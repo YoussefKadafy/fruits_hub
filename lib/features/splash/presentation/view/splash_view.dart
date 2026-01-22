@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fruits_hub/core/routing/app_routes.dart';
-import 'package:fruits_hub/features/splash/presentation/view/widgets/splash_body.dart';
+import 'package:fruits_hub/features/splash/presentation/widgets/splash_body.dart';
 import 'package:go_router/go_router.dart';
 
 class SplashView extends StatefulWidget {
@@ -25,7 +25,7 @@ class _SplashViewState extends State<SplashView> {
   }
 
   void navigateToNextScreen() {
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
         context.pushReplacementNamed(AppRoutes.onboarding);
       }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruits_hub/core/routing/routes_config.dart';
 
 void main() {
@@ -10,10 +11,16 @@ class FruitsHub extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Fruits Hub',
-      routerConfig: RoutesConfig.routes,
-      debugShowCheckedModeBanner: false,
+    return ScreenUtilInit(
+      designSize: const Size(375, 812),
+      splitScreenMode: true,
+      minTextAdapt: true,
+      builder: (context, child) => MaterialApp.router(
+        title: 'Fruits Hub',
+        routerConfig: RoutesConfig.routes,
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(scaffoldBackgroundColor: Colors.white),
+      ),
     );
   }
 }
