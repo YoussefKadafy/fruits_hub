@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fruits_hub/core/helpers/shared_prefs.dart';
 import 'package:fruits_hub/core/routing/routes_config.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize SharedPreferences
+  await SharedPrefs.init();
   runApp(const FruitsHub());
 }
 

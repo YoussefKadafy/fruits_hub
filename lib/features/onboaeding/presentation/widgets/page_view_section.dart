@@ -2,11 +2,14 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:fruits_hub/core/app_styles/app_colors.dart';
 import 'package:fruits_hub/core/extensions/sized_box_extension.dart';
+import 'package:fruits_hub/core/helpers/shared_prefs.dart';
+import 'package:fruits_hub/core/routing/app_routes.dart';
 import 'package:fruits_hub/core/utils/custom_button.dart';
 import 'package:fruits_hub/features/onboaeding/data/onboarding_data_model.dart';
 import 'package:fruits_hub/features/onboaeding/presentation/widgets/page_view_item.dart';
 import 'package:fruits_hub/core/app_styles/app_assets.dart';
 import 'package:fruits_hub/core/app_styles/app_styles.dart';
+import 'package:go_router/go_router.dart';
 
 class PageViewSection extends StatefulWidget {
   const PageViewSection({super.key});
@@ -102,7 +105,12 @@ class _PageViewSectionState extends State<PageViewSection> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: CustomButton(
-              onPressed: () {},
+              onPressed: () async {
+                await SharedPrefs.setOnboardingViewed(isOnboardingViewed: true);
+                if (context.mounted) {
+                  context.pushReplacementNamed(AppRoutes.login);
+                }
+              },
               text: 'ابدأ الأن',
               backgroundColor: AppColors.primary,
               textColor: AppColors.white,

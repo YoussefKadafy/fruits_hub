@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:fruits_hub/core/app_styles/app_colors.dart';
 import 'package:fruits_hub/core/app_styles/app_styles.dart';
 import 'package:fruits_hub/core/extensions/sized_box_extension.dart';
+import 'package:fruits_hub/core/helpers/shared_prefs.dart';
+import 'package:fruits_hub/core/routing/app_routes.dart';
+import 'package:go_router/go_router.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 
 class PageViewItem extends StatelessWidget {
@@ -40,7 +43,14 @@ class PageViewItem extends StatelessWidget {
                   top: 0,
                   child: SafeArea(
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: () async {
+                        await SharedPrefs.setOnboardingViewed(
+                          isOnboardingViewed: true,
+                        );
+                        if (context.mounted) {
+                          context.pushReplacementNamed(AppRoutes.login);
+                        }
+                      },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
