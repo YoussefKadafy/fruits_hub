@@ -35,15 +35,15 @@ class _PageViewSectionState extends State<PageViewSection> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            'Fruits',
-            style: AppStyles.onboardingTitle.copyWith(color: AppColors.primary),
-          ),
+          Text(' مرحبًا بك في ', style: AppStyles.onboardingTitle),
           Text(
             ' Hub',
             style: AppStyles.onboardingTitle.copyWith(color: Colors.orange),
           ),
-          Text(' مرحبًا بك في ', style: AppStyles.onboardingTitle),
+          Text(
+            'Fruits',
+            style: AppStyles.onboardingTitle.copyWith(color: AppColors.primary),
+          ),
         ],
       ),
       description:

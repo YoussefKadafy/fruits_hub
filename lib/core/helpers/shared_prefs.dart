@@ -24,4 +24,8 @@ class SharedPrefs {
   static bool isOnboardingViewed() {
     return instance.getBool(_isOnboardingViewedKey) ?? false;
   }
+
+  static Future<void> clearOnboardingViewed() async {
+    await instance.remove(_isOnboardingViewedKey);
+  }
 }

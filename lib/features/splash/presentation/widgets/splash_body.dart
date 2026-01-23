@@ -10,9 +10,9 @@ class SplashBody extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [SvgPicture.asset(AppAssets.assetsIconsUpperSplashImage)],
+        Align(
+          alignment: Alignment.topLeft,
+          child: SvgPicture.asset(AppAssets.assetsIconsUpperSplashImage),
         ),
         SvgPicture.asset(AppAssets.assetsIconsMainSplashImage),
         SvgPicture.asset(AppAssets.assetsIconsBottomSplashImage),

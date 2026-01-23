@@ -27,7 +27,11 @@ class AppStyles {
   );
 
   ///Styles with numberd names
-
+  static const TextStyle wight700Size13 = TextStyle(
+    fontSize: 13,
+    fontWeight: FontWeight.w700,
+    color: Colors.black,
+  );
   static const TextStyle wight400Size14 = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w400,
@@ -67,7 +71,11 @@ class AppStyles {
     fontWeight: FontWeight.w600,
     color: Colors.black,
   );
-
+  static const TextStyle wight700Size19 = TextStyle(
+    fontSize: 19,
+    fontWeight: FontWeight.w700,
+    color: Colors.black,
+  );
   static const TextStyle wight600Size24 = TextStyle(
     fontSize: 24,
     fontWeight: FontWeight.w600,
