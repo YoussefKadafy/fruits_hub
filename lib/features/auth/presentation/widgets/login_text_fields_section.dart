@@ -21,8 +21,7 @@ class LoginTextFieldsSection extends StatefulWidget {
 }
 
 class _LoginTextFieldsSectionState extends State<LoginTextFieldsSection> {
-  bool _isPasswordVisible = false;
-
+  final ValueNotifier<bool> isPasswordVisible = ValueNotifier<bool>(true);
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -38,24 +37,24 @@ class _LoginTextFieldsSectionState extends State<LoginTextFieldsSection> {
         16.height,
 
         // Password Field
-        CustomTextField(
-          controller: widget._passwordController,
-          hintText: 'أدخل كلمة المرور',
-          labelText: 'كلمة المرور',
-          obscureText: !_isPasswordVisible,
-          validator: widget.passwordValidator,
-
-          prefixIcon: IconButton(
-            icon: Icon(
-              _isPasswordVisible
-                  ? Icons.visibility_outlined
-                  : Icons.visibility_off_outlined,
-            ),
-            onPressed: () {
-              _isPasswordVisible = !_isPasswordVisible;
-              setState(() {});
-            },
-          ),
+        ValueListenableBuilder<bool>(
+          valueListenable: isPasswordVisible,
+          builder: (context, obscure, _) {
+            return CustomTextField(
+              controller: widget._passwordController,
+              hintText: 'ادخل كلمة المرور',
+              labelText: 'كلمة المرور',
+              validator: (value) {
+                if (value!.isEmpty) return 'ادخل كلمة المرور';
+                return null;
+              },
+              prefixIcon: GestureDetector(
+                onTap: () => isPasswordVisible.value = !obscure,
+                child: Icon(obscure ? Icons.visibility_off : Icons.visibility),
+              ),
+              obscureText: obscure,
+            );
+          },
         ),
       ],
     );

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruits_hub/core/app_styles/app_colors.dart';
 import 'package:fruits_hub/core/app_styles/app_styles.dart';
 import 'package:fruits_hub/core/extensions/sized_box_extension.dart';
+import 'package:fruits_hub/core/routing/app_routes.dart';
 import 'package:fruits_hub/core/utils/custom_button.dart';
 import 'package:fruits_hub/features/auth/presentation/widgets/login_text_fields_section.dart';
 import 'package:fruits_hub/features/auth/presentation/widgets/social_buttons_section.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginBody extends StatefulWidget {
   const LoginBody({super.key});
@@ -69,6 +72,9 @@ class _LoginBodyState extends State<LoginBody> {
             Align(
               alignment: Alignment.centerLeft,
               child: TextButton(
+                style: TextButton.styleFrom(
+                  overlayColor: AppColors.lightPrimary,
+                ),
                 onPressed: () {
                   // Navigate to forgot password screen
                 },
@@ -100,10 +106,16 @@ class _LoginBodyState extends State<LoginBody> {
                     color: AppColors.grayScale,
                   ),
                 ),
-                Text(
-                  ' قم بإنشاء حساب',
-                  style: AppStyles.wight600Size16.copyWith(
-                    color: AppColors.primary,
+                InkWell(
+                  borderRadius: BorderRadius.circular(8.r),
+                  onTap: () {
+                    context.pushReplacementNamed(AppRoutes.register);
+                  },
+                  child: Text(
+                    ' قم بإنشاء حساب',
+                    style: AppStyles.wight600Size16.copyWith(
+                      color: AppColors.primary,
+                    ),
                   ),
                 ),
               ],
@@ -112,12 +124,12 @@ class _LoginBodyState extends State<LoginBody> {
             // Or Divider
             Row(
               children: [
-                const Expanded(child: Divider(color: Color(0xffDDDFDF))),
+                const Expanded(child: Divider(color: AppColors.borderColor)),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Text('أو', style: AppStyles.wight600Size16),
                 ),
-                const Expanded(child: Divider(color: Color(0xffDDDFDF))),
+                const Expanded(child: Divider(color: AppColors.borderColor)),
               ],
             ),
 

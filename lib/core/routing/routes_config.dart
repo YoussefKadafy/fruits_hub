@@ -1,5 +1,6 @@
 import 'package:fruits_hub/core/routing/app_routes.dart';
 import 'package:fruits_hub/features/auth/presentation/views/login_view.dart';
+import 'package:fruits_hub/features/auth/presentation/views/register_view.dart';
 import 'package:fruits_hub/features/onboaeding/presentation/views/onboarding_view.dart';
 import 'package:fruits_hub/features/splash/presentation/view/splash_view.dart';
 import 'package:go_router/go_router.dart';
@@ -27,6 +28,13 @@ class RoutesConfig {
         name: AppRoutes.login,
         builder: (context, state) {
           return const LoginView();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.register,
+        name: AppRoutes.register,
+        builder: (context, state) {
+          return const RegisterView();
         },
       ),
     ],

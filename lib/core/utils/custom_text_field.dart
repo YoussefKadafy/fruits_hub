@@ -70,6 +70,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
       enabled: widget.enabled,
       obscureText: widget.obscureText,
       maxLines: widget.maxLines,
+      obscuringCharacter: '●', // Circular obscuring character
+
       cursorColor: AppColors.primary,
       cursorWidth: 1.5.w,
       style: AppStyles.wight600Size16,
@@ -89,23 +91,23 @@ class _CustomTextFieldState extends State<CustomTextField> {
         prefixIcon: widget.suffixIcon,
         suffixIcon: widget.prefixIcon,
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12.r),
+          borderRadius: BorderRadius.circular(4.r),
           borderSide: BorderSide(color: Color(0xffE6E9EA), width: 1),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12.r),
+          borderRadius: BorderRadius.circular(4.r),
           borderSide: BorderSide(color: AppColors.primary, width: 2),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12.r),
+          borderRadius: BorderRadius.circular(4.r),
           borderSide: const BorderSide(color: Colors.red, width: 1.5),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12.r),
+          borderRadius: BorderRadius.circular(4.r),
           borderSide: const BorderSide(color: Colors.red, width: 2),
         ),
         disabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12.r),
+          borderRadius: BorderRadius.circular(4.r),
           borderSide: BorderSide(color: Color(0xffE6E9EA), width: 1),
         ),
       ),

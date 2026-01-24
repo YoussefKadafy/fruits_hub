@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fruits_hub/core/app_styles/app_colors.dart';
 
 import 'package:fruits_hub/core/helpers/shared_prefs.dart';
 import 'package:fruits_hub/core/routing/routes_config.dart';
@@ -36,6 +37,8 @@ class FruitsHub extends StatelessWidget {
         routerConfig: RoutesConfig.routes,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
+          primaryColor: AppColors.primary,
+          useMaterial3: true,
           fontFamily: 'Cairo',
           scaffoldBackgroundColor: Colors.white,
           appBarTheme: const AppBarTheme(
