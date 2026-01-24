@@ -6,10 +6,12 @@ import 'package:fruits_hub/core/app_styles/app_colors.dart';
 import 'package:fruits_hub/core/helpers/shared_prefs.dart';
 import 'package:fruits_hub/core/routing/routes_config.dart';
 import 'package:fruits_hub/generated/l10n.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   // Initialize SharedPreferences
   await SharedPrefs.init();
   runApp(const FruitsHub());

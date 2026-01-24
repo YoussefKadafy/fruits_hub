@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "792436545567",
+    "project_id": "key-surf-459412-g7",
+    "storage_bucket": "key-surf-459412-g7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:792436545567:android:4121309f0f6207cb481d2a",
+        "android_client_info": {
+          "package_name": "com.example.fruits_hub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQAtxWufcaHg1X6G7QLvkzqMatOD1dMlA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
