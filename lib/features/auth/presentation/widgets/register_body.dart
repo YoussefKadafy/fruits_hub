@@ -85,7 +85,6 @@ class _RegisterBodyState extends State<RegisterBody> {
                             password: passwordController.text,
                             name: nameController.text,
                           );
-                          log('Email: ${emailController.text}');
                         } else {
                           autovalidateMode = AutovalidateMode.always;
                         }

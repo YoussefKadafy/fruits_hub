@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruits_hub/core/app_styles/app_colors.dart';
+import 'package:fruits_hub/core/helpers/custom_bloc_observer.dart';
 import 'package:fruits_hub/core/helpers/service_locator.dart';
 
 import 'package:fruits_hub/core/helpers/shared_prefs.dart';
@@ -12,6 +14,7 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Bloc.observer = CustomBlocObserver();
   setupServiceLocator();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
