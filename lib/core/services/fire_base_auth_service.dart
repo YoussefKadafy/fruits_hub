@@ -20,7 +20,7 @@ class FireBaseAuthService {
       return credential.user!;
     } on FirebaseAuthException catch (e) {
       // ✅ Pass the entire exception, not just the code
-      throw CustomException(_mapFirebaseAuthExceptionToMessage(e));
+      throw CustomException(_mapFirebaseAuthExceptionToArabicMessage(e));
     } on CustomException {
       rethrow;
     } catch (e) {
@@ -29,6 +29,84 @@ class FireBaseAuthService {
       throw CustomException(
         'An unexpected error occurred. Please try again later.',
       );
+    }
+  }
+
+  String _mapFirebaseAuthExceptionToArabicMessage(
+    FirebaseAuthException exception,
+  ) {
+    switch (exception.code) {
+      // أخطاء البريد الإلكتروني/كلمة المرور
+      case 'weak-password':
+        return 'كلمة المرور ضعيفة جداً. يرجى استخدام 6 أحرف على الأقل مع مزيج من الحروف والأرقام.';
+
+      case 'email-already-in-use':
+        return 'يوجد حساب بالفعل بهذا البريد الإلكتروني. يرجى تسجيل الدخول أو استخدام بريد إلكتروني مختلف.';
+
+      case 'invalid-email':
+        return 'البريد الإلكتروني غير صالح. يرجى التحقق والمحاولة مرة أخرى.';
+
+      case 'user-not-found':
+        return 'لا يوجد حساب بهذا البريد الإلكتروني. يرجى إنشاء حساب جديد أولاً.';
+
+      case 'wrong-password':
+        return 'كلمة المرور غير صحيحة. يرجى المحاولة مرة أخرى أو إعادة تعيين كلمة المرور.';
+
+      case 'user-disabled':
+        return 'تم تعطيل هذا الحساب. يرجى التواصل مع الدعم الفني للمساعدة.';
+
+      case 'missing-email':
+        return 'يرجى إدخال البريد الإلكتروني.';
+
+      case 'missing-password':
+        return 'يرجى إدخال كلمة المرور.';
+
+      // أخطاء العمليات
+      case 'operation-not-allowed':
+        return 'طريقة المصادقة هذه غير مفعّلة. يرجى التواصل مع الدعم الفني.';
+
+      case 'requires-recent-login':
+        return 'تتطلب هذه العملية تسجيل دخول حديث. يرجى تسجيل الدخول مرة أخرى.';
+
+      // أخطاء الشبكة
+      case 'network-request-failed':
+        return 'خطأ في الاتصال بالإنترنت. يرجى التحقق من الاتصال والمحاولة مرة أخرى.';
+
+      case 'too-many-requests':
+        return 'عدد كبير جداً من المحاولات الفاشلة. يرجى المحاولة لاحقاً أو إعادة تعيين كلمة المرور.';
+
+      // أخطاء بيانات الاعتماد
+      case 'invalid-credential':
+        return 'بيانات الاعتماد غير صالحة أو منتهية الصلاحية.';
+
+      case 'credential-already-in-use':
+        return 'بيانات الاعتماد هذه مرتبطة بالفعل بحساب آخر.';
+
+      case 'account-exists-with-different-credential':
+        return 'يوجد حساب بالفعل بهذا البريد الإلكتروني ولكن بطريقة تسجيل دخول مختلفة.';
+
+      // أخطاء الجلسة
+      case 'session-expired':
+        return 'انتهت صلاحية الجلسة. يرجى تسجيل الدخول مرة أخرى.';
+
+      case 'user-token-expired':
+        return 'انتهت صلاحية بيانات الاعتماد. يرجى تسجيل الدخول مرة أخرى.';
+
+      case 'invalid-user-token':
+        return 'بيانات الاعتماد غير صالحة. يرجى تسجيل الدخول مرة أخرى.';
+
+      // أخطاء داخلية
+      case 'internal-error':
+        return 'حدث خطأ داخلي. يرجى المحاولة مرة أخرى.';
+
+      // الافتراضي - للمراقبة والتسجيل
+      default:
+        debugPrint('كود خطأ Firebase غير معالج: ${exception.code}');
+        debugPrint('رسالة الخطأ من Firebase: ${exception.message}');
+
+        // ✅ استخدام رسالة Firebase كخيار احتياطي (تجربة مستخدم أفضل)
+        return exception.message ??
+            'فشلت عملية المصادقة. يرجى المحاولة مرة أخرى.';
     }
   }
 

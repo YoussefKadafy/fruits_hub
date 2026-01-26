@@ -1,14 +1,15 @@
-import 'package:flutter/gestures.dart';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:fruits_hub/core/app_styles/app_colors.dart';
-import 'package:fruits_hub/core/app_styles/app_styles.dart';
 import 'package:fruits_hub/core/extensions/sized_box_extension.dart';
-import 'package:fruits_hub/core/routing/app_routes.dart';
 import 'package:fruits_hub/core/utils/custom_button.dart';
-import 'package:fruits_hub/core/utils/custom_check_box.dart';
+import 'package:fruits_hub/features/auth/presentation/cubit/signup/signup_cubit.dart';
+import 'package:fruits_hub/features/auth/presentation/widgets/have_an_account.dart';
 import 'package:fruits_hub/features/auth/presentation/widgets/register_text_fields_section.dart';
-import 'package:go_router/go_router.dart';
+import 'package:fruits_hub/features/auth/presentation/widgets/terms_and_conditions.dart';
 
 class RegisterBody extends StatefulWidget {
   const RegisterBody({super.key});
@@ -22,7 +23,8 @@ class _RegisterBodyState extends State<RegisterBody> {
   late final TextEditingController emailController;
   late final TextEditingController passwordController;
   late final ValueNotifier<bool> isChecked;
-
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
   @override
   void initState() {
     super.initState();
@@ -43,94 +45,61 @@ class _RegisterBodyState extends State<RegisterBody> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            24.height,
-            RegisterTextFieldsSection(
-              nameController: nameController,
-              emailController: emailController,
-              passwordController: passwordController,
-            ),
-            16.height,
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: ValueListenableBuilder<bool>(
-                    valueListenable: isChecked,
-                    builder: (context, value, _) {
-                      return CustomCheckbox(
-                        value: value,
-                        onChanged: (value) {
-                          isChecked.value = value;
-                        },
-                      );
-                    },
-                  ),
-                ),
-                8.width,
-                SizedBox(
-                  width: 287.w,
-                  child: RichText(
-                    text: TextSpan(
-                      style: TextStyle(fontFamily: 'Cairo'),
-                      children: [
-                        TextSpan(
-                          text: 'من خلال إنشاء حساب، توافق على ',
-                          style: AppStyles.wight600Size13.copyWith(
-                            color: AppColors.grayScale,
-                          ),
-                        ),
-                        TextSpan(
-                          text: 'الشروط والأحكام الخاصة بالتطبيق',
-                          style: AppStyles.wight600Size13.copyWith(
-                            color: AppColors.mintGreen,
-                          ),
-                        ),
-                      ],
+    return BlocConsumer<SignupCubit, SignupState>(
+      listener: (context, state) {
+        if (state is SignupSuccess) {}
+        if (state is SignupError) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.message)));
+        }
+      },
+      builder: (context, state) {
+        return ModalProgressHUD(
+          inAsyncCall: state is SignupLoading,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Form(
+                key: _formKey,
+                autovalidateMode: autovalidateMode,
+                child: Column(
+                  children: [
+                    24.height,
+                    RegisterTextFieldsSection(
+                      nameController: nameController,
+                      emailController: emailController,
+                      passwordController: passwordController,
                     ),
-                  ),
-                ),
-              ],
-            ),
-            30.height,
-            CustomButton(
-              text: 'إنشاء حساب جديد',
-              backgroundColor: AppColors.primary,
-              textColor: Colors.white,
-              onPressed: () {},
-            ),
-            26.height,
-            RichText(
-              text: TextSpan(
-                style: TextStyle(fontFamily: 'Cairo'),
-                children: [
-                  TextSpan(
-                    text: 'تمتلك حساب بالفعل؟',
-                    style: AppStyles.wight600Size16.copyWith(
-                      color: AppColors.grayScale,
-                    ),
-                  ),
-                  TextSpan(
-                    text: ' تسجيل الدخول',
-                    style: AppStyles.wight600Size16.copyWith(
-                      color: AppColors.primary,
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        context.pushReplacementNamed(AppRoutes.login);
+                    16.height,
+                    TermsAndConditionsSection(isChecked: isChecked),
+                    30.height,
+                    CustomButton(
+                      text: 'إنشاء حساب جديد',
+                      backgroundColor: AppColors.primary,
+                      textColor: Colors.white,
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          context.read<SignupCubit>().signupUser(
+                            email: emailController.text,
+                            password: passwordController.text,
+                            name: nameController.text,
+                          );
+                          log('Email: ${emailController.text}');
+                        } else {
+                          autovalidateMode = AutovalidateMode.always;
+                        }
                       },
-                  ),
-                ],
+                    ),
+                    26.height,
+                    HaveAnAccount(),
+                  ],
+                ),
               ),
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

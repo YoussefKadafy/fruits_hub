@@ -17,7 +17,7 @@ class CustomTextField extends StatefulWidget {
   final List<TextInputFormatter>? inputFormatters;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
-
+  final void Function(String?)? onSaved;
   const CustomTextField({
     super.key,
     this.controller,
@@ -32,6 +32,7 @@ class CustomTextField extends StatefulWidget {
     this.inputFormatters,
     this.prefixIcon,
     this.suffixIcon,
+    this.onSaved,
   });
 
   @override
@@ -63,6 +64,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.controller,
+      onSaved: widget.onSaved,
       focusNode: _focusNode,
       keyboardType: widget.keyboardType,
       validator: widget.validator,
