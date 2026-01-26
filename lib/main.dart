@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruits_hub/core/app_styles/app_colors.dart';
+import 'package:fruits_hub/core/helpers/service_locator.dart';
 
 import 'package:fruits_hub/core/helpers/shared_prefs.dart';
 import 'package:fruits_hub/core/routing/routes_config.dart';
@@ -11,6 +12,8 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  setupServiceLocator();
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   // Initialize SharedPreferences
   await SharedPrefs.init();
