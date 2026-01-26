@@ -25,6 +25,7 @@ class _RegisterBodyState extends State<RegisterBody> {
   late final ValueNotifier<bool> isChecked;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
+  bool showTermsError = false;
   @override
   void initState() {
     super.initState();
@@ -32,6 +33,13 @@ class _RegisterBodyState extends State<RegisterBody> {
     emailController = TextEditingController();
     passwordController = TextEditingController();
     isChecked = ValueNotifier(false);
+    isChecked.addListener(() {
+      if (isChecked.value && showTermsError) {
+        setState(() {
+          showTermsError = false;
+        });
+      }
+    });
   }
 
   @override
@@ -72,7 +80,10 @@ class _RegisterBodyState extends State<RegisterBody> {
                       passwordController: passwordController,
                     ),
                     16.height,
-                    TermsAndConditionsSection(isChecked: isChecked),
+                    TermsAndConditionsSection(
+                      isChecked: isChecked,
+                      isError: showTermsError,
+                    ),
                     30.height,
                     CustomButton(
                       text: 'إنشاء حساب جديد',
@@ -80,11 +91,17 @@ class _RegisterBodyState extends State<RegisterBody> {
                       textColor: Colors.white,
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          context.read<SignupCubit>().signupUser(
-                            email: emailController.text,
-                            password: passwordController.text,
-                            name: nameController.text,
-                          );
+                          if (isChecked.value == true) {
+                            autovalidateMode = AutovalidateMode.disabled;
+                            showTermsError = false;
+                            context.read<SignupCubit>().signupUser(
+                              email: emailController.text,
+                              password: passwordController.text,
+                              name: nameController.text,
+                            );
+                          } else {
+                            showTermsError = true;
+                          }
                         } else {
                           autovalidateMode = AutovalidateMode.always;
                         }

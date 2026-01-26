@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fruits_hub/core/errors/custom_exception.dart';
@@ -25,7 +27,7 @@ class FireBaseAuthService {
       rethrow;
     } catch (e) {
       // Log unexpected errors for monitoring
-      debugPrint('Unexpected error in createUserWithEmailAndPassword: $e');
+      log('Unexpected error in createUserWithEmailAndPassword: $e');
       throw CustomException(
         'An unexpected error occurred. Please try again later.',
       );

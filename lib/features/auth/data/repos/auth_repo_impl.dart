@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 
 import 'package:fruits_hub/core/errors/failure.dart';
@@ -25,6 +27,8 @@ class AuthRepoImpl extends AuthRepo {
 
       return Right(UserModel.fromFirebase(user));
     } catch (e) {
+      log('Unexpected error in createUserWithEmailAndPassword: $e');
+
       return Left(ServerFailure(e.toString()));
     }
   }
