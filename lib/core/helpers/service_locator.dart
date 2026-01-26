@@ -1,5 +1,6 @@
 import 'package:fruits_hub/features/auth/data/repos/auth_repo_impl.dart';
 import 'package:fruits_hub/features/auth/domain/repo/auth_repo.dart';
+import 'package:fruits_hub/features/auth/presentation/cubit/login/login_cubit.dart';
 import 'package:fruits_hub/features/auth/presentation/cubit/signup/signup_cubit.dart';
 import 'package:get_it/get_it.dart';
 import 'package:fruits_hub/core/services/fire_base_auth_service.dart';
@@ -21,5 +22,6 @@ void setupServiceLocator() {
 
   // BLoCs
   locator.registerSingleton<SignupCubit>(SignupCubit(locator<AuthRepo>()));
+  locator.registerSingleton<LoginCubit>(LoginCubit(locator<AuthRepo>()));
   // Add your BLoCs here
 }

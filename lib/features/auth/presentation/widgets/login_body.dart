@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruits_hub/core/app_styles/app_colors.dart';
 import 'package:fruits_hub/core/app_styles/app_styles.dart';
 import 'package:fruits_hub/core/extensions/sized_box_extension.dart';
 import 'package:fruits_hub/core/routing/app_routes.dart';
 import 'package:fruits_hub/core/utils/custom_button.dart';
+import 'package:fruits_hub/features/auth/presentation/cubit/login/login_cubit.dart';
 import 'package:fruits_hub/features/auth/presentation/widgets/login_text_fields_section.dart';
 import 'package:fruits_hub/features/auth/presentation/widgets/social_buttons_section.dart';
 import 'package:go_router/go_router.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class LoginBody extends StatefulWidget {
   const LoginBody({super.key});
@@ -20,7 +23,7 @@ class _LoginBodyState extends State<LoginBody> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-
+  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
   @override
   void dispose() {
     _emailController.dispose();
@@ -51,97 +54,124 @@ class _LoginBodyState extends State<LoginBody> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            24.height,
+    return BlocConsumer<LoginCubit, LoginState>(
+      listener: (context, state) {
+        if (state is LoginSuccess) {}
+        if (state is LoginError) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.message)));
+        }
+      },
+      builder: (context, state) {
+        return ModalProgressHUD(
+          inAsyncCall: state is LoginLoading,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: _formKey,
+              autovalidateMode: autovalidateMode,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  24.height,
 
-            LoginTextFieldsSection(
-              emailController: _emailController,
-              passwordController: _passwordController,
-              emailValidator: _validateEmail,
-              passwordValidator: _validatePassword,
-            ),
-
-            16.height,
-
-            Align(
-              alignment: Alignment.centerLeft,
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  overlayColor: AppColors.lightPrimary,
-                ),
-                onPressed: () {
-                  // Navigate to forgot password screen
-                },
-                child: Text(
-                  'نسيت كلمة المرور؟',
-                  style: AppStyles.wight600Size16.copyWith(
-                    color: AppColors.mintGreen,
+                  LoginTextFieldsSection(
+                    emailController: _emailController,
+                    passwordController: _passwordController,
+                    emailValidator: _validateEmail,
+                    passwordValidator: _validatePassword,
                   ),
-                ),
-              ),
-            ),
 
-            33.height,
+                  16.height,
 
-            CustomButton(
-              onPressed: () {},
-              text: 'تسجيل الدخول',
-              backgroundColor: AppColors.primary,
-              textColor: Colors.white,
-            ),
-
-            37.height,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "لا تمتلك حساب؟ ",
-                  style: AppStyles.wight600Size16.copyWith(
-                    color: AppColors.grayScale,
-                  ),
-                ),
-                InkWell(
-                  borderRadius: BorderRadius.circular(8.r),
-                  onTap: () {
-                    context.pushReplacementNamed(AppRoutes.register);
-                  },
-                  child: Text(
-                    ' قم بإنشاء حساب',
-                    style: AppStyles.wight600Size16.copyWith(
-                      color: AppColors.primary,
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        overlayColor: AppColors.lightPrimary,
+                      ),
+                      onPressed: () {
+                        // Navigate to forgot password screen
+                      },
+                      child: Text(
+                        'نسيت كلمة المرور؟',
+                        style: AppStyles.wight600Size16.copyWith(
+                          color: AppColors.mintGreen,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ],
+
+                  33.height,
+
+                  CustomButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        context.read<LoginCubit>().loginUser(
+                          email: _emailController.text,
+                          password: _passwordController.text,
+                        );
+                      }
+                    },
+                    text: 'تسجيل الدخول',
+                    backgroundColor: AppColors.primary,
+                    textColor: Colors.white,
+                  ),
+
+                  37.height,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "لا تمتلك حساب؟ ",
+                        style: AppStyles.wight600Size16.copyWith(
+                          color: AppColors.grayScale,
+                        ),
+                      ),
+                      InkWell(
+                        borderRadius: BorderRadius.circular(8.r),
+                        onTap: () {
+                          context.pushReplacementNamed(AppRoutes.register);
+                        },
+                        child: Text(
+                          ' قم بإنشاء حساب',
+                          style: AppStyles.wight600Size16.copyWith(
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  33.height,
+                  // Or Divider
+                  Row(
+                    children: [
+                      const Expanded(
+                        child: Divider(color: AppColors.borderColor),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Text('أو', style: AppStyles.wight600Size16),
+                      ),
+                      const Expanded(
+                        child: Divider(color: AppColors.borderColor),
+                      ),
+                    ],
+                  ),
+
+                  16.height,
+
+                  // Social Login Buttons
+                  SocialButtonsSection(),
+
+                  24.height,
+                ],
+              ),
             ),
-            33.height,
-            // Or Divider
-            Row(
-              children: [
-                const Expanded(child: Divider(color: AppColors.borderColor)),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Text('أو', style: AppStyles.wight600Size16),
-                ),
-                const Expanded(child: Divider(color: AppColors.borderColor)),
-              ],
-            ),
-
-            16.height,
-
-            // Social Login Buttons
-            SocialButtonsSection(),
-
-            24.height,
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruits_hub/core/helpers/service_locator.dart';
 import 'package:fruits_hub/core/routing/app_routes.dart';
+import 'package:fruits_hub/features/auth/presentation/cubit/login/login_cubit.dart';
 import 'package:fruits_hub/features/auth/presentation/cubit/signup/signup_cubit.dart';
 import 'package:fruits_hub/features/auth/presentation/views/login_view.dart';
 import 'package:fruits_hub/features/auth/presentation/views/register_view.dart';
@@ -30,7 +31,10 @@ class RoutesConfig {
         path: AppRoutes.login,
         name: AppRoutes.login,
         builder: (context, state) {
-          return const LoginView();
+          return BlocProvider(
+            create: (context) => locator<LoginCubit>(),
+            child: const LoginView(),
+          );
         },
       ),
       GoRoute(
