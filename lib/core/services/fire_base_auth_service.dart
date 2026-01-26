@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:fruits_hub/core/errors/custom_exception.dart';
 
 class FireBaseAuthService {
+  /// Creates a new user account using email and password.
   Future<User> createUserWithEmailAndPassword({
     required String email,
     required String password,
@@ -28,6 +29,30 @@ class FireBaseAuthService {
     } catch (e) {
       // Log unexpected errors for monitoring
       log('Unexpected error in createUserWithEmailAndPassword: $e');
+      throw CustomException(
+        'An unexpected error occurred. Please try again later.',
+      );
+    }
+  }
+
+  ///log in user with email and password
+  Future<User> signInWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return credential.user!;
+    } on FirebaseAuthException catch (e) {
+      throw CustomException(_mapFirebaseAuthExceptionToArabicMessage(e));
+    } on CustomException {
+      rethrow;
+    } catch (e) {
+      // Log unexpected errors for monitoring
+      log('Unexpected error in signInWithEmailAndPassword: $e');
       throw CustomException(
         'An unexpected error occurred. Please try again later.',
       );
