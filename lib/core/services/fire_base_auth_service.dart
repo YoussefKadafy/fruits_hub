@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fruits_hub/core/errors/custom_exception.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class FireBaseAuthService {
   /// Creates a new user account using email and password.
@@ -59,6 +60,57 @@ class FireBaseAuthService {
     }
   }
 
+  /// log in with google
+  /// log in with google
+  Future<User> signInWithGoogle() async {
+    try {
+      // Trigger the authentication flow
+      final GoogleSignInAccount? googleUser = await GoogleSignIn.instance
+          .authenticate();
+
+      // User cancelled Google sign-in
+      if (googleUser == null) {
+        throw CustomException('تم إلغاء تسجيل الدخول باستخدام Google.');
+      }
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+
+      if (googleAuth.idToken == null) {
+        throw CustomException('فشل الحصول على بيانات المصادقة من Google.');
+      }
+
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        idToken: googleAuth.idToken,
+      );
+
+      // Sign in with Firebase
+      final userCredential = await FirebaseAuth.instance.signInWithCredential(
+        credential,
+      );
+
+      if (userCredential.user == null) {
+        throw CustomException(
+          'فشل تسجيل الدخول باستخدام Google. حاول مرة أخرى.',
+        );
+      }
+
+      return userCredential.user!;
+    } on FirebaseAuthException catch (e) {
+      throw CustomException(_mapFirebaseAuthExceptionToArabicMessage(e));
+    } on CustomException {
+      rethrow;
+    } catch (e) {
+      log('Unexpected error in signInWithGoogle: $e');
+      throw CustomException(
+        'حدث خطأ غير متوقع أثناء تسجيل الدخول باستخدام Google.',
+      );
+    }
+  }
+
+  /////////////////////////////////////////////
+  /////////////////////////////////////////////
   String _mapFirebaseAuthExceptionToArabicMessage(
     FirebaseAuthException exception,
   ) {
