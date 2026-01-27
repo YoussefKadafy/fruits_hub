@@ -31,7 +31,9 @@ class SocialButtonsSection extends StatelessWidget {
         SocialButton(
           icon: SvgPicture.asset(AppAssets.assetsIconsFacebook),
           text: 'تسجيل الدخول بواسطة Facebook',
-          onTap: () {},
+          onTap: () {
+            context.read<LoginCubit>().loginWithFacebook();
+          },
         ),
       ],
     );
