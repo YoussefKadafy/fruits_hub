@@ -4,7 +4,7 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:fruits_hub/core/app_styles/app_colors.dart';
 import 'package:fruits_hub/core/extensions/sized_box_extension.dart';
 import 'package:fruits_hub/core/utils/custom_button.dart';
-import 'package:fruits_hub/features/auth/presentation/cubit/signup/signup_cubit.dart';
+import 'package:fruits_hub/features/auth/presentation/cubit/signup/register_cubit.dart';
 import 'package:fruits_hub/features/auth/presentation/widgets/have_an_account.dart';
 import 'package:fruits_hub/features/auth/presentation/widgets/register_text_fields_section.dart';
 import 'package:fruits_hub/features/auth/presentation/widgets/terms_and_conditions.dart';
@@ -51,10 +51,10 @@ class _RegisterBodyState extends State<RegisterBody> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<SignupCubit, SignupState>(
+    return BlocConsumer<RegisterCubit, RegisterState>(
       listener: (context, state) {
-        if (state is SignupSuccess) {}
-        if (state is SignupError) {
+        if (state is RegisterSuccess) {}
+        if (state is RegisterError) {
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text(state.message)));
@@ -62,7 +62,7 @@ class _RegisterBodyState extends State<RegisterBody> {
       },
       builder: (context, state) {
         return ModalProgressHUD(
-          inAsyncCall: state is SignupLoading,
+          inAsyncCall: state is RegisterLoading,
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16),
@@ -92,7 +92,7 @@ class _RegisterBodyState extends State<RegisterBody> {
                           if (isChecked.value == true) {
                             autovalidateMode = AutovalidateMode.disabled;
                             showTermsError = false;
-                            context.read<SignupCubit>().signupUser(
+                            context.read<RegisterCubit>().registerUser(
                               email: emailController.text,
                               password: passwordController.text,
                               name: nameController.text,

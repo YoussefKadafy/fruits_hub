@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruits_hub/core/helpers/service_locator.dart';
 import 'package:fruits_hub/core/routing/app_routes.dart';
 import 'package:fruits_hub/features/auth/presentation/cubit/login/login_cubit.dart';
-import 'package:fruits_hub/features/auth/presentation/cubit/signup/signup_cubit.dart';
+import 'package:fruits_hub/features/auth/presentation/cubit/signup/register_cubit.dart';
 import 'package:fruits_hub/features/auth/presentation/views/login_view.dart';
 import 'package:fruits_hub/features/auth/presentation/views/register_view.dart';
 import 'package:fruits_hub/features/onboaeding/presentation/views/onboarding_view.dart';
@@ -42,7 +42,7 @@ class RoutesConfig {
         name: AppRoutes.register,
         builder: (context, state) {
           return BlocProvider(
-            create: (context) => locator<SignupCubit>(),
+            create: (context) => locator<RegisterCubit>(),
             child: RegisterView(),
           );
         },

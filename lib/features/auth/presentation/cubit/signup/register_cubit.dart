@@ -3,26 +3,26 @@ import 'package:fruits_hub/features/auth/domain/entity/user_entity.dart';
 import 'package:fruits_hub/features/auth/domain/repo/auth_repo.dart';
 import 'package:meta/meta.dart';
 
-part 'signup_state.dart';
+part 'register_state.dart';
 
-class SignupCubit extends Cubit<SignupState> {
-  SignupCubit(this.authRepo) : super(SignupInitial());
+class RegisterCubit extends Cubit<RegisterState> {
+  RegisterCubit(this.authRepo) : super(RegisterInitial());
   final AuthRepo authRepo;
 
-  Future<void> signupUser({
+  Future<void> registerUser({
     required String email,
     required String password,
     required String name,
   }) async {
-    emit(SignupLoading());
+    emit(RegisterLoading());
     final result = await authRepo.createUserWithEmailPassword(
       email: email,
       password: password,
       name: name,
     );
     result.fold(
-      (l) => emit(SignupError(l.message)),
-      (r) => emit(SignupSuccess(r)),
+      (l) => emit(RegisterError(l.message)),
+      (r) => emit(RegisterSuccess(r)),
     );
   }
 }

@@ -47,7 +47,7 @@ class FireBaseAuthService {
       );
       return credential.user!;
     } on FirebaseAuthException catch (e) {
-      throw CustomException(_mapFirebaseAuthExceptionToMessage(e));
+      throw CustomException(_mapFirebaseAuthExceptionToArabicMessage(e));
     } on CustomException {
       rethrow;
     } catch (e) {

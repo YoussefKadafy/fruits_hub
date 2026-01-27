@@ -45,7 +45,7 @@ class AuthRepoImpl extends AuthRepo {
       );
       return Right(UserModel.fromFirebase(user));
     } catch (e) {
-      log('Unexpected error in loginWithEmailAndPassword: $e');
+      log('Unexpected error in repo loginWithEmailAndPassword: $e');
       return Left(ServerFailure(e.toString()));
     }
   }
