@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruits_hub/core/app_styles/app_assets.dart';
 import 'package:fruits_hub/core/extensions/sized_box_extension.dart';
+import 'package:fruits_hub/features/auth/presentation/cubit/login/login_cubit.dart';
 import 'package:fruits_hub/features/auth/presentation/widgets/social_auth.dart';
 import 'package:svg_flutter/svg.dart';
 
@@ -14,7 +16,9 @@ class SocialButtonsSection extends StatelessWidget {
         SocialButton(
           icon: SvgPicture.asset(AppAssets.assetsIconsGoogle),
           text: 'تسجيل الدخول بواسطة Google',
-          onTap: () {},
+          onTap: () {
+            context.read<LoginCubit>().loginWithGoogle();
+          },
         ),
         12.height,
 
