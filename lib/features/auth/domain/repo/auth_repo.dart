@@ -14,4 +14,5 @@ abstract class AuthRepo {
     required String password,
   });
   Future<Either<Failure, UserEntity>> loginWithGoogle();
+  Future<Either<Failure, UserEntity>> loginWithFacebook();
 }

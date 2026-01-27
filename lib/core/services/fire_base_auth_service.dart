@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fruits_hub/core/errors/custom_exception.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class FireBaseAuthService {
   /// Creates a new user account using email and password.
@@ -105,6 +106,58 @@ class FireBaseAuthService {
       log('Unexpected error in signInWithGoogle: $e');
       throw CustomException(
         'حدث خطأ غير متوقع أثناء تسجيل الدخول باستخدام Google.',
+      );
+    }
+  }
+
+  /// log in with facebook
+  Future<User> signInWithFacebook() async {
+    try {
+      // Trigger the sign-in flow
+      final LoginResult loginResult = await FacebookAuth.instance.login();
+
+      // User cancelled Facebook sign-in
+      if (loginResult.status == LoginStatus.cancelled) {
+        throw CustomException('تم إلغاء تسجيل الدخول باستخدام Facebook.');
+      }
+
+      // Login failed
+      if (loginResult.status == LoginStatus.failed) {
+        throw CustomException(
+          loginResult.message ?? 'فشل تسجيل الدخول باستخدام Facebook.',
+        );
+      }
+
+      final accessToken = loginResult.accessToken;
+
+      if (accessToken == null) {
+        throw CustomException('فشل الحصول على رمز الوصول من Facebook.');
+      }
+
+      // Create a credential from the access token
+      final OAuthCredential facebookAuthCredential =
+          FacebookAuthProvider.credential(loginResult.accessToken!.tokenString);
+
+      // Sign in with Firebase
+      final userCredential = await FirebaseAuth.instance.signInWithCredential(
+        facebookAuthCredential,
+      );
+
+      if (userCredential.user == null) {
+        throw CustomException(
+          'فشل تسجيل الدخول باستخدام Facebook. حاول مرة أخرى.',
+        );
+      }
+
+      return userCredential.user!;
+    } on FirebaseAuthException catch (e) {
+      throw CustomException(_mapFirebaseAuthExceptionToArabicMessage(e));
+    } on CustomException {
+      rethrow;
+    } catch (e) {
+      log('Unexpected error in signInWithFacebook: $e');
+      throw CustomException(
+        'حدث خطأ غير متوقع أثناء تسجيل الدخول باستخدام Facebook.',
       );
     }
   }
