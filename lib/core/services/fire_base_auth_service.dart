@@ -63,39 +63,28 @@ class FireBaseAuthService {
 
   /// log in with google
   /// log in with google
+
   Future<User> signInWithGoogle() async {
+    // Trigger the authentication flow
     try {
-      // Trigger the authentication flow
+      await GoogleSignIn.instance.initialize();
+      // Trigger Google sign-in
       final GoogleSignInAccount? googleUser = await GoogleSignIn.instance
           .authenticate();
 
-      // User cancelled Google sign-in
+      // User cancelled
       if (googleUser == null) {
-        throw CustomException('تم إلغاء تسجيل الدخول باستخدام Google.');
+        throw CustomException('Google sign-in cancelled');
       }
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
 
-      // Obtain the auth details from the request
-      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
-
-      if (googleAuth.idToken == null) {
-        throw CustomException('فشل الحصول على بيانات المصادقة من Google.');
-      }
-
-      // Create a new credential
       final credential = GoogleAuthProvider.credential(
         idToken: googleAuth.idToken,
       );
-
-      // Sign in with Firebase
       final userCredential = await FirebaseAuth.instance.signInWithCredential(
         credential,
       );
-
-      if (userCredential.user == null) {
-        throw CustomException(
-          'فشل تسجيل الدخول باستخدام Google. حاول مرة أخرى.',
-        );
-      }
 
       return userCredential.user!;
     } on FirebaseAuthException catch (e) {
@@ -103,9 +92,10 @@ class FireBaseAuthService {
     } on CustomException {
       rethrow;
     } catch (e) {
+      // Log unexpected errors for monitoring
       log('Unexpected error in signInWithGoogle: $e');
       throw CustomException(
-        'حدث خطأ غير متوقع أثناء تسجيل الدخول باستخدام Google.',
+        'An unexpected error in FIREBASE SERVICE occurred. Please try again later.',
       );
     }
   }
@@ -155,7 +145,7 @@ class FireBaseAuthService {
     } on CustomException {
       rethrow;
     } catch (e) {
-      log('Unexpected error in signInWithFacebook: $e');
+      log('Unexpected error in FIREBASE SERVICE signInWithFacebook: $e');
       throw CustomException(
         'حدث خطأ غير متوقع أثناء تسجيل الدخول باستخدام Facebook.',
       );
