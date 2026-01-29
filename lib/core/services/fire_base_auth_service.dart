@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:fruits_hub/core/errors/custom_exception.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
@@ -65,7 +66,6 @@ class FireBaseAuthService {
   /// log in with google
 
   Future<User> signInWithGoogle() async {
-    // Trigger the authentication flow
     try {
       await GoogleSignIn.instance.initialize();
       // Trigger Google sign-in
@@ -89,14 +89,24 @@ class FireBaseAuthService {
       return userCredential.user!;
     } on FirebaseAuthException catch (e) {
       throw CustomException(_mapFirebaseAuthExceptionToArabicMessage(e));
+    } on PlatformException catch (e) {
+      // Handle Google Sign-In specific errors
+      log('PlatformException in signInWithGoogle: ${e.code} - ${e.message}');
+
+      if (e.code == 'sign_in_canceled' ||
+          e.code == 'network_error' ||
+          e.code == 'sign_in_failed') {
+        throw CustomException(_mapPlatformExceptionToArabicMessage(e));
+      }
+
+      throw CustomException('حدث خطأ في Google Sign-In: ${e.message}');
     } on CustomException {
+      // Re-throw custom exceptions as-is
       rethrow;
     } catch (e) {
-      // Log unexpected errors for monitoring
+      // Log truly unexpected errors
       log('Unexpected error in signInWithGoogle: $e');
-      throw CustomException(
-        'An unexpected error in FIREBASE SERVICE occurred. Please try again later.',
-      );
+      throw CustomException('حدث خطأ غير متوقع. برجاء المحاولة مرة أخرى.');
     }
   }
 
@@ -306,6 +316,21 @@ class FireBaseAuthService {
 
         // ✅ Include Firebase's message as fallback (better UX)
         return exception.message ?? 'Authentication failed. Please try again.';
+    }
+  }
+
+  /// PlatformException to user-friendly messages
+
+  String _mapPlatformExceptionToArabicMessage(PlatformException e) {
+    switch (e.code) {
+      case 'sign_in_canceled':
+        return 'تم إلغاء تسجيل الدخول باستخدام Google.';
+      case 'network_error':
+        return 'خطأ في الاتصال بالإنترنت. تحقق من اتصالك وحاول مرة أخرى.';
+      case 'sign_in_failed':
+        return 'فشل تسجيل الدخول. برجاء المحاولة مرة أخرى.';
+      default:
+        return 'حدث خطأ في Google Sign-In.';
     }
   }
 }

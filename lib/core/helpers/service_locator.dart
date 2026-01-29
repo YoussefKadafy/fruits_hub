@@ -9,11 +9,13 @@ final locator = GetIt.instance;
 
 void setupServiceLocator() {
   // Services
-  locator.registerSingleton<FireBaseAuthService>(FireBaseAuthService());
+  locator.registerLazySingleton<FireBaseAuthService>(
+    () => FireBaseAuthService(),
+  );
 
   // Repositories
-  locator.registerSingleton<AuthRepo>(
-    AuthRepoImpl(fireBaseAuthService: locator<FireBaseAuthService>()),
+  locator.registerLazySingleton<AuthRepo>(
+    () => AuthRepoImpl(fireBaseAuthService: locator<FireBaseAuthService>()),
   );
   // Add your repositories here
 
@@ -21,7 +23,9 @@ void setupServiceLocator() {
   // Add your use cases here
 
   // BLoCs
-  locator.registerSingleton<RegisterCubit>(RegisterCubit(locator<AuthRepo>()));
-  locator.registerSingleton<LoginCubit>(LoginCubit(locator<AuthRepo>()));
+  locator.registerFactory<RegisterCubit>(
+    () => RegisterCubit(locator<AuthRepo>()),
+  );
+  locator.registerFactory<LoginCubit>(() => LoginCubit(locator<AuthRepo>()));
   // Add your BLoCs here
 }
