@@ -1,3 +1,5 @@
+import 'package:fruits_hub/core/services/data_base_service.dart';
+import 'package:fruits_hub/core/services/fire_store_service.dart';
 import 'package:fruits_hub/features/auth/data/repos/auth_repo_impl.dart';
 import 'package:fruits_hub/features/auth/domain/repo/auth_repo.dart';
 import 'package:fruits_hub/features/auth/presentation/cubit/login/login_cubit.dart';
@@ -12,10 +14,13 @@ void setupServiceLocator() {
   locator.registerLazySingleton<FireBaseAuthService>(
     () => FireBaseAuthService(),
   );
-
+  locator.registerLazySingleton<DataBaseService>(() => FireStoreService());
   // Repositories
   locator.registerLazySingleton<AuthRepo>(
-    () => AuthRepoImpl(fireBaseAuthService: locator<FireBaseAuthService>()),
+    () => AuthRepoImpl(
+      fireBaseAuthService: locator<FireBaseAuthService>(),
+      dataBaseService: locator<DataBaseService>(),
+    ),
   );
   // Add your repositories here
 
