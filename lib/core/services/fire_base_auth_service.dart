@@ -67,39 +67,28 @@ class FireBaseAuthService {
 
   Future<User> signInWithGoogle() async {
     try {
-      await GoogleSignIn.instance.initialize();
-      // Trigger Google sign-in
+      // await GoogleSignIn.instance.initialize();
       final GoogleSignInAccount? googleUser = await GoogleSignIn.instance
           .authenticate();
 
-      // User cancelled
-      if (googleUser == null) {
-        throw CustomException('Google sign-in cancelled');
-      }
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication googleAuth = googleUser!.authentication;
 
+      // Create a new credential
       final credential = GoogleAuthProvider.credential(
         idToken: googleAuth.idToken,
       );
+
+      // Once signed in, return the UserCredential
       final userCredential = await FirebaseAuth.instance.signInWithCredential(
         credential,
       );
 
       return userCredential.user!;
-    } on FirebaseAuthException catch (e) {
-      throw CustomException(_mapFirebaseAuthExceptionToArabicMessage(e));
     } on PlatformException catch (e) {
       // Handle Google Sign-In specific errors
       log('PlatformException in signInWithGoogle: ${e.code} - ${e.message}');
-
-      if (e.code == 'sign_in_canceled' ||
-          e.code == 'network_error' ||
-          e.code == 'sign_in_failed') {
-        throw CustomException(_mapPlatformExceptionToArabicMessage(e));
-      }
-
-      throw CustomException('حدث خطأ في Google Sign-In: ${e.message}');
+      throw CustomException(_mapPlatformExceptionToArabicMessage(e));
     } on CustomException {
       // Re-throw custom exceptions as-is
       rethrow;
@@ -323,12 +312,21 @@ class FireBaseAuthService {
 
   String _mapPlatformExceptionToArabicMessage(PlatformException e) {
     switch (e.code) {
+      case 'sign_in_canceled_by_user':
+        return 'تم إلغاء تسجيل الدخول باستخدام Google.';
+
       case 'sign_in_canceled':
         return 'تم إلغاء تسجيل الدخول باستخدام Google.';
       case 'network_error':
         return 'خطأ في الاتصال بالإنترنت. تحقق من اتصالك وحاول مرة أخرى.';
       case 'sign_in_failed':
         return 'فشل تسجيل الدخول. برجاء المحاولة مرة أخرى.';
+
+      case 'account_exists_with_different_credential':
+        return 'حساب موجود بالفعل باستخدام بيانات اخرى.';
+      case 'invalid_credential':
+        return 'بيانات التسجيل غير صالحة.';
+
       default:
         return 'حدث خطأ في Google Sign-In.';
     }
