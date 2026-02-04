@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:fruits_hub/core/errors/custom_exception.dart';
+import 'package:fruits_hub/core/helpers/shared_prefs.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
@@ -153,6 +154,16 @@ class FireBaseAuthService {
         'حدث خطأ غير متوقع أثناء تسجيل الدخول باستخدام Facebook.',
       );
     }
+  }
+
+  Future<bool> isAuthanticated() async {
+    final user = FirebaseAuth.instance.currentUser;
+    return user != null;
+  }
+
+  Future<void> signOut() async {
+    await FirebaseAuth.instance.signOut();
+    await SharedPrefs.clearUserData();
   }
 
   /////////////////////////////////////////////

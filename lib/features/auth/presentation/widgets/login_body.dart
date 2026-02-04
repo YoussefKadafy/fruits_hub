@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruits_hub/core/app_styles/app_colors.dart';
 import 'package:fruits_hub/core/extensions/sized_box_extension.dart';
+import 'package:fruits_hub/core/routing/app_routes.dart';
 import 'package:fruits_hub/core/utils/custom_button.dart';
 import 'package:fruits_hub/features/auth/presentation/cubit/login/login_cubit.dart';
 import 'package:fruits_hub/features/auth/presentation/widgets/divider_or.dart';
@@ -9,6 +10,7 @@ import 'package:fruits_hub/features/auth/presentation/widgets/do_not_have_accoun
 import 'package:fruits_hub/features/auth/presentation/widgets/forget_password.dart';
 import 'package:fruits_hub/features/auth/presentation/widgets/login_text_fields_section.dart';
 import 'package:fruits_hub/features/auth/presentation/widgets/social_buttons_section.dart';
+import 'package:go_router/go_router.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class LoginBody extends StatefulWidget {
@@ -31,7 +33,9 @@ class _LoginBodyState extends State<LoginBody> {
   Widget build(BuildContext context) {
     return BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) {
-        if (state is LoginSuccess) {}
+        if (state is LoginSuccess) {
+          context.pushReplacementNamed(AppRoutes.home);
+        }
         if (state is LoginError) {
           ScaffoldMessenger.of(
             context,
