@@ -50,6 +50,14 @@ class AppAssets {
   /// assets/icons/facebook.svg
   static const String assetsIconsFacebook = "assets/icons/facebook.svg";
 
+  /// Assets for assetsIconsFeaturedBackground
+  /// assets/icons/featured-background.svg
+  static const String assetsIconsFeaturedBackground = "assets/icons/featured-background.svg";
+
+  /// Assets for assetsIconsFilter
+  /// assets/icons/filter.svg
+  static const String assetsIconsFilter = "assets/icons/filter.svg";
+
   /// Assets for assetsIconsFruitBasketAmico1
   /// assets/icons/fruit-basket-amico-1.svg
   static const String assetsIconsFruitBasketAmico1 = "assets/icons/fruit-basket-amico-1.svg";
@@ -61,6 +69,10 @@ class AppAssets {
   /// Assets for assetsIconsMainSplashImage
   /// assets/icons/main_splash_image.svg
   static const String assetsIconsMainSplashImage = "assets/icons/main_splash_image.svg";
+
+  /// Assets for assetsIconsNotification
+  /// assets/icons/notification.svg
+  static const String assetsIconsNotification = "assets/icons/notification.svg";
 
   /// Assets for assetsIconsOnboardingBackground1
   /// assets/icons/onboarding_background1.svg
@@ -74,8 +86,24 @@ class AppAssets {
   /// assets/icons/pineapple-cuate-1.svg
   static const String assetsIconsPineappleCuate1 = "assets/icons/pineapple-cuate-1.svg";
 
+  /// Assets for assetsIconsProfile
+  /// assets/icons/profile.svg
+  static const String assetsIconsProfile = "assets/icons/profile.svg";
+
+  /// Assets for assetsIconsSearch
+  /// assets/icons/search.svg
+  static const String assetsIconsSearch = "assets/icons/search.svg";
+
+  /// Assets for assetsIconsStrawberry
+  /// assets/icons/strawberry.svg
+  static const String assetsIconsStrawberry = "assets/icons/strawberry.svg";
+
   /// Assets for assetsIconsUpperSplashImage
   /// assets/icons/upper_splash_image.svg
   static const String assetsIconsUpperSplashImage = "assets/icons/upper_splash_image.svg";
+
+  /// Assets for assetsImagesStrawberry
+  /// assets/images/strawberry.png
+  static const String assetsImagesStrawberry = "assets/images/strawberry.png";
 }
 
