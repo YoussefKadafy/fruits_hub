@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPrefs {
   static SharedPreferences? _preferences;
   static const String _isOnboardingViewedKey = 'is_onboarding_viewed';
+  static const String _userDataKey = 'user_data';
+
   static Future<void> init() async {
     _preferences = await SharedPreferences.getInstance();
   }
@@ -27,5 +31,21 @@ class SharedPrefs {
 
   static Future<void> clearOnboardingViewed() async {
     await instance.remove(_isOnboardingViewedKey);
+  }
+
+  // User Data Methods
+  static Future<bool> saveUserData(Map<String, dynamic> userData) async {
+    final userDataJson = jsonEncode(userData);
+    return await instance.setString(_userDataKey, userDataJson);
+  }
+
+  static Map<String, dynamic>? getUserData() {
+    final userDataJson = instance.getString(_userDataKey);
+    if (userDataJson == null) return null;
+    return jsonDecode(userDataJson) as Map<String, dynamic>;
+  }
+
+  static Future<void> clearUserData() async {
+    await instance.remove(_userDataKey);
   }
 }

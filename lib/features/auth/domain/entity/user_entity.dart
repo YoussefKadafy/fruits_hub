@@ -10,4 +10,9 @@ class UserEntity {
     'email': email,
     'userId': userId,
   };
+  factory UserEntity.fromMap(Map<String, dynamic> map) => UserEntity(
+    name: map['name'] ?? '',
+    email: map['email'] ?? '',
+    userId: map['userId'] ?? '',
+  );
 }

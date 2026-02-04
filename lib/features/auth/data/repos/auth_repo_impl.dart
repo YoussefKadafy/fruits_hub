@@ -6,6 +6,7 @@ import 'package:fruits_hub/core/errors/custom_exception.dart';
 
 import 'package:fruits_hub/core/errors/failure.dart';
 import 'package:fruits_hub/core/helpers/backend_endpoints.dart';
+import 'package:fruits_hub/core/helpers/shared_prefs.dart';
 import 'package:fruits_hub/core/services/data_base_service.dart';
 import 'package:fruits_hub/core/services/fire_base_auth_service.dart';
 import 'package:fruits_hub/features/auth/data/models/user_model.dart';
@@ -33,11 +34,16 @@ class AuthRepoImpl extends AuthRepo {
         email: email,
         password: password,
       );
-      final userEntity = UserModel.fromFirebase(user);
-
+      final userEntity = UserEntity(
+        name: name,
+        email: user.email!,
+        userId: user.uid,
+      );
       await addUserData(user: userEntity);
+      final savedUserEntity = await getUserData(userId: user.uid);
+      await SharedPrefs.saveUserData(savedUserEntity.toMap());
 
-      return Right(userEntity);
+      return Right(savedUserEntity);
     } catch (e) {
       if (user != null) {
         await fireBaseAuthService.deleteUser();
@@ -59,7 +65,10 @@ class AuthRepoImpl extends AuthRepo {
         email: email,
         password: password,
       );
-      return Right(UserModel.fromFirebase(user));
+      final userEntity = await getUserData(userId: user.uid);
+      await SharedPrefs.saveUserData(userEntity.toMap());
+
+      return Right(userEntity);
     } catch (e) {
       log('Unexpected error in repo loginWithEmailAndPassword: $e');
       return Left(ServerFailure(e.toString()));
@@ -70,7 +79,20 @@ class AuthRepoImpl extends AuthRepo {
   Future<Either<Failure, UserEntity>> loginWithGoogle() async {
     try {
       final user = await fireBaseAuthService.signInWithGoogle();
-      return Right(UserModel.fromFirebase(user));
+      final userEntity = UserModel.fromFirebase(user);
+      final isUserExist = await dataBaseService.isUserExist(
+        path: BackendEndpoints.usersCollection,
+        id: user.uid,
+      );
+      UserEntity entity;
+      if (isUserExist) {
+        entity = await getUserData(userId: user.uid);
+      } else {
+        await addUserData(user: userEntity);
+        entity = await getUserData(userId: user.uid);
+      }
+      await SharedPrefs.saveUserData(entity.toMap());
+      return Right(entity);
     } catch (e) {
       log('Unexpected error in repo loginWithGoogle: $e');
       return Left(ServerFailure(e.toString()));
@@ -81,7 +103,9 @@ class AuthRepoImpl extends AuthRepo {
   Future<Either<Failure, UserEntity>> loginWithFacebook() async {
     try {
       final user = await fireBaseAuthService.signInWithFacebook();
-      return Right(UserModel.fromFirebase(user));
+      final userEntity = UserModel.fromFirebase(user);
+      await SharedPrefs.saveUserData(userEntity.toMap());
+      return Right(userEntity);
     } catch (e) {
       log('Unexpected error in repo loginWithFacebook: $e');
       return Left(ServerFailure(e.toString()));
@@ -89,15 +113,21 @@ class AuthRepoImpl extends AuthRepo {
   }
 
   @override
-  Future<dynamic> addUserData({required UserEntity user}) {
-    try {
-      return dataBaseService.addData(
-        path: BackendEndpoints.usersCollection,
-        data: user.toMap(),
-      );
-    } catch (e) {
-      log('Unexpected error in repo addData: $e');
-      throw CustomException(e.toString());
-    }
+  Future<dynamic> addUserData({required UserEntity user}) async {
+    return await dataBaseService.addData(
+      path: BackendEndpoints.usersCollection,
+      data: user.toMap(),
+      documentId: user.userId,
+    );
+  }
+
+  @override
+  Future<UserEntity> getUserData({required String userId}) async {
+    final userData = await dataBaseService.getData(
+      path: BackendEndpoints.usersCollection,
+      id: userId,
+    );
+
+    return UserEntity.fromMap(userData);
   }
 }

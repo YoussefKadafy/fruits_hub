@@ -5,6 +5,7 @@ import 'package:fruits_hub/features/auth/presentation/cubit/login/login_cubit.da
 import 'package:fruits_hub/features/auth/presentation/cubit/signup/register_cubit.dart';
 import 'package:fruits_hub/features/auth/presentation/views/login_view.dart';
 import 'package:fruits_hub/features/auth/presentation/views/register_view.dart';
+import 'package:fruits_hub/features/home/presentation/views/home_view.dart';
 import 'package:fruits_hub/features/onboaeding/presentation/views/onboarding_view.dart';
 import 'package:fruits_hub/features/splash/presentation/view/splash_view.dart';
 import 'package:go_router/go_router.dart';
@@ -45,6 +46,13 @@ class RoutesConfig {
             create: (context) => locator<RegisterCubit>(),
             child: RegisterView(),
           );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.home,
+        name: AppRoutes.home,
+        builder: (context, state) {
+          return const HomeView();
         },
       ),
     ],

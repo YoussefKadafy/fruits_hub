@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fruits_hub/core/routing/app_routes.dart';
+import 'package:go_router/go_router.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:fruits_hub/core/app_styles/app_colors.dart';
 import 'package:fruits_hub/core/extensions/sized_box_extension.dart';
@@ -53,7 +55,9 @@ class _RegisterBodyState extends State<RegisterBody> {
   Widget build(BuildContext context) {
     return BlocConsumer<RegisterCubit, RegisterState>(
       listener: (context, state) {
-        if (state is RegisterSuccess) {}
+        if (state is RegisterSuccess) {
+          context.pushReplacementNamed(AppRoutes.home);
+        }
         if (state is RegisterError) {
           ScaffoldMessenger.of(
             context,
