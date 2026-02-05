@@ -58,6 +58,22 @@ class AppAssets {
   /// assets/icons/filter.svg
   static const String assetsIconsFilter = "assets/icons/filter.svg";
 
+  /// Assets for assetsIconsFocusedHome
+  /// assets/icons/focused-home.svg
+  static const String assetsIconsFocusedHome = "assets/icons/focused-home.svg";
+
+  /// Assets for assetsIconsFocusedProducts
+  /// assets/icons/focused-products.svg
+  static const String assetsIconsFocusedProducts = "assets/icons/focused-products.svg";
+
+  /// Assets for assetsIconsFocusedShoppingCart
+  /// assets/icons/focused-shopping-cart.svg
+  static const String assetsIconsFocusedShoppingCart = "assets/icons/focused-shopping-cart.svg";
+
+  /// Assets for assetsIconsFocusedUser
+  /// assets/icons/focused-user.svg
+  static const String assetsIconsFocusedUser = "assets/icons/focused-user.svg";
+
   /// Assets for assetsIconsFruitBasketAmico1
   /// assets/icons/fruit-basket-amico-1.svg
   static const String assetsIconsFruitBasketAmico1 = "assets/icons/fruit-basket-amico-1.svg";
@@ -65,6 +81,10 @@ class AppAssets {
   /// Assets for assetsIconsGoogle
   /// assets/icons/google.svg
   static const String assetsIconsGoogle = "assets/icons/google.svg";
+
+  /// Assets for assetsIconsHome
+  /// assets/icons/home.svg
+  static const String assetsIconsHome = "assets/icons/home.svg";
 
   /// Assets for assetsIconsMainSplashImage
   /// assets/icons/main_splash_image.svg
@@ -86,6 +106,10 @@ class AppAssets {
   /// assets/icons/pineapple-cuate-1.svg
   static const String assetsIconsPineappleCuate1 = "assets/icons/pineapple-cuate-1.svg";
 
+  /// Assets for assetsIconsProducts
+  /// assets/icons/products.svg
+  static const String assetsIconsProducts = "assets/icons/products.svg";
+
   /// Assets for assetsIconsProfile
   /// assets/icons/profile.svg
   static const String assetsIconsProfile = "assets/icons/profile.svg";
@@ -94,6 +118,10 @@ class AppAssets {
   /// assets/icons/search.svg
   static const String assetsIconsSearch = "assets/icons/search.svg";
 
+  /// Assets for assetsIconsShoppingCart
+  /// assets/icons/shopping-cart.svg
+  static const String assetsIconsShoppingCart = "assets/icons/shopping-cart.svg";
+
   /// Assets for assetsIconsStrawberry
   /// assets/icons/strawberry.svg
   static const String assetsIconsStrawberry = "assets/icons/strawberry.svg";
@@ -101,6 +129,10 @@ class AppAssets {
   /// Assets for assetsIconsUpperSplashImage
   /// assets/icons/upper_splash_image.svg
   static const String assetsIconsUpperSplashImage = "assets/icons/upper_splash_image.svg";
+
+  /// Assets for assetsIconsUser
+  /// assets/icons/user.svg
+  static const String assetsIconsUser = "assets/icons/user.svg";
 
   /// Assets for assetsImagesStrawberry
   /// assets/images/strawberry.png
