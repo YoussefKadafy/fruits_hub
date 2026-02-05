@@ -18,12 +18,18 @@ class FeaturedItem extends StatelessWidget {
         aspectRatio: 342 / 158,
         child: Stack(
           children: [
-            Container(
-              width: width * .9,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.fill,
-                  image: AssetImage(AppAssets.assetsImagesStrawberry),
+            Positioned(
+              left: 0,
+              right: width * .38,
+              bottom: 0,
+              top: 0,
+              child: Container(
+                width: width * .9,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.fill,
+                    image: Svg(AppAssets.assetsIconsPineappleCuate1),
+                  ),
                 ),
               ),
             ),

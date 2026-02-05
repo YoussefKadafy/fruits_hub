@@ -17,8 +17,8 @@ class SearchTextField extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: AppColors.green50,
-            blurRadius: 8, // كلما زادت كلما انتشر الظل أكثر
-            spreadRadius: 1, // انتشار الظل
+            blurRadius: 10, // كلما زادت كلما انتشر الظل أكثر
+            spreadRadius: 2, // انتشار الظل
             offset: Offset(2, 2), // موضع الظل
           ),
         ],
@@ -58,11 +58,11 @@ class SearchTextField extends StatelessWidget {
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(4.r),
-            borderSide: BorderSide(color: Color(0xffE6E9EA), width: 1),
+            borderSide: BorderSide(color: Colors.white, width: 1),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(4.r),
-            borderSide: BorderSide(color: AppColors.primary, width: 2),
+            borderSide: BorderSide(color: AppColors.primary, width: 1),
           ),
 
           focusedErrorBorder: OutlineInputBorder(
@@ -71,7 +71,7 @@ class SearchTextField extends StatelessWidget {
           ),
           disabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(4.r),
-            borderSide: BorderSide(color: Color(0xffE6E9EA), width: 1),
+            borderSide: BorderSide(color: Colors.white, width: 1),
           ),
         ),
       ),
