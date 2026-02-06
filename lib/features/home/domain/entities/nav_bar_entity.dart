@@ -5,51 +5,40 @@ import 'package:svg_flutter/svg.dart';
 
 class NavBarEntity {
   final String focusedLabel;
-  final Widget icon;
-  final Widget activeIcon;
+  final String iconPath;
+  final String activeIconPath;
 
   const NavBarEntity({
     required this.focusedLabel,
-    required this.icon,
-    required this.activeIcon,
+    required this.iconPath,
+    required this.activeIconPath,
   });
 
-  static List<NavBarEntity> navBarItems = [
+  // Lazy widget creation instead of storing widgets
+  Widget get icon => SvgPicture.asset(iconPath, height: 24.h, width: 24.w);
+
+  Widget get activeIcon => SvgPicture.asset(activeIconPath);
+
+  static const List<NavBarEntity> navBarItems = [
     NavBarEntity(
-      focusedLabel: 'الرئيسية',
-      icon: SvgPicture.asset(
-        AppAssets.assetsIconsHome,
-        height: 24.h,
-        width: 24.w,
-      ),
-      activeIcon: SvgPicture.asset(AppAssets.assetsIconsFocusedHome),
+      focusedLabel: 'الرئيسية',
+      iconPath: AppAssets.assetsIconsHome,
+      activeIconPath: AppAssets.assetsIconsFocusedHome,
     ),
     NavBarEntity(
       focusedLabel: 'المنتجات',
-      icon: SvgPicture.asset(
-        AppAssets.assetsIconsProducts,
-        height: 24.h,
-        width: 24.w,
-      ),
-      activeIcon: SvgPicture.asset(AppAssets.assetsIconsFocusedProducts),
+      iconPath: AppAssets.assetsIconsProducts,
+      activeIconPath: AppAssets.assetsIconsFocusedProducts,
     ),
     NavBarEntity(
       focusedLabel: 'عربة التسوق',
-      icon: SvgPicture.asset(
-        AppAssets.assetsIconsShoppingCart,
-        height: 24.h,
-        width: 24.w,
-      ),
-      activeIcon: SvgPicture.asset(AppAssets.assetsIconsFocusedShoppingCart),
+      iconPath: AppAssets.assetsIconsShoppingCart,
+      activeIconPath: AppAssets.assetsIconsFocusedShoppingCart,
     ),
     NavBarEntity(
       focusedLabel: 'حسابي',
-      icon: SvgPicture.asset(
-        AppAssets.assetsIconsUser,
-        height: 24.h,
-        width: 24.w,
-      ),
-      activeIcon: SvgPicture.asset(AppAssets.assetsIconsFocusedUser),
+      iconPath: AppAssets.assetsIconsUser,
+      activeIconPath: AppAssets.assetsIconsFocusedUser,
     ),
   ];
 }

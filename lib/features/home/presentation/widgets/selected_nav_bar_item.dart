@@ -35,6 +35,7 @@ class SelectedNavBarItem extends StatelessWidget {
               fontSize: 12.sp,
               fontWeight: FontWeight.w600,
               color: AppColors.primary,
+              decoration: TextDecoration.none,
             ),
           ),
         ],
