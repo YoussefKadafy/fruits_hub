@@ -34,6 +34,7 @@ class AuthRepoImpl extends AuthRepo {
         password: password,
       );
       final userEntity = UserEntity(
+        role: 'user',
         name: name,
         email: user.email!,
         userId: user.uid,
@@ -128,5 +129,16 @@ class AuthRepoImpl extends AuthRepo {
     );
 
     return UserEntity.fromMap(userData);
+  }
+
+  @override
+  Future<Either<Failure, void>> signOut() async {
+    try {
+      await fireBaseAuthService.signOut();
+      return const Right(null);
+    } catch (e) {
+      log('Unexpected error in repo signOut: $e');
+      return Left(ServerFailure(e.toString()));
+    }
   }
 }

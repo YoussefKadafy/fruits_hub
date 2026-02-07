@@ -8,6 +8,8 @@ import 'package:fruits_hub/features/auth/presentation/views/register_view.dart';
 import 'package:fruits_hub/features/home/presentation/views/best_seller_view.dart';
 import 'package:fruits_hub/features/main/presentation/views/main_view.dart';
 import 'package:fruits_hub/features/onboaeding/presentation/views/onboarding_view.dart';
+import 'package:fruits_hub/features/profile/presentation/cubit/profile_cubit.dart';
+import 'package:fruits_hub/features/profile/presentation/views/profile_view.dart';
 import 'package:fruits_hub/features/splash/presentation/view/splash_view.dart';
 import 'package:go_router/go_router.dart';
 
@@ -61,6 +63,16 @@ class RoutesConfig {
         name: AppRoutes.bestSeller,
         builder: (context, state) {
           return const BestSellerView();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.profile,
+        name: AppRoutes.profile,
+        builder: (context, state) {
+          return BlocProvider(
+            create: (context) => locator<ProfileCubit>(),
+            child: const ProfileView(),
+          );
         },
       ),
     ],
