@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fruits_hub/features/home/domain/entities/nav_bar_entity.dart';
+import 'package:fruits_hub/features/main/domain/entities/nav_bar_entity.dart';
 
 class UnselectedNavBarItem extends StatelessWidget {
   final NavBarEntity item;

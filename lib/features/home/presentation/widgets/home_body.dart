@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruits_hub/core/extensions/sized_box_extension.dart';
 import 'package:fruits_hub/core/utils/search_text_field.dart';
 import 'package:fruits_hub/features/home/presentation/widgets/best_seller_headline.dart';
@@ -17,9 +18,13 @@ class HomeBody extends StatelessWidget {
           SliverToBoxAdapter(
             child: Column(
               children: [
+                16.height,
                 CustomHomeAppBar(),
                 24.height,
-                SearchTextField(controller: TextEditingController()),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0.w),
+                  child: SearchTextField(controller: TextEditingController()),
+                ),
                 19.height,
                 FeaturedItemsList(),
                 12.height,

@@ -10,32 +10,35 @@ class BestSellerHeadline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text('الأكثر مبيعاً', style: AppStyles.wight700Size16),
-        InkWell(
-          onTap: () {
-            PersistentNavBarNavigator.pushNewScreen(
-              context,
-              screen: const BestSellerView(),
-              withNavBar: true, // Keep the bottom nav bar visible
-              pageTransitionAnimation: PageTransitionAnimation.cupertino,
-            );
-          },
-          splashColor: AppColors.green50,
-          borderRadius: BorderRadius.circular(8.r),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              'المزيد',
-              style: AppStyles.wight400Size13.copyWith(
-                color: AppColors.grayScale,
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.0.w),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text('الأكثر مبيعاً', style: AppStyles.wight700Size16),
+          InkWell(
+            onTap: () {
+              PersistentNavBarNavigator.pushNewScreen(
+                context,
+                screen: const BestSellerView(),
+                withNavBar: true, // Keep the bottom nav bar visible
+                pageTransitionAnimation: PageTransitionAnimation.cupertino,
+              );
+            },
+            splashColor: AppColors.green50,
+            borderRadius: BorderRadius.circular(8.r),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'المزيد',
+                style: AppStyles.wight400Size13.copyWith(
+                  color: AppColors.grayScale,
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

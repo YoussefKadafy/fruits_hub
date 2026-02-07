@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruits_hub/core/app_styles/app_colors.dart';
-import 'package:fruits_hub/features/home/domain/entities/nav_bar_entity.dart';
+import 'package:fruits_hub/features/main/domain/entities/nav_bar_entity.dart';
 
 class SelectedNavBarItem extends StatelessWidget {
   final NavBarEntity item;
