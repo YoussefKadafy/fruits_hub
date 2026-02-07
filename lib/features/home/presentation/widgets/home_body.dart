@@ -4,8 +4,7 @@ import 'package:fruits_hub/core/utils/search_text_field.dart';
 import 'package:fruits_hub/features/home/presentation/widgets/best_seller_headline.dart';
 import 'package:fruits_hub/features/home/presentation/widgets/custom_home_app_bar.dart';
 import 'package:fruits_hub/features/home/presentation/widgets/featured_items_list.dart';
-import 'package:fruits_hub/features/home/presentation/widgets/fruite_item.dart';
-import 'package:fruits_hub/features/home/presentation/widgets/home_grid_list.dart';
+import 'package:fruits_hub/core/utils/products_grid_list.dart';
 
 class HomeBody extends StatelessWidget {
   const HomeBody({super.key});
@@ -29,7 +28,7 @@ class HomeBody extends StatelessWidget {
               ],
             ),
           ),
-          HomeGridList(),
+          ProductsGridList(),
         ],
       ),
     );
