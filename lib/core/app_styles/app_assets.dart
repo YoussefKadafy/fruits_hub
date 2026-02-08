@@ -78,6 +78,10 @@ class AppAssets {
   /// assets/icons/fruit-basket-amico-1.svg
   static const String assetsIconsFruitBasketAmico1 = "assets/icons/fruit-basket-amico-1.svg";
 
+  /// Assets for assetsIconsFucosedPlus
+  /// assets/icons/fucosed-plus.svg
+  static const String assetsIconsFucosedPlus = "assets/icons/fucosed-plus.svg";
+
   /// Assets for assetsIconsGoogle
   /// assets/icons/google.svg
   static const String assetsIconsGoogle = "assets/icons/google.svg";
@@ -105,6 +109,14 @@ class AppAssets {
   /// Assets for assetsIconsPineappleCuate1
   /// assets/icons/pineapple-cuate-1.svg
   static const String assetsIconsPineappleCuate1 = "assets/icons/pineapple-cuate-1.svg";
+
+  /// Assets for assetsIconsPlus
+  /// assets/icons/plus.svg
+  static const String assetsIconsPlus = "assets/icons/plus.svg";
+
+  /// Assets for assetsIconsPlus1
+  /// assets/icons/plus1.svg
+  static const String assetsIconsPlus1 = "assets/icons/plus1.svg";
 
   /// Assets for assetsIconsProducts
   /// assets/icons/products.svg

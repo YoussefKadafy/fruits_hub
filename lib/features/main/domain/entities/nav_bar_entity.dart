@@ -41,4 +41,32 @@ class NavBarEntity {
       activeIconPath: AppAssets.assetsIconsFocusedUser,
     ),
   ];
+
+  static const List<NavBarEntity> adminNavBarItems = [
+    NavBarEntity(
+      focusedLabel: 'الرئيسية',
+      iconPath: AppAssets.assetsIconsHome,
+      activeIconPath: AppAssets.assetsIconsFocusedHome,
+    ),
+    NavBarEntity(
+      focusedLabel: 'المنتجات',
+      iconPath: AppAssets.assetsIconsProducts,
+      activeIconPath: AppAssets.assetsIconsFocusedProducts,
+    ),
+    NavBarEntity(
+      focusedLabel: 'إضافة',
+      iconPath: AppAssets.assetsIconsPlus1,
+      activeIconPath: AppAssets.assetsIconsFucosedPlus,
+    ),
+    NavBarEntity(
+      focusedLabel: 'عربة التسوق',
+      iconPath: AppAssets.assetsIconsShoppingCart,
+      activeIconPath: AppAssets.assetsIconsFocusedShoppingCart,
+    ),
+    NavBarEntity(
+      focusedLabel: 'حسابي',
+      iconPath: AppAssets.assetsIconsUser,
+      activeIconPath: AppAssets.assetsIconsFocusedUser,
+    ),
+  ];
 }

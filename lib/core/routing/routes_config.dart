@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruits_hub/core/helpers/service_locator.dart';
 import 'package:fruits_hub/core/routing/app_routes.dart';
+import 'package:fruits_hub/features/add_product/presentation/views/add_product_view.dart';
 import 'package:fruits_hub/features/auth/presentation/cubit/login/login_cubit.dart';
 import 'package:fruits_hub/features/auth/presentation/cubit/signup/register_cubit.dart';
 import 'package:fruits_hub/features/auth/presentation/views/login_view.dart';
@@ -73,6 +74,13 @@ class RoutesConfig {
             create: (context) => locator<ProfileCubit>(),
             child: const ProfileView(),
           );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.addProduct,
+        name: AppRoutes.addProduct,
+        builder: (context, state) {
+          return const AddProductView();
         },
       ),
     ],
