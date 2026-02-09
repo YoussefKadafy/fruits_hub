@@ -30,4 +30,16 @@ class FireStoreService implements DataBaseService {
     final user = await firestore.collection(path).doc(id).get();
     return user.exists;
   }
+
+  @override
+  Stream<Map<String, dynamic>> listenToData({
+    required String path,
+    required String id,
+  }) {
+    return firestore.collection(path).doc(id).snapshots().map((
+      documentSnapshot,
+    ) {
+      return documentSnapshot.data() as Map<String, dynamic>;
+    });
+  }
 }

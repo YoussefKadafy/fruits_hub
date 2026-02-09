@@ -4,6 +4,8 @@ import 'package:fruits_hub/features/auth/data/repos/auth_repo_impl.dart';
 import 'package:fruits_hub/features/auth/domain/repo/auth_repo.dart';
 import 'package:fruits_hub/features/auth/presentation/cubit/login/login_cubit.dart';
 import 'package:fruits_hub/features/auth/presentation/cubit/signup/register_cubit.dart';
+import 'package:fruits_hub/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:fruits_hub/features/auth/domain/usecases/listen_to_user_usecase.dart';
 import 'package:fruits_hub/features/profile/domain/usecases/sign_out_usecase.dart';
 import 'package:fruits_hub/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:get_it/get_it.dart';
@@ -30,6 +32,9 @@ void setupServiceLocator() {
   locator.registerLazySingleton<SignOutUseCase>(
     () => SignOutUseCase(locator<AuthRepo>()),
   );
+  locator.registerLazySingleton<ListenToUserUseCase>(
+    () => ListenToUserUseCase(repo: locator<AuthRepo>()),
+  );
   // Add your use cases here
 
   // BLoCs
@@ -39,6 +44,9 @@ void setupServiceLocator() {
   locator.registerFactory<LoginCubit>(() => LoginCubit(locator<AuthRepo>()));
   locator.registerFactory<ProfileCubit>(
     () => ProfileCubit(locator<SignOutUseCase>()),
+  );
+  locator.registerFactory<AuthCubit>(
+    () => AuthCubit(listenToUserUseCase: locator<ListenToUserUseCase>()),
   );
   // Add your BLoCs here
 }

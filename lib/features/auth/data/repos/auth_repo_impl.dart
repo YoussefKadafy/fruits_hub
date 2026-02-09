@@ -22,6 +22,26 @@ class AuthRepoImpl extends AuthRepo {
   });
 
   @override
+  Stream<UserEntity> listenToUser({required String userId}) {
+    return dataBaseService
+        .listenToData(path: BackendEndpoints.usersCollection, id: userId)
+        .map((userData) {
+          final userEntity = UserEntity.fromMap(userData);
+          // Cache user data in SharedPreferences for offline fallback
+          SharedPrefs.saveUserData(userEntity);
+          return userEntity;
+        })
+        .handleError((error) {
+          // Fallback to SharedPreferences if Firestore stream fails
+          final cachedUserEntity = SharedPrefs.getUserEntity();
+          if (cachedUserEntity != null) {
+            return cachedUserEntity;
+          }
+          throw error;
+        });
+  }
+
+  @override
   Future<Either<Failure, UserEntity>> createUserWithEmailPassword({
     required String email,
     required String password,
@@ -41,7 +61,7 @@ class AuthRepoImpl extends AuthRepo {
       );
       await addUserData(user: userEntity);
       final savedUserEntity = await getUserData(userId: user.uid);
-      await SharedPrefs.saveUserData(savedUserEntity.toMap());
+      await SharedPrefs.saveUserData(savedUserEntity);
 
       return Right(savedUserEntity);
     } catch (e) {
@@ -66,7 +86,7 @@ class AuthRepoImpl extends AuthRepo {
         password: password,
       );
       final userEntity = await getUserData(userId: user.uid);
-      await SharedPrefs.saveUserData(userEntity.toMap());
+      await SharedPrefs.saveUserData(userEntity);
 
       return Right(userEntity);
     } catch (e) {
@@ -91,7 +111,7 @@ class AuthRepoImpl extends AuthRepo {
         await addUserData(user: userEntity);
         entity = await getUserData(userId: user.uid);
       }
-      await SharedPrefs.saveUserData(entity.toMap());
+      await SharedPrefs.saveUserData(entity);
       return Right(entity);
     } catch (e) {
       log('Unexpected error in repo loginWithGoogle: $e');
@@ -104,7 +124,7 @@ class AuthRepoImpl extends AuthRepo {
     try {
       final user = await fireBaseAuthService.signInWithFacebook();
       final userEntity = UserModel.fromFirebase(user);
-      await SharedPrefs.saveUserData(userEntity.toMap());
+      await SharedPrefs.saveUserData(userEntity);
       return Right(userEntity);
     } catch (e) {
       log('Unexpected error in repo loginWithFacebook: $e');

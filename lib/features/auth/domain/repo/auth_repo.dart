@@ -13,9 +13,16 @@ abstract class AuthRepo {
     required String email,
     required String password,
   });
+
   Future addUserData({required UserEntity user});
+
   Future<UserEntity> getUserData({required String userId});
+
+  Stream<UserEntity> listenToUser({required String userId});
+
   Future<Either<Failure, UserEntity>> loginWithGoogle();
+
   Future<Either<Failure, UserEntity>> loginWithFacebook();
+
   Future<Either<Failure, void>> signOut();
 }

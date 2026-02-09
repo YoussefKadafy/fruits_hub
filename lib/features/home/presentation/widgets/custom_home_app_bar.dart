@@ -14,11 +14,9 @@ class CustomHomeAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userDataMap = SharedPrefs.getUserData();
+    final userEntity = SharedPrefs.getUserEntity();
 
-    final userName = userDataMap != null
-        ? UserEntity.fromMap(userDataMap).name
-        : 'Guest';
+    final userName = userEntity != null ? userEntity.name : 'Guest';
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.0.w),
       child: Row(
