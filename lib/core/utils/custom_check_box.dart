@@ -19,7 +19,7 @@ class CustomCheckbox extends StatelessWidget {
       onTap: () => onChanged(!value),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
-        curve: Curves.easeInOut, // ✅ أنعم
+        curve: Curves.easeInOut,
         height: 24,
         width: 24,
         decoration: BoxDecoration(
