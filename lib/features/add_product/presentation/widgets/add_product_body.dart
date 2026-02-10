@@ -21,7 +21,7 @@ class _AddProductBodyState extends State<AddProductBody> {
   final ValueNotifier<bool> isFeaturedNotifier = ValueNotifier(false);
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  AutovalidateMode autovalidateMode = AutovalidateMode.always;
+  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
   @override
   void dispose() {
     isFeaturedNotifier.dispose();

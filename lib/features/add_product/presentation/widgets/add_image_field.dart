@@ -41,6 +41,8 @@ class _AddImageFieldState extends State<AddImageField> {
       });
       log('Error picking image: $e');
     }
+    isImageLoading = false;
+    setState(() {});
   }
 
   @override
