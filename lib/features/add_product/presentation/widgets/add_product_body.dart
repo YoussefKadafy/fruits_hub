@@ -7,6 +7,7 @@ import 'package:fruits_hub/core/extensions/sized_box_extension.dart';
 import 'package:fruits_hub/core/utils/custom_button.dart';
 import 'package:fruits_hub/core/utils/custom_check_box.dart';
 import 'package:fruits_hub/core/utils/custom_text_field.dart';
+import 'package:fruits_hub/features/add_product/domain/entities/add_product_entity.dart';
 import 'package:fruits_hub/features/add_product/presentation/widgets/add_image_field.dart';
 
 class AddProductBody extends StatefulWidget {
@@ -20,6 +21,7 @@ class _AddProductBodyState extends State<AddProductBody> {
   final ValueNotifier<bool> isFeaturedNotifier = ValueNotifier(false);
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  AutovalidateMode autovalidateMode = AutovalidateMode.always;
   @override
   void dispose() {
     isFeaturedNotifier.dispose();
@@ -34,6 +36,7 @@ class _AddProductBodyState extends State<AddProductBody> {
     return SingleChildScrollView(
       child: Form(
         key: _formKey,
+        autovalidateMode: autovalidateMode,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
@@ -44,8 +47,15 @@ class _AddProductBodyState extends State<AddProductBody> {
                 hintText: 'اسم المنتج',
                 labelText: 'اسم المنتج',
                 keyboardType: TextInputType.name,
+
                 onSaved: (value) {
                   productName = value!;
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'الرجاء ادخال اسم المنتج';
+                  }
+                  return null;
                 },
               ),
               20.height,
@@ -54,7 +64,16 @@ class _AddProductBodyState extends State<AddProductBody> {
                 labelText: 'سعر المنتج',
                 keyboardType: TextInputType.number,
                 onSaved: (value) {
-                  productPrice = num.parse(value!);
+                  productPrice = num.tryParse(value!) ?? 0;
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'الرجاء ادخال سعر المنتج';
+                  }
+                  if (num.tryParse(value) == null) {
+                    return 'الرجاء ادخال رقم صالح';
+                  }
+                  return null;
                 },
               ),
               20.height,
@@ -65,6 +84,12 @@ class _AddProductBodyState extends State<AddProductBody> {
                 onSaved: (value) {
                   productCode = value!.toLowerCase();
                 },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'الرجاء ادخال كود المنتج';
+                  }
+                  return null;
+                },
               ),
               20.height,
               CustomTextField(
@@ -74,6 +99,12 @@ class _AddProductBodyState extends State<AddProductBody> {
                 maxLines: 5,
                 onSaved: (value) {
                   productDescription = value!;
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'الرجاء ادخال وصف المنتج';
+                  }
+                  return null;
                 },
               ),
               20.height,
@@ -112,14 +143,30 @@ class _AddProductBodyState extends State<AddProductBody> {
                 onPressed: () {
                   if (productImage == null) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('يرجى إضافة صورة للمنتج')),
+                      const SnackBar(content: Text('الرجاء اضافة صورة للمنتج')),
                     );
                     return;
                   }
 
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
+                  if (!_formKey.currentState!.validate()) {
+                    setState(() {
+                      autovalidateMode = AutovalidateMode.always;
+                    });
+                    return;
                   }
+
+                  _formKey.currentState!.save();
+
+                  final AddProductEntity input = AddProductEntity(
+                    name: productName,
+                    description: productDescription,
+                    price: productPrice,
+                    image: productImage!,
+                    code: productCode,
+                    isFeatured: isFeaturedNotifier.value,
+                  );
+
+                  // dispatch usecase / bloc / cubit
                 },
               ),
             ],

@@ -21,6 +21,7 @@ class _AddImageFieldState extends State<AddImageField> {
 
   void _addImage() {
     isImageLoading = true;
+    setState(() {});
     try {
       final ImagePicker picker = ImagePicker();
       picker.pickImage(source: ImageSource.gallery).then((pickedImage) {
@@ -65,14 +66,17 @@ class _AddImageFieldState extends State<AddImageField> {
               Positioned(
                 right: 10,
                 top: 10,
-                child: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      imageFile = null;
-                      widget.onImageAdded.call(null);
-                    });
-                  },
-                  icon: const Icon(Icons.close, color: Colors.red),
+                child: Visibility(
+                  visible: imageFile != null,
+                  child: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        imageFile = null;
+                        widget.onImageAdded.call(null);
+                      });
+                    },
+                    icon: const Icon(Icons.close, color: Colors.red),
+                  ),
                 ),
               ),
             ],
