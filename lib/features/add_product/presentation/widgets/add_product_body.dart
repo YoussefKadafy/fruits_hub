@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruits_hub/core/app_styles/app_colors.dart';
 import 'package:fruits_hub/core/app_styles/app_styles.dart';
 import 'package:fruits_hub/core/extensions/sized_box_extension.dart';
@@ -8,6 +9,7 @@ import 'package:fruits_hub/core/utils/custom_button.dart';
 import 'package:fruits_hub/core/utils/custom_check_box.dart';
 import 'package:fruits_hub/core/utils/custom_text_field.dart';
 import 'package:fruits_hub/features/add_product/domain/entities/add_product_entity.dart';
+import 'package:fruits_hub/features/add_product/presentation/cubit/add_product_cubit_cubit.dart';
 import 'package:fruits_hub/features/add_product/presentation/widgets/add_image_field.dart';
 
 class AddProductBody extends StatefulWidget {
@@ -136,37 +138,61 @@ class _AddProductBodyState extends State<AddProductBody> {
                 ],
               ),
               40.height,
-              CustomButton(
-                text: 'اضافة المنتج',
-                backgroundColor: AppColors.primary,
-                textColor: Colors.white,
-                onPressed: () {
-                  if (productImage == null) {
+              BlocConsumer<AddProductCubit, AddProductCubitState>(
+                listener: (context, state) {
+                  if (state is AddProductCubitFailure) {
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text(state.errorMessage)));
+                  } else if (state is AddProductCubitSuccess) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('الرجاء اضافة صورة للمنتج')),
+                      const SnackBar(content: Text('تم اضافة المنتج بنجاح')),
                     );
-                    return;
                   }
+                },
+                builder: (context, state) {
+                  return CustomButton(
+                    text: 'اضافة المنتج',
+                    backgroundColor: AppColors.primary,
+                    textColor: Colors.white,
+                    onPressed: () {
+                      if (productImage == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('الرجاء اضافة صورة للمنتج'),
+                          ),
+                        );
+                        return;
+                      }
 
-                  if (!_formKey.currentState!.validate()) {
-                    setState(() {
-                      autovalidateMode = AutovalidateMode.always;
-                    });
-                    return;
-                  }
+                      if (!_formKey.currentState!.validate()) {
+                        setState(() {
+                          autovalidateMode = AutovalidateMode.always;
+                        });
+                        return;
+                      }
 
-                  _formKey.currentState!.save();
+                      _formKey.currentState!.save();
 
-                  final AddProductEntity input = AddProductEntity(
-                    name: productName,
-                    description: productDescription,
-                    price: productPrice,
-                    image: productImage!,
-                    code: productCode,
-                    isFeatured: isFeaturedNotifier.value,
+                      final AddProductEntity input = AddProductEntity(
+                        quantityOfKalories: 0,
+                        isOrganic: false,
+                        rating: 0,
+                        reviews: 0,
+                        name: productName,
+                        description: productDescription,
+                        price: productPrice,
+                        image: productImage!,
+
+                        code: productCode,
+                        isFeatured: isFeaturedNotifier.value,
+                      );
+                      context.read<AddProductCubit>().addProduct(
+                        addProductEntity: input,
+                      );
+                      // dispatch usecase / bloc / cubit
+                    },
                   );
-
-                  // dispatch usecase / bloc / cubit
                 },
               ),
             ],
