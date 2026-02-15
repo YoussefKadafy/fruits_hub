@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:fruits_hub/features/add_product/data/models/review_model.dart';
 import 'package:fruits_hub/features/add_product/domain/entities/add_product_entity.dart';
 
 class AddProductModel {
@@ -14,6 +15,8 @@ class AddProductModel {
   final num reviews;
   final num rating;
   final num quantityOfKalories;
+  final int expiratinsDateByMonths;
+  final List<ReviewModel> reviewEntity;
 
   AddProductModel({
     required this.name,
@@ -26,6 +29,8 @@ class AddProductModel {
     required this.reviews,
     required this.rating,
     required this.quantityOfKalories,
+    required this.expiratinsDateByMonths,
+    required this.reviewEntity,
   });
   factory AddProductModel.fromEntity(AddProductEntity entity) {
     final model = AddProductModel(
@@ -39,6 +44,10 @@ class AddProductModel {
       reviews: entity.reviews,
       rating: entity.rating,
       quantityOfKalories: entity.quantityOfKalories,
+      expiratinsDateByMonths: entity.expiratinsDateByMonths,
+      reviewEntity: entity.reviewEntity
+          .map((review) => ReviewModel.fromEntity(review))
+          .toList(),
     );
     model.imageUrl = entity.imageUrl;
     return model;
@@ -55,6 +64,8 @@ class AddProductModel {
       'reviews': reviews,
       'rating': rating,
       'quantityOfKalories': quantityOfKalories,
+      'expiratinsDateByMonths': expiratinsDateByMonths,
+      'reviewEntity': reviewEntity,
     };
   }
 }

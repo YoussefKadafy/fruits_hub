@@ -15,7 +15,7 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SupabaseService.initialize();
+  await SupabaseService.initialize();
 
   Bloc.observer = CustomBlocObserver();
   setupServiceLocator();

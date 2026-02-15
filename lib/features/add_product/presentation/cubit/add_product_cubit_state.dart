@@ -5,7 +5,11 @@ abstract class AddProductCubitState {}
 
 class AddProductCubitInitial extends AddProductCubitState {}
 
-class AddProductCubitLoading extends AddProductCubitState {}
+class AddProductCubitLoading extends AddProductCubitState {
+  final String loadingMessage;
+
+  AddProductCubitLoading({this.loadingMessage = 'جاري التحميل...'});
+}
 
 class AddProductCubitSuccess extends AddProductCubitState {}
 

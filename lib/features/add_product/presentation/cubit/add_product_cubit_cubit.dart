@@ -13,25 +13,28 @@ class AddProductCubit extends Cubit<AddProductCubitState> {
   final ImageRepo imageRepo;
 
   Future<void> addProduct({required AddProductEntity addProductEntity}) async {
-    emit(AddProductCubitLoading());
+    emit(AddProductCubitLoading(loadingMessage: 'جاري رفع الصورة...'));
     final imageResult = await imageRepo.uploadImage(
       imageFile: addProductEntity.image,
     );
     imageResult.fold(
       (failure) => emit(
         AddProductCubitFailure(
-          errorMessage:
-              ' failure in uploadImage in cubit: ' + failure.toString(),
+          errorMessage: 'فشل في رفع الصورة: ' + failure.toString(),
         ),
       ),
       (imageUrl) async {
         addProductEntity.imageUrl = imageUrl;
+        emit(AddProductCubitLoading(loadingMessage: 'جاري حفظ المنتج...'));
         final result = await productsRepo.addProduct(
           addProductEntity: addProductEntity,
         );
         result.fold(
-          (failure) =>
-              emit(AddProductCubitFailure(errorMessage: failure.toString())),
+          (failure) => emit(
+            AddProductCubitFailure(
+              errorMessage: 'فشل في حفظ المنتج: ' + failure.toString(),
+            ),
+          ),
           (_) => emit(AddProductCubitSuccess()),
         );
       },

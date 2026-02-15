@@ -5,11 +5,21 @@ import 'package:fruits_hub/core/errors/failure.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SupabaseService implements StorageService {
+  static const String _supabaseUrl = String.fromEnvironment(
+    'SUPABASE_URL',
+    defaultValue: 'https://iclrvacvsppgpoiuzzym.supabase.co',
+  );
+  static const String _supabaseAnonKey = String.fromEnvironment(
+    'SUPABASE_ANON_KEY',
+    defaultValue: '',
+  );
   static late Supabase _supabase;
   static Future<void> initialize() async {
     _supabase = await Supabase.initialize(
-      url: 'https://iclrvacvsppgpoiuzzym.supabase.co',
-      anonKey: 'sb_publishable_dc4T2awlWyBk1Xl-XGA8UA_Gy93Xdj3',
+      url: _supabaseUrl,
+      anonKey: _supabaseAnonKey.isNotEmpty
+          ? _supabaseAnonKey
+          : 'https://iclrvacvsppgpoiuzzym.supabase.co',
     );
   }
 
@@ -19,16 +29,14 @@ class SupabaseService implements StorageService {
     required File imageFile,
   }) async {
     final fileName = path_util.basename(imageFile.path);
-    final fileExtension = path_util.extension(imageFile.path);
-    final storagePath = '$path/$fileName$fileExtension';
+    final storagePath = '$path/$fileName';
 
     try {
-      await _supabase.client.storage
+      await Supabase.instance.client.storage
           .from('fruits-hub')
           .upload(storagePath, imageFile);
 
-      // Get public URL of the uploaded image
-      final publicUrl = _supabase.client.storage
+      final publicUrl = Supabase.instance.client.storage
           .from('fruits-hub')
           .getPublicUrl(storagePath);
 

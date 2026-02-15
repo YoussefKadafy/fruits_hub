@@ -21,17 +21,21 @@ class AddProductBody extends StatefulWidget {
 
 class _AddProductBodyState extends State<AddProductBody> {
   final ValueNotifier<bool> isFeaturedNotifier = ValueNotifier(false);
+  final ValueNotifier<bool> isOrganicNotifier = ValueNotifier(false);
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
   @override
   void dispose() {
     isFeaturedNotifier.dispose();
+    isOrganicNotifier.dispose();
     super.dispose();
   }
 
   late String productName, productCode, productDescription;
   late num productPrice;
+  late int productQuantityOfKalories;
+  late int productExpirationDate;
   File? productImage;
   @override
   Widget build(BuildContext context) {
@@ -137,6 +141,60 @@ class _AddProductBodyState extends State<AddProductBody> {
                   ),
                 ],
               ),
+              20.height,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('منتج عضوي', style: AppStyles.onboardingSubTitle),
+                  ValueListenableBuilder<bool>(
+                    valueListenable: isOrganicNotifier,
+                    builder: (context, isOrganic, _) {
+                      return CustomCheckbox(
+                        value: isOrganic,
+                        onChanged: (value) {
+                          isOrganicNotifier.value = value;
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
+              20.height,
+              CustomTextField(
+                hintText: 'عدد السعرات الحرارية',
+                labelText: 'السعرات الحرارية',
+                keyboardType: TextInputType.number,
+                onSaved: (value) {
+                  productQuantityOfKalories = int.tryParse(value!) ?? 0;
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'الرجاء ادخال السعرات الحرارية';
+                  }
+                  if (int.tryParse(value) == null) {
+                    return 'الرجاء ادخال رقم صالح';
+                  }
+                  return null;
+                },
+              ),
+              20.height,
+              CustomTextField(
+                hintText: 'مدة الصلاحية (بالأشهر)',
+                labelText: 'مدة الصلاحية',
+                keyboardType: TextInputType.number,
+                onSaved: (value) {
+                  productExpirationDate = int.tryParse(value!) ?? 0;
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'الرجاء ادخال مدة الصلاحية';
+                  }
+                  if (int.tryParse(value) == null) {
+                    return 'الرجاء ادخال رقم صالح';
+                  }
+                  return null;
+                },
+              ),
               40.height,
               BlocConsumer<AddProductCubit, AddProductCubitState>(
                 listener: (context, state) {
@@ -148,50 +206,62 @@ class _AddProductBodyState extends State<AddProductBody> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('تم اضافة المنتج بنجاح')),
                     );
+                    // Reset form
+                    _formKey.currentState!.reset();
+                    setState(() {
+                      productImage = null;
+                    });
                   }
                 },
                 builder: (context, state) {
+                  final isLoading = state is AddProductCubitLoading;
                   return CustomButton(
-                    text: 'اضافة المنتج',
+                    text: isLoading
+                        ? (state as AddProductCubitLoading).loadingMessage
+                        : 'اضافة المنتج',
                     backgroundColor: AppColors.primary,
                     textColor: Colors.white,
-                    onPressed: () {
-                      if (productImage == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('الرجاء اضافة صورة للمنتج'),
-                          ),
-                        );
-                        return;
-                      }
+                    isLoading: isLoading,
+                    onPressed: isLoading
+                        ? null
+                        : () {
+                            if (productImage == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('الرجاء اضافة صورة للمنتج'),
+                                ),
+                              );
+                              return;
+                            }
 
-                      if (!_formKey.currentState!.validate()) {
-                        setState(() {
-                          autovalidateMode = AutovalidateMode.always;
-                        });
-                        return;
-                      }
+                            if (!_formKey.currentState!.validate()) {
+                              setState(() {
+                                autovalidateMode = AutovalidateMode.always;
+                              });
+                              return;
+                            }
 
-                      _formKey.currentState!.save();
+                            _formKey.currentState!.save();
 
-                      final AddProductEntity input = AddProductEntity(
-                        quantityOfKalories: 0,
-                        isOrganic: false,
-                        rating: 0,
-                        reviews: 0,
-                        name: productName,
-                        description: productDescription,
-                        price: productPrice,
-                        image: productImage!,
-
-                        code: productCode,
-                        isFeatured: isFeaturedNotifier.value,
-                      );
-                      context.read<AddProductCubit>().addProduct(
-                        addProductEntity: input,
-                      );
-                      // dispatch usecase / bloc / cubit
-                    },
+                            final AddProductEntity input = AddProductEntity(
+                              quantityOfKalories: productQuantityOfKalories,
+                              isOrganic: isOrganicNotifier.value,
+                              rating: 0,
+                              reviews: 0,
+                              name: productName,
+                              description: productDescription,
+                              price: productPrice,
+                              image: productImage!,
+                              code: productCode,
+                              isFeatured: isFeaturedNotifier.value,
+                              expiratinsDateByMonths: productExpirationDate,
+                              reviewEntity: const [],
+                            );
+                            context.read<AddProductCubit>().addProduct(
+                              addProductEntity: input,
+                            );
+                            // dispatch usecase / bloc / cubit
+                          },
                   );
                 },
               ),
