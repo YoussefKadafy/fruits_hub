@@ -1,13 +1,18 @@
 import 'dart:io';
 import 'package:path/path.dart' as path_util;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fruits_hub/core/admin/services/storage_service.dart';
 import 'package:fruits_hub/core/errors/failure.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SupabaseService implements StorageService {
+  static Map<String, String> _envVars = {};
   static const String _supabaseUrl = 'https://iclrvacvsppgpoiuzzym.supabase.co';
-  static String get _supabaseAnonKey => dotenv.env['SUPABASE_ANON_KEY'] ?? '';
+  static String get _supabaseAnonKey => _envVars['SUPABASE_ANON_KEY'] ?? '';
+
+  static void setEnv(Map<String, String> envVars) {
+    _envVars = envVars;
+  }
+
   static late Supabase _supabase;
   static Future<void> initialize() async {
     _supabase = await Supabase.initialize(

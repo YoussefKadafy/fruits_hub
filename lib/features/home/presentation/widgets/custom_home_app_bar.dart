@@ -6,7 +6,6 @@ import 'package:fruits_hub/core/app_styles/app_styles.dart';
 import 'package:fruits_hub/core/extensions/sized_box_extension.dart';
 import 'package:fruits_hub/core/helpers/shared_prefs.dart';
 import 'package:fruits_hub/core/utils/notification_circle.dart';
-import 'package:fruits_hub/features/auth/domain/entity/user_entity.dart';
 import 'package:svg_flutter/svg.dart';
 
 class CustomHomeAppBar extends StatelessWidget {

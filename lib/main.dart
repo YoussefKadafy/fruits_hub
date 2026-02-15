@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,9 +16,30 @@ import 'package:fruits_hub/generated/l10n.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
+Future<void> loadEnv() async {
+  if (Platform.isAndroid || Platform.isIOS) {
+    // On mobile, load from assets
+    try {
+      final String envString = await rootBundle.loadString('.env');
+      final Map<String, String> envVars = {};
+      for (var line in envString.split('\n')) {
+        if (line.isNotEmpty && !line.startsWith('#')) {
+          final parts = line.split('=');
+          if (parts.length == 2) {
+            envVars[parts[0].trim()] = parts[1].trim();
+          }
+        }
+      }
+      SupabaseService.setEnv(envVars);
+    } catch (e) {
+      // Fall back to empty env
+    }
+  }
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: '.env');
+  await loadEnv();
   await SupabaseService.initialize();
 
   Bloc.observer = CustomBlocObserver();
