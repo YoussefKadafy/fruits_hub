@@ -5,21 +5,17 @@ import 'package:fruits_hub/core/errors/failure.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SupabaseService implements StorageService {
-  static const String _supabaseUrl = String.fromEnvironment(
-    'SUPABASE_URL',
-    defaultValue: 'https://iclrvacvsppgpoiuzzym.supabase.co',
-  );
+  static const String _supabaseUrl = String.fromEnvironment('SUPABASE_URL');
   static const String _supabaseAnonKey = String.fromEnvironment(
     'SUPABASE_ANON_KEY',
-    defaultValue: '',
   );
   static late Supabase _supabase;
   static Future<void> initialize() async {
     _supabase = await Supabase.initialize(
-      url: _supabaseUrl,
-      anonKey: _supabaseAnonKey.isNotEmpty
-          ? _supabaseAnonKey
+      url: _supabaseUrl.isNotEmpty
+          ? _supabaseUrl
           : 'https://iclrvacvsppgpoiuzzym.supabase.co',
+      anonKey: _supabaseAnonKey.isNotEmpty ? _supabaseAnonKey : '',
     );
   }
 

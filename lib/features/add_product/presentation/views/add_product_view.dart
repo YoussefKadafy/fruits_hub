@@ -13,6 +13,7 @@ class AddProductView extends StatelessWidget {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         appBar: AppBar(
           title: Text('إضافة منتج جديد', style: AppStyles.wight700Size19),
         ),
