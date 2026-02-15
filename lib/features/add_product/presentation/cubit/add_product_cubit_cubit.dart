@@ -12,7 +12,7 @@ class AddProductCubit extends Cubit<AddProductCubitState> {
   final ProductsRepo productsRepo;
   final ImageRepo imageRepo;
 
-  Future<void> addProduct({required AddProductEntity addProductEntity}) async {
+  Future<void> addProduct({required ProductEntity addProductEntity}) async {
     emit(AddProductCubitLoading(loadingMessage: 'جاري رفع الصورة...'));
     final imageResult = await imageRepo.uploadImage(
       imageFile: addProductEntity.image,

@@ -4,10 +4,7 @@ abstract class DataBaseService {
     required Map<String, dynamic> data,
     String? documentId,
   });
-  Future<Map<String, dynamic>> getData({
-    required String path,
-    required String id,
-  });
+  Future<dynamic> getData({required String path, String? id});
   Future<bool> isUserExist({required String path, required String id});
   Stream<Map<String, dynamic>> listenToData({
     required String path,

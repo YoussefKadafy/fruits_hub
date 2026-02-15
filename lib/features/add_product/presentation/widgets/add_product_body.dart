@@ -248,7 +248,7 @@ class _AddProductBodyState extends State<AddProductBody> {
 
                             _formKey.currentState!.save();
 
-                            final AddProductEntity input = AddProductEntity(
+                            final ProductEntity input = ProductEntity(
                               quantityOfKalories: productQuantityOfKalories,
                               isOrganic: isOrganicNotifier.value,
                               rating: 0,

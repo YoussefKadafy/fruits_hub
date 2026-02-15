@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:fruits_hub/features/add_product/domain/entities/review_entity.dart';
 
-class AddProductEntity {
+class ProductEntity {
   final String name;
   final String description;
   final num price;
@@ -17,7 +17,7 @@ class AddProductEntity {
   final List<ReviewEntity> reviewEntity;
   final int expiratinsDateByMonths;
 
-  AddProductEntity({
+  ProductEntity({
     required this.name,
     required this.description,
     required this.price,

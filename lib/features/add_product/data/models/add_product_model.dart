@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:fruits_hub/features/add_product/data/models/review_model.dart';
 import 'package:fruits_hub/features/add_product/domain/entities/add_product_entity.dart';
 
-class AddProductModel {
+class ProductModel {
   final String name;
   final String description;
   final num price;
@@ -18,7 +18,7 @@ class AddProductModel {
   final int expiratinsDateByMonths;
   final List<ReviewModel> reviewEntity;
 
-  AddProductModel({
+  ProductModel({
     required this.name,
     required this.description,
     required this.price,
@@ -32,8 +32,8 @@ class AddProductModel {
     required this.expiratinsDateByMonths,
     required this.reviewEntity,
   });
-  factory AddProductModel.fromEntity(AddProductEntity entity) {
-    final model = AddProductModel(
+  factory ProductModel.fromEntity(ProductEntity entity) {
+    final model = ProductModel(
       name: entity.name,
       description: entity.description,
       price: entity.price,
@@ -52,6 +52,41 @@ class AddProductModel {
     model.imageUrl = entity.imageUrl;
     return model;
   }
+  factory ProductModel.fromJson(Map<String, dynamic> json) {
+    return ProductModel(
+      name: json['name'],
+      description: json['description'],
+      price: json['price'],
+      image: File(json['image']), // Assuming the image is stored as a file path
+      code: json['code'],
+      isFeatured: json['isFeatured'],
+      isOrganic: json['isOrganic'],
+      reviews: json['reviews'],
+      rating: json['rating'],
+      quantityOfKalories: json['quantityOfKalories'],
+      expiratinsDateByMonths: json['expiratinsDateByMonths'],
+      reviewEntity: (json['reviewEntity'] as List)
+          .map((review) => ReviewModel.fromJson(review))
+          .toList(),
+    );
+  }
+  ProductEntity toEntity() {
+    return ProductEntity(
+      name: name,
+      description: description,
+      price: price,
+      image: image,
+      code: code,
+      isFeatured: isFeatured,
+      isOrganic: isOrganic,
+      reviews: reviews,
+      rating: rating,
+      quantityOfKalories: quantityOfKalories,
+      expiratinsDateByMonths: expiratinsDateByMonths,
+      reviewEntity: reviewEntity.map((review) => review.toEntity()).toList(),
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'name': name,

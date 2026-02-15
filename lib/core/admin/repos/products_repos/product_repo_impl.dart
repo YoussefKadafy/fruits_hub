@@ -12,12 +12,12 @@ class ProductImpl implements ProductsRepo {
   ProductImpl({required this.adminFireStoreService});
   @override
   Future<Either<Failure, void>> addProduct({
-    required AddProductEntity addProductEntity,
+    required ProductEntity addProductEntity,
   }) async {
     try {
       final result = await adminFireStoreService.addData(
         path: BackendEndpoints.addProductsCollection,
-        data: AddProductModel.fromEntity(addProductEntity).toJson(),
+        data: ProductModel.fromEntity(addProductEntity).toJson(),
       );
 
       return Right(result);

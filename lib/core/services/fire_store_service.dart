@@ -17,12 +17,14 @@ class FireStoreService implements DataBaseService {
   }
 
   @override
-  Future<Map<String, dynamic>> getData({
-    required String path,
-    required String id,
-  }) async {
-    final doc = await firestore.collection(path).doc(id).get();
-    return doc.data() as Map<String, dynamic>;
+  Future<dynamic> getData({required String path, String? id}) async {
+    if (id != null) {
+      final doc = await firestore.collection(path).doc(id).get();
+      return doc.data() ?? {};
+    } else {
+      final querySnapshot = await firestore.collection(path).get();
+      return querySnapshot.docs.map((doc) => doc.data()).toList();
+    }
   }
 
   @override
@@ -34,7 +36,7 @@ class FireStoreService implements DataBaseService {
   @override
   Stream<Map<String, dynamic>> listenToData({
     required String path,
-    required String id,
+    String? id,
   }) {
     return firestore.collection(path).doc(id).snapshots().map((
       documentSnapshot,

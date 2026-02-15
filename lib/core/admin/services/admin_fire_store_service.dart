@@ -18,10 +18,7 @@ class AdminFireStoreService implements DataBaseService {
   }
 
   @override
-  Future<Map<String, dynamic>> getData({
-    required String path,
-    required String id,
-  }) {
+  Future<dynamic> getData({required String path, String? id}) {
     // TODO: implement getData
     throw UnimplementedError();
   }
