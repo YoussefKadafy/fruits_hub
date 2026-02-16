@@ -47,4 +47,40 @@ class GetProductsRepoImpl implements GetProductsRepo {
       return Left(ServerFailure('Failed to fetch products: $e'));
     }
   }
+
+  @override
+  Future<Either<Failure, List<ProductEntity>>> getProductsBestSelling() async {
+    try {
+      final productsData = await dataBaseService.getData(
+        path: BackendEndpoints.productsCollection,
+        query: {'orderBy': 'sellingCount', 'descending': true, 'limit': 10},
+      );
+
+      // Handle null or empty data
+      if (productsData == null ||
+          (productsData is List && productsData.isEmpty)) {
+        return const Right([]);
+      }
+
+      // Ensure it's a list
+      if (productsData is! List) {
+        return const Left(ServerFailure('Invalid data format received'));
+      }
+
+      List<ProductModel> products = productsData
+          .map((data) => ProductModel.fromJson(Map<String, dynamic>.from(data)))
+          .toList();
+      List<ProductEntity> productEntities = products
+          .map((model) => model.toEntity())
+          .toList();
+
+      return Right(productEntities);
+    } on FirebaseException catch (e) {
+      debugPrint('FirebaseException in getProducts: ${e.code} - ${e.message}');
+      return Left(ServerFailure('Database error: ${e.message}'));
+    } catch (e) {
+      debugPrint('Unexpected error in getProducts: $e');
+      return Left(ServerFailure('Failed to fetch products: $e'));
+    }
+  }
 }

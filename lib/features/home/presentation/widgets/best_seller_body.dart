@@ -5,6 +5,7 @@ import 'package:fruits_hub/core/extensions/sized_box_extension.dart';
 import 'package:fruits_hub/features/add_product/domain/entities/add_product_entity.dart';
 import 'package:fruits_hub/features/home/presentation/cubit/get_products_cubit.dart';
 import 'package:fruits_hub/core/utils/products_grid_list.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class BestSellerBody extends StatelessWidget {
   const BestSellerBody({super.key});
@@ -38,12 +39,8 @@ class BestSellerBody extends StatelessWidget {
                 ],
               ),
             ),
-            if (isLoading)
-              SliverToBoxAdapter(
-                child: Center(child: CircularProgressIndicator()),
-              )
-            else
-              ProductsGridList(products: products),
+
+            ProductsGridList(products: products, isLoading: isLoading),
           ],
         );
       },

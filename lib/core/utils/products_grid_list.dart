@@ -5,7 +5,12 @@ import 'package:fruits_hub/features/home/presentation/widgets/fruite_item.dart';
 class ProductsGridList extends StatelessWidget {
   final List<ProductEntity> products;
 
-  const ProductsGridList({super.key, required this.products});
+  const ProductsGridList({
+    super.key,
+    required this.products,
+    required this.isLoading,
+  });
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +25,11 @@ class ProductsGridList extends StatelessWidget {
         ),
         itemCount: products.isEmpty ? 6 : products.length,
         itemBuilder: (context, index) {
-          if (products.isEmpty) {
-            return FruitItem();
+          if (isLoading) {
+            return const FruitItem(enabled: true);
           }
-          return FruitItem(product: products[index]);
+
+          return FruitItem(product: products[index], enabled: isLoading);
         },
       ),
     );

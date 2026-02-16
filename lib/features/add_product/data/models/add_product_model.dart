@@ -17,6 +17,7 @@ class ProductModel {
   final num quantityOfKalories;
   final int expiratinsDateByMonths;
   final List<ReviewModel> reviewEntity;
+  final num sellingCount;
 
   ProductModel({
     required this.name,
@@ -32,6 +33,7 @@ class ProductModel {
     required this.expiratinsDateByMonths,
     required this.reviewEntity,
     this.imageUrl,
+    this.sellingCount = 0,
   });
 
   // FROM ENTITY
@@ -52,6 +54,7 @@ class ProductModel {
       reviewEntity: entity.reviewEntity
           .map((review) => ReviewModel.fromEntity(review))
           .toList(),
+      sellingCount: entity.sellingCount,
     );
   }
 
@@ -75,6 +78,7 @@ class ProductModel {
             (review) => ReviewModel.fromJson(Map<String, dynamic>.from(review)),
           )
           .toList(),
+      sellingCount: json['sellingCount'] as num? ?? 0,
     );
   }
 
@@ -94,6 +98,7 @@ class ProductModel {
       quantityOfKalories: quantityOfKalories,
       expiratinsDateByMonths: expiratinsDateByMonths,
       reviewEntity: reviewEntity.map((review) => review.toEntity()).toList(),
+      sellingCount: sellingCount,
     );
   }
 
@@ -112,6 +117,7 @@ class ProductModel {
       'quantityOfKalories': quantityOfKalories,
       'expiratinsDateByMonths': expiratinsDateByMonths,
       'reviewEntity': reviewEntity.map((e) => e.toJson()).toList(),
+      'sellingCount': sellingCount,
     };
   }
 }

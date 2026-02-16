@@ -1,14 +1,18 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fruits_hub/core/app_styles/app_assets.dart';
 import 'package:fruits_hub/core/app_styles/app_colors.dart';
 import 'package:fruits_hub/core/app_styles/app_styles.dart';
 import 'package:fruits_hub/core/extensions/sized_box_extension.dart';
 import 'package:fruits_hub/features/add_product/domain/entities/add_product_entity.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class FruitItem extends StatelessWidget {
   final ProductEntity? product;
 
-  const FruitItem({super.key, this.product});
+  final bool enabled;
+
+  const FruitItem({super.key, this.product, required this.enabled});
 
   @override
   Widget build(BuildContext context) {
@@ -16,65 +20,140 @@ class FruitItem extends StatelessWidget {
     final price = product?.price ?? 200;
     final imageUrl = product?.imageUrl;
 
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(4),
-        color: AppColors.lightGray,
-      ),
-      child: Stack(
-        children: [
-          Positioned(
-            right: 0,
-            top: 0,
-            child: IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.favorite_border),
+    return Skeletonizer(
+      enabled: enabled,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(18),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 12,
+              offset: const Offset(0, 6),
             ),
-          ),
-          Positioned.fill(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+          ],
+        ),
+        child: Stack(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                17.height,
-                imageUrl != null
-                    ? Image.network(imageUrl)
-                    : Image.asset(AppAssets.assetsImagesStrawberry),
-                24.height,
-                ListTile(
-                  title: Text(name, style: AppStyles.wight600Size13),
-
-                  subtitle: Text.rich(
-                    TextSpan(
-                      text: '$price ج.م',
-                      children: [
-                        TextSpan(
-                          text: '/',
-                          style: AppStyles.wight600Size13.copyWith(
-                            color: AppColors.lightSecondary,
-                          ),
-                        ),
-                        TextSpan(
-                          text: 'كيلو',
-                          style: AppStyles.wight600Size13.copyWith(
-                            color: AppColors.lightSecondary,
-                          ),
-                        ),
-                      ],
-                      style: AppStyles.wight600Size13.copyWith(
-                        color: AppColors.secondary,
-                      ),
-                    ),
+                /// 🖼 Image Section
+                ClipRRect(
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(18),
                   ),
-                  trailing: CircleAvatar(
-                    radius: 16,
-                    backgroundColor: AppColors.primary,
-                    child: Icon(Icons.add, color: Colors.white),
+                  child: SizedBox(
+                    height: 120,
+                    width: double.infinity,
+                    child: imageUrl != null && imageUrl.isNotEmpty
+                        ? CachedNetworkImage(
+                            imageUrl: imageUrl,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => Center(
+                              child: SizedBox(
+                                width: 25,
+                                height: 25,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                            ),
+                            errorWidget: (context, url, error) => Image.asset(
+                              AppAssets.assetsImagesStrawberry,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : Image.asset(
+                            AppAssets.assetsImagesStrawberry,
+                            fit: BoxFit.cover,
+                          ),
                   ),
                 ),
+
+                12.height,
+
+                /// 📝 Product Info
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppStyles.wight600Size14,
+                      ),
+
+                      6.height,
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text.rich(
+                            TextSpan(
+                              text: '$price ج.م ',
+                              style: AppStyles.wight600Size14.copyWith(
+                                color: AppColors.secondary,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: '/ كيلو',
+                                  style: AppStyles.wight400Size13.copyWith(
+                                    color: AppColors.lightSecondary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          /// ➕ Add Button
+                          Container(
+                            height: 32,
+                            width: 32,
+                            decoration: BoxDecoration(
+                              color: AppColors.primary,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Icon(
+                              Icons.add,
+                              size: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+
+                12.height,
               ],
             ),
-          ),
-        ],
+
+            /// ❤️ Favorite Icon
+            Positioned(
+              top: 8,
+              right: 8,
+              child: Container(
+                height: 32,
+                width: 32,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.9),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.favorite_border,
+                  size: 18,
+                  color: Colors.red,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -16,6 +16,7 @@ class ProductEntity {
   final num quantityOfKalories;
   final List<ReviewEntity> reviewEntity;
   final int expiratinsDateByMonths;
+  final num sellingCount;
 
   ProductEntity({
     required this.name,
@@ -31,5 +32,6 @@ class ProductEntity {
     required this.quantityOfKalories,
     required this.expiratinsDateByMonths,
     this.reviewEntity = const [],
+    this.sellingCount = 0,
   });
 }
