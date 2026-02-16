@@ -3,12 +3,19 @@ import 'package:fruits_hub/core/app_styles/app_assets.dart';
 import 'package:fruits_hub/core/app_styles/app_colors.dart';
 import 'package:fruits_hub/core/app_styles/app_styles.dart';
 import 'package:fruits_hub/core/extensions/sized_box_extension.dart';
+import 'package:fruits_hub/features/add_product/domain/entities/add_product_entity.dart';
 
 class FruitItem extends StatelessWidget {
-  const FruitItem({super.key});
+  final ProductEntity? product;
+
+  const FruitItem({super.key, this.product});
 
   @override
   Widget build(BuildContext context) {
+    final name = product?.name ?? 'فراولة';
+    final price = product?.price ?? 200;
+    final imageUrl = product?.imageUrl;
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(4),
@@ -29,14 +36,16 @@ class FruitItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 17.height,
-                Image.asset(AppAssets.assetsImagesStrawberry),
+                imageUrl != null
+                    ? Image.network(imageUrl)
+                    : Image.asset(AppAssets.assetsImagesStrawberry),
                 24.height,
                 ListTile(
-                  title: Text('فراولة', style: AppStyles.wight600Size13),
+                  title: Text(name, style: AppStyles.wight600Size13),
 
                   subtitle: Text.rich(
                     TextSpan(
-                      text: '200 ج.م',
+                      text: '$price ج.م',
                       children: [
                         TextSpan(
                           text: '/',

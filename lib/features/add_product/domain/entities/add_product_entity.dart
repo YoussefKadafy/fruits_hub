@@ -6,7 +6,7 @@ class ProductEntity {
   final String name;
   final String description;
   final num price;
-  final File image;
+  final File? image;
   String? imageUrl;
   final String code;
   final bool isFeatured;
@@ -30,6 +30,6 @@ class ProductEntity {
     this.rating = 0,
     required this.quantityOfKalories,
     required this.expiratinsDateByMonths,
-    required this.reviewEntity,
+    this.reviewEntity = const [],
   });
 }

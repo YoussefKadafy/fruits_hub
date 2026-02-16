@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fruits_hub/features/add_product/domain/entities/add_product_entity.dart';
 import 'package:fruits_hub/features/home/presentation/widgets/fruite_item.dart';
 
 class ProductsGridList extends StatelessWidget {
-  const ProductsGridList({super.key});
+  final List<ProductEntity> products;
+
+  const ProductsGridList({super.key, required this.products});
 
   @override
   Widget build(BuildContext context) {
@@ -15,9 +18,12 @@ class ProductsGridList extends StatelessWidget {
           crossAxisSpacing: 8.0,
           mainAxisSpacing: 8.0,
         ),
-        itemCount: 6,
+        itemCount: products.isEmpty ? 6 : products.length,
         itemBuilder: (context, index) {
-          return FruitItem();
+          if (products.isEmpty) {
+            return FruitItem();
+          }
+          return FruitItem(product: products[index]);
         },
       ),
     );

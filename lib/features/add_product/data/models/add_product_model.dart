@@ -7,8 +7,8 @@ class ProductModel {
   final String name;
   final String description;
   final num price;
-  final File image;
-  String? imageUrl;
+  final File? image;
+  final String? imageUrl;
   final String code;
   final bool isFeatured;
   final bool isOrganic;
@@ -31,9 +31,12 @@ class ProductModel {
     required this.quantityOfKalories,
     required this.expiratinsDateByMonths,
     required this.reviewEntity,
+    this.imageUrl,
   });
+
+  // FROM ENTITY
   factory ProductModel.fromEntity(ProductEntity entity) {
-    final model = ProductModel(
+    return ProductModel(
       name: entity.name,
       description: entity.description,
       price: entity.price,
@@ -45,37 +48,44 @@ class ProductModel {
       rating: entity.rating,
       quantityOfKalories: entity.quantityOfKalories,
       expiratinsDateByMonths: entity.expiratinsDateByMonths,
+      imageUrl: entity.imageUrl,
       reviewEntity: entity.reviewEntity
           .map((review) => ReviewModel.fromEntity(review))
           .toList(),
     );
-    model.imageUrl = entity.imageUrl;
-    return model;
   }
+
+  // FROM FIRESTORE
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     return ProductModel(
-      name: json['name'],
-      description: json['description'],
-      price: json['price'],
-      image: File(json['image']), // Assuming the image is stored as a file path
-      code: json['code'],
-      isFeatured: json['isFeatured'],
-      isOrganic: json['isOrganic'],
-      reviews: json['reviews'],
-      rating: json['rating'],
-      quantityOfKalories: json['quantityOfKalories'],
-      expiratinsDateByMonths: json['expiratinsDateByMonths'],
-      reviewEntity: (json['reviewEntity'] as List)
-          .map((review) => ReviewModel.fromJson(review))
+      name: json['name'] as String? ?? '',
+      description: json['description'] as String? ?? '',
+      price: json['price'] as num? ?? 0,
+      image: null, // Firestore never returns File
+      imageUrl: json['imageUrl'] as String?,
+      code: json['code'] as String? ?? '',
+      isFeatured: json['isFeatured'] as bool? ?? false,
+      isOrganic: json['isOrganic'] as bool? ?? false,
+      reviews: json['reviews'] as num? ?? 0,
+      rating: json['rating'] as num? ?? 0,
+      quantityOfKalories: json['quantityOfKalories'] as num? ?? 0,
+      expiratinsDateByMonths: json['expiratinsDateByMonths'] as int? ?? 0,
+      reviewEntity: (json['reviewEntity'] as List<dynamic>? ?? [])
+          .map(
+            (review) => ReviewModel.fromJson(Map<String, dynamic>.from(review)),
+          )
           .toList(),
     );
   }
+
+  // TO ENTITY
   ProductEntity toEntity() {
     return ProductEntity(
       name: name,
       description: description,
       price: price,
       image: image,
+      imageUrl: imageUrl,
       code: code,
       isFeatured: isFeatured,
       isOrganic: isOrganic,
@@ -87,6 +97,7 @@ class ProductModel {
     );
   }
 
+  // TO FIRESTORE
   Map<String, dynamic> toJson() {
     return {
       'name': name,
@@ -100,7 +111,7 @@ class ProductModel {
       'rating': rating,
       'quantityOfKalories': quantityOfKalories,
       'expiratinsDateByMonths': expiratinsDateByMonths,
-      'reviewEntity': reviewEntity,
+      'reviewEntity': reviewEntity.map((e) => e.toJson()).toList(),
     };
   }
 }

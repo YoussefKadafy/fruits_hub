@@ -17,6 +17,9 @@ import 'package:fruits_hub/features/auth/domain/usecases/listen_to_user_usecase.
 import 'package:fruits_hub/features/profile/domain/usecases/sign_out_usecase.dart';
 import 'package:fruits_hub/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:fruits_hub/features/add_product/presentation/cubit/add_product_cubit_cubit.dart';
+import 'package:fruits_hub/features/home/data/repos/get_products_repo_impl.dart';
+import 'package:fruits_hub/features/home/domain/repo/get_products_repo.dart';
+import 'package:fruits_hub/features/home/presentation/cubit/get_products_cubit.dart';
 import 'package:get_it/get_it.dart';
 import 'package:fruits_hub/core/services/fire_base_auth_service.dart';
 
@@ -47,6 +50,9 @@ void setupServiceLocator() {
   locator.registerLazySingleton<ImageRepo>(
     () => ImagesRepoImpl(storageService: locator<StorageService>()),
   );
+  locator.registerLazySingleton<GetProductsRepo>(
+    () => GetProductsRepoImpl(dataBaseService: locator<DataBaseService>()),
+  );
   // Add your repositories here
 
   // Use Cases
@@ -74,6 +80,9 @@ void setupServiceLocator() {
       productsRepo: locator<ProductsRepo>(),
       imageRepo: locator<ImageRepo>(),
     ),
+  );
+  locator.registerLazySingleton<GetProductsCubit>(
+    () => GetProductsCubit(getProductsRepo: locator<GetProductsRepo>()),
   );
   // Add your BLoCs here
 }

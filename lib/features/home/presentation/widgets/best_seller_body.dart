@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruits_hub/core/app_styles/app_styles.dart';
 import 'package:fruits_hub/core/extensions/sized_box_extension.dart';
+import 'package:fruits_hub/features/add_product/domain/entities/add_product_entity.dart';
+import 'package:fruits_hub/features/home/presentation/cubit/get_products_cubit.dart';
 import 'package:fruits_hub/core/utils/products_grid_list.dart';
 
 class BestSellerBody extends StatelessWidget {
@@ -8,25 +11,42 @@ class BestSellerBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverToBoxAdapter(
-          child: Column(
-            children: [
-              24.height,
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: Text('الأكثر مبيعاً', style: AppStyles.wight700Size16),
-                ),
+    return BlocBuilder<GetProductsCubit, GetProductsCubitState>(
+      builder: (context, state) {
+        final List<ProductEntity> products = state is GetProductsCubitSuccess
+            ? state.products
+            : [];
+        final isLoading = state is GetProductsCubitLoading;
+
+        return CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  24.height,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Align(
+                      alignment: AlignmentDirectional.centerStart,
+                      child: Text(
+                        'الأكثر مبيعاً',
+                        style: AppStyles.wight700Size16,
+                      ),
+                    ),
+                  ),
+                  8.height,
+                ],
               ),
-              8.height,
-            ],
-          ),
-        ),
-        ProductsGridList(),
-      ],
+            ),
+            if (isLoading)
+              SliverToBoxAdapter(
+                child: Center(child: CircularProgressIndicator()),
+              )
+            else
+              ProductsGridList(products: products),
+          ],
+        );
+      },
     );
   }
 }
