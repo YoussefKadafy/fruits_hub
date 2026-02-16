@@ -80,8 +80,9 @@ void setupServiceLocator() {
       imageRepo: locator<ImageRepo>(),
     ),
   );
-  locator.registerLazySingleton<GetProductsCubit>(
+  locator.registerFactory<GetProductsCubit>(
     () => GetProductsCubit(getProductsRepo: locator<GetProductsRepo>()),
   );
+
   // Add your BLoCs here
 }

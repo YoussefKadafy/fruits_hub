@@ -6,8 +6,18 @@ import 'package:fruits_hub/features/add_product/domain/entities/add_product_enti
 import 'package:fruits_hub/features/home/presentation/cubit/get_products_cubit.dart';
 import 'package:fruits_hub/core/utils/products_grid_list.dart';
 
-class BestSellerBody extends StatelessWidget {
+class BestSellerBody extends StatefulWidget {
   const BestSellerBody({super.key});
+
+  @override
+  State<BestSellerBody> createState() => _BestSellerBodyState();
+}
+
+class _BestSellerBodyState extends State<BestSellerBody> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,30 +28,7 @@ class BestSellerBody extends StatelessWidget {
             : [];
         final isLoading = state is GetProductsCubitLoading;
 
-        return CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: Column(
-                children: [
-                  24.height,
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Align(
-                      alignment: AlignmentDirectional.centerStart,
-                      child: Text(
-                        'الأكثر مبيعاً',
-                        style: AppStyles.wight700Size16,
-                      ),
-                    ),
-                  ),
-                  8.height,
-                ],
-              ),
-            ),
-
-            ProductsGridList(products: products, isLoading: isLoading),
-          ],
-        );
+        return ProductsGridList(products: products, isLoading: isLoading);
       },
     );
   }

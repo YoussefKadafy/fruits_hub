@@ -27,19 +27,22 @@ class FireStoreService implements DataBaseService {
       return doc.data() ?? {};
     } else {
       if (query != null) {
-        final querySnapshot = firestore.collection(path);
+        Query<Map<String, dynamic>> collectionQuery = firestore.collection(
+          path,
+        );
 
         if (query['orderBy'] != null) {
-          querySnapshot.orderBy(
+          collectionQuery = collectionQuery.orderBy(
             query['orderBy'],
             descending: query['descending'] ?? false,
           );
         }
+
         if (query['limit'] != null) {
-          querySnapshot.limit(query['limit']);
+          collectionQuery = collectionQuery.limit(query['limit']);
         }
 
-        final snapshot = await querySnapshot.get();
+        final snapshot = await collectionQuery.get();
         return snapshot.docs.map((doc) => doc.data()).toList();
       } else {
         final snapshot = await firestore.collection(path).get();

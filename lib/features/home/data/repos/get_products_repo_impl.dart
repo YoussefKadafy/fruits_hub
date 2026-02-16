@@ -53,7 +53,12 @@ class GetProductsRepoImpl implements GetProductsRepo {
     try {
       final productsData = await dataBaseService.getData(
         path: BackendEndpoints.productsCollection,
-        query: {'orderBy': 'sellingCount', 'descending': true, 'limit': 10},
+        query: {
+          'where': ['sellingCount', '>', 0],
+          'orderBy': 'sellingCount',
+          'descending': true,
+          'limit': 4,
+        },
       );
 
       // Handle null or empty data
