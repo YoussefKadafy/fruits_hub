@@ -73,7 +73,7 @@ class FireBaseAuthService {
   Future<User> signInWithGoogle() async {
     try {
       await GoogleSignIn.instance.initialize();
-      final GoogleSignInAccount? googleUser = await GoogleSignIn.instance
+      final GoogleSignInAccount googleUser = await GoogleSignIn.instance
           .authenticate();
 
       // Obtain the auth details from the request

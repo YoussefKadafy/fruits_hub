@@ -221,9 +221,7 @@ class _AddProductBodyState extends State<AddProductBody> {
                 builder: (context, state) {
                   final isLoading = state is AddProductCubitLoading;
                   return CustomButton(
-                    text: isLoading
-                        ? (state as AddProductCubitLoading).loadingMessage
-                        : 'اضافة المنتج',
+                    text: isLoading ? (state).loadingMessage : 'اضافة المنتج',
                     backgroundColor: AppColors.primary,
                     textColor: Colors.white,
                     isLoading: isLoading,

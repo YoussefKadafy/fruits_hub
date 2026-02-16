@@ -2,7 +2,6 @@ import 'package:fruits_hub/core/admin/repos/products_repos/product_repo_impl.dar
 import 'package:fruits_hub/core/admin/repos/products_repos/products_repo.dart';
 import 'package:fruits_hub/core/admin/repos/images_repos/image_repo.dart';
 import 'package:fruits_hub/core/admin/repos/images_repos/images_repo_impl.dart';
-import 'package:fruits_hub/core/admin/services/fire_storage_service.dart';
 import 'package:fruits_hub/core/admin/services/storage_service.dart';
 import 'package:fruits_hub/core/admin/services/admin_fire_store_service.dart';
 import 'package:fruits_hub/core/admin/services/supabase_service.dart';

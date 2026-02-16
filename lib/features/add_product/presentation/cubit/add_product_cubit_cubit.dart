@@ -19,9 +19,7 @@ class AddProductCubit extends Cubit<AddProductCubitState> {
     );
     imageResult.fold(
       (failure) => emit(
-        AddProductCubitFailure(
-          errorMessage: 'فشل في رفع الصورة: ' + failure.toString(),
-        ),
+        AddProductCubitFailure(errorMessage: 'فشل في رفع الصورة: $failure'),
       ),
       (imageUrl) async {
         addProductEntity.imageUrl = imageUrl;
@@ -31,9 +29,7 @@ class AddProductCubit extends Cubit<AddProductCubitState> {
         );
         result.fold(
           (failure) => emit(
-            AddProductCubitFailure(
-              errorMessage: 'فشل في حفظ المنتج: ' + failure.toString(),
-            ),
+            AddProductCubitFailure(errorMessage: 'فشل في حفظ المنتج: $failure'),
           ),
           (_) => emit(AddProductCubitSuccess()),
         );

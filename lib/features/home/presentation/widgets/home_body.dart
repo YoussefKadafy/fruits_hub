@@ -9,7 +9,6 @@ import 'package:fruits_hub/features/home/presentation/widgets/best_seller_headli
 import 'package:fruits_hub/features/home/presentation/widgets/custom_home_app_bar.dart';
 import 'package:fruits_hub/features/home/presentation/widgets/featured_items_list.dart';
 import 'package:fruits_hub/core/utils/products_grid_list.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 
 class HomeBody extends StatelessWidget {
   const HomeBody({super.key});

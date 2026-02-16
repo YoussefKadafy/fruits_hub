@@ -1,25 +1,49 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    // VSCode Launch Configuration for Flutter/Dart
+    // For more information, visit: https://code.visualstudio.com/docs/editor/debugging#_launch-configurations
     "version": "0.2.0",
     "configurations": [
+        // ============================================
+        // Debug Mode Configuration (Default)
+        // Use for development and debugging
+        // ============================================
         {
-            "name": "fruits_hub",
+            "name": "fruits_hub (debug)",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "cwd": "${workspaceFolder}",
+            "program": "lib/main.dart",
+            "args": [],
+            "console": "integratedTerminal",
+            "debugConsole": "console"
         },
+
+        // ============================================
+        // Profile Mode Configuration
+        // Use for performance analysis and profiling
+        // ============================================
         {
             "name": "fruits_hub (profile mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "cwd": "${workspaceFolder}",
+            "program": "lib/main.dart",
+            "flutterMode": "profile",
+            "console": "integratedTerminal"
         },
+
+        // ============================================
+        // Release Mode Configuration
+        // Use for production builds and performance testing
+        // ============================================
         {
             "name": "fruits_hub (release mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
+            "cwd": "${workspaceFolder}",
+            "program": "lib/main.dart",
+            "flutterMode": "release",
+            "console": "integratedTerminal"
         }
     ]
 }
