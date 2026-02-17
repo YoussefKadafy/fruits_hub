@@ -6,18 +6,8 @@ import 'package:fruits_hub/features/add_product/domain/entities/add_product_enti
 import 'package:fruits_hub/features/home/presentation/cubit/get_products_cubit.dart';
 import 'package:fruits_hub/core/utils/products_grid_list.dart';
 
-class BestSellerBody extends StatefulWidget {
+class BestSellerBody extends StatelessWidget {
   const BestSellerBody({super.key});
-
-  @override
-  State<BestSellerBody> createState() => _BestSellerBodyState();
-}
-
-class _BestSellerBodyState extends State<BestSellerBody> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

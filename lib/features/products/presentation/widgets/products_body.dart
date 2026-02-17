@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fruits_hub/core/app_styles/app_assets.dart';
 import 'package:fruits_hub/core/app_styles/app_styles.dart';
 import 'package:fruits_hub/core/extensions/sized_box_extension.dart';
+import 'package:fruits_hub/core/utils/headline_and_action.dart';
+import 'package:fruits_hub/core/utils/search_text_field.dart';
 import 'package:fruits_hub/features/add_product/domain/entities/add_product_entity.dart';
 import 'package:fruits_hub/features/home/presentation/cubit/get_products_cubit.dart';
 import 'package:fruits_hub/core/utils/products_grid_list.dart';
+import 'package:svg_flutter/svg.dart';
 
 class ProductsBody extends StatelessWidget {
   const ProductsBody({super.key});
@@ -25,15 +29,12 @@ class ProductsBody extends StatelessWidget {
                 child: Column(
                   children: [
                     24.height,
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Align(
-                        alignment: AlignmentDirectional.centerStart,
-                        child: Text(
-                          'المنتجات',
-                          style: AppStyles.wight700Size16,
-                        ),
-                      ),
+                    SearchTextField(controller: TextEditingController()),
+                    16.height,
+                    HeadlineAndAction(
+                      headline: 'منتجاتنا',
+                      action: SvgPicture.asset(AppAssets.assetsIconsFilter2),
+                      onTap: () {},
                     ),
                     8.height,
                   ],

@@ -58,6 +58,10 @@ class AppAssets {
   /// assets/icons/filter.svg
   static const String assetsIconsFilter = "assets/icons/filter.svg";
 
+  /// Assets for assetsIconsFilter2
+  /// assets/icons/filter2.svg
+  static const String assetsIconsFilter2 = "assets/icons/filter2.svg";
+
   /// Assets for assetsIconsFocusedHome
   /// assets/icons/focused-home.svg
   static const String assetsIconsFocusedHome = "assets/icons/focused-home.svg";
@@ -109,10 +113,6 @@ class AppAssets {
   /// Assets for assetsIconsPineappleCuate1
   /// assets/icons/pineapple-cuate-1.svg
   static const String assetsIconsPineappleCuate1 = "assets/icons/pineapple-cuate-1.svg";
-
-  /// Assets for assetsIconsPlus
-  /// assets/icons/plus.svg
-  static const String assetsIconsPlus = "assets/icons/plus.svg";
 
   /// Assets for assetsIconsPlus1
   /// assets/icons/plus1.svg
