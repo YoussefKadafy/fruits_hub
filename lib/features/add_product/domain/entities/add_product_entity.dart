@@ -17,6 +17,8 @@ class ProductEntity {
   final List<ReviewEntity> reviewEntity;
   final int expiratinsDateByMonths;
   final num sellingCount;
+  final String unitAmount;
+  final num amount;
 
   ProductEntity({
     required this.name,
@@ -33,5 +35,7 @@ class ProductEntity {
     required this.expiratinsDateByMonths,
     this.reviewEntity = const [],
     this.sellingCount = 0,
+    this.unitAmount = 'kg',
+    this.amount = 1,
   });
 }

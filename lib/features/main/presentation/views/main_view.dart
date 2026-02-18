@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fruits_hub/core/helpers/service_locator.dart';
 import 'package:fruits_hub/features/add_product/presentation/views/add_product_view.dart';
 import 'package:fruits_hub/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:fruits_hub/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:fruits_hub/features/cart/presentation/views/cart_view.dart';
 import 'package:fruits_hub/features/home/presentation/views/home_view.dart';
 import 'package:fruits_hub/features/main/domain/entities/nav_bar_entity.dart';
@@ -55,10 +56,15 @@ class _MainViewState extends State<MainView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          locator<AuthCubit>()
-            ..startListeningToUser(FirebaseAuth.instance.currentUser!.uid),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) =>
+              locator<AuthCubit>()
+                ..startListeningToUser(FirebaseAuth.instance.currentUser!.uid),
+        ),
+        BlocProvider(create: (context) => CartCubit()),
+      ],
       child: BlocBuilder<AuthCubit, AuthState>(
         builder: (context, state) {
           if (state is AuthLoading) {

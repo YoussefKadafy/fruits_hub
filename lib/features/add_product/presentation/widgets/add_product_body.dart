@@ -36,7 +36,10 @@ class _AddProductBodyState extends State<AddProductBody> {
   late num productPrice;
   late int productQuantityOfKalories;
   late int productExpirationDate;
+  late int productAmount = 1;
+  late String productUnitAmount = 'kg';
   File? productImage;
+  Key imageFieldKey = UniqueKey();
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -103,6 +106,53 @@ class _AddProductBodyState extends State<AddProductBody> {
                 },
               ),
               20.height,
+              Row(
+                children: [
+                  Expanded(
+                    child: CustomTextField(
+                      hintText: 'الكمية',
+                      labelText: 'الكمية',
+                      keyboardType: TextInputType.number,
+                      onSaved: (value) {
+                        productAmount = int.tryParse(value!) ?? 1;
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'الرجاء ادخال الكمية';
+                        }
+                        if (int.tryParse(value) == null) {
+                          return 'الرجاء ادخال رقم صالح';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  16.width,
+                  Expanded(
+                    child: DropdownButtonFormField<String>(
+                      value: productUnitAmount,
+                      decoration: InputDecoration(
+                        labelText: 'الوحدة',
+                        hintText: 'اختر الوحدة',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      items: const [
+                        DropdownMenuItem(value: 'kg', child: Text('كيلو')),
+                        DropdownMenuItem(value: 'piece', child: Text('قطعة')),
+                        DropdownMenuItem(value: 'box', child: Text('صندوق')),
+                        DropdownMenuItem(value: 'gram', child: Text('جرام')),
+                        DropdownMenuItem(value: 'liter', child: Text('لتر')),
+                      ],
+                      onChanged: (value) {
+                        productUnitAmount = value!;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              20.height,
               CustomTextField(
                 hintText: 'وصف المنتج',
                 labelText: 'وصف المنتج',
@@ -120,12 +170,49 @@ class _AddProductBodyState extends State<AddProductBody> {
               ),
               20.height,
               AddImageField(
+                key: imageFieldKey,
                 onImageAdded: (image) {
                   productImage = image;
                 },
               ),
-              20.height,
 
+              20.height,
+              CustomTextField(
+                hintText: 'عدد السعرات الحرارية',
+                labelText: 'السعرات الحرارية',
+                keyboardType: TextInputType.number,
+                onSaved: (value) {
+                  productQuantityOfKalories = int.tryParse(value!) ?? 0;
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'الرجاء ادخال السعرات الحرارية';
+                  }
+                  if (int.tryParse(value) == null) {
+                    return 'الرجاء ادخال رقم صالح';
+                  }
+                  return null;
+                },
+              ),
+              20.height,
+              CustomTextField(
+                hintText: 'مدة الصلاحية (بالأشهر)',
+                labelText: 'مدة الصلاحية',
+                keyboardType: TextInputType.number,
+                onSaved: (value) {
+                  productExpirationDate = int.tryParse(value!) ?? 0;
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'الرجاء ادخال مدة الصلاحية';
+                  }
+                  if (int.tryParse(value) == null) {
+                    return 'الرجاء ادخال رقم صالح';
+                  }
+                  return null;
+                },
+              ),
+              20.height,
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -163,42 +250,6 @@ class _AddProductBodyState extends State<AddProductBody> {
                     },
                   ),
                 ],
-              ),
-              20.height,
-              CustomTextField(
-                hintText: 'عدد السعرات الحرارية',
-                labelText: 'السعرات الحرارية',
-                keyboardType: TextInputType.number,
-                onSaved: (value) {
-                  productQuantityOfKalories = int.tryParse(value!) ?? 0;
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'الرجاء ادخال السعرات الحرارية';
-                  }
-                  if (int.tryParse(value) == null) {
-                    return 'الرجاء ادخال رقم صالح';
-                  }
-                  return null;
-                },
-              ),
-              20.height,
-              CustomTextField(
-                hintText: 'مدة الصلاحية (بالأشهر)',
-                labelText: 'مدة الصلاحية',
-                keyboardType: TextInputType.number,
-                onSaved: (value) {
-                  productExpirationDate = int.tryParse(value!) ?? 0;
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'الرجاء ادخال مدة الصلاحية';
-                  }
-                  if (int.tryParse(value) == null) {
-                    return 'الرجاء ادخال رقم صالح';
-                  }
-                  return null;
-                },
               ),
               40.height,
               BlocConsumer<AddProductCubit, AddProductCubitState>(
@@ -259,6 +310,8 @@ class _AddProductBodyState extends State<AddProductBody> {
                               isFeatured: isFeaturedNotifier.value,
                               expiratinsDateByMonths: productExpirationDate,
                               reviewEntity: const [],
+                              amount: productAmount,
+                              unitAmount: productUnitAmount,
                             );
                             context.read<AddProductCubit>().addProduct(
                               addProductEntity: input,

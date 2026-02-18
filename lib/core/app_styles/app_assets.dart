@@ -138,6 +138,10 @@ class AppAssets {
   /// assets/icons/strawberry.svg
   static const String assetsIconsStrawberry = "assets/icons/strawberry.svg";
 
+  /// Assets for assetsIconsTrash
+  /// assets/icons/trash.svg
+  static const String assetsIconsTrash = "assets/icons/trash.svg";
+
   /// Assets for assetsIconsUpperSplashImage
   /// assets/icons/upper_splash_image.svg
   static const String assetsIconsUpperSplashImage = "assets/icons/upper_splash_image.svg";

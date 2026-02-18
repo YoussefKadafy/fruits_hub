@@ -18,6 +18,8 @@ class ProductModel {
   final int expiratinsDateByMonths;
   final List<ReviewModel> reviewEntity;
   final num sellingCount;
+  final String unitAmount;
+  final num amount;
 
   ProductModel({
     required this.name,
@@ -34,6 +36,8 @@ class ProductModel {
     required this.reviewEntity,
     this.imageUrl,
     this.sellingCount = 0,
+    this.unitAmount = 'kg',
+    this.amount = 1,
   });
 
   // FROM ENTITY
@@ -55,6 +59,8 @@ class ProductModel {
           .map((review) => ReviewModel.fromEntity(review))
           .toList(),
       sellingCount: entity.sellingCount,
+      unitAmount: entity.unitAmount,
+      amount: entity.amount,
     );
   }
 
@@ -79,6 +85,8 @@ class ProductModel {
           )
           .toList(),
       sellingCount: json['sellingCount'] as num? ?? 0,
+      unitAmount: json['unitAmount'] as String? ?? 'kg',
+      amount: json['amount'] as num? ?? 1,
     );
   }
 
@@ -99,6 +107,8 @@ class ProductModel {
       expiratinsDateByMonths: expiratinsDateByMonths,
       reviewEntity: reviewEntity.map((review) => review.toEntity()).toList(),
       sellingCount: sellingCount,
+      unitAmount: unitAmount,
+      amount: amount,
     );
   }
 
@@ -118,6 +128,8 @@ class ProductModel {
       'expiratinsDateByMonths': expiratinsDateByMonths,
       'reviewEntity': reviewEntity.map((e) => e.toJson()).toList(),
       'sellingCount': sellingCount,
+      'unitAmount': unitAmount,
+      'amount': amount,
     };
   }
 }
