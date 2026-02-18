@@ -8,12 +8,12 @@ class UnselectedNavBarItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-      child: Container(
-        color: Colors.transparent,
-        child: Center(child: SizedBox(width: 48, height: 48, child: item.icon)),
-      ),
+      width: 48,
+      height: 36,
+      alignment: Alignment.center,
+      child: item.icon,
     );
   }
 }

@@ -19,8 +19,10 @@ class CustomNavBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
+
     return Container(
-      height: 70.h + MediaQuery.of(context).padding.bottom,
+      height: 70.h + bottomPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
         boxShadow: [
@@ -37,23 +39,42 @@ class CustomNavBarWidget extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).padding.bottom,
-          top: 8.h,
-        ),
+        padding: EdgeInsets.only(bottom: bottomPadding, top: 8.h),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: List.generate(
             items.length,
-            (index) => GestureDetector(
+            (index) => _NavBarItemButton(
+              item: items[index],
+              isSelected: selectedIndex == index,
               onTap: () => onItemSelected(index),
-              child: selectedIndex == index
-                  ? SelectedNavBarItem(item: items[index])
-                  : UnselectedNavBarItem(item: items[index]),
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class _NavBarItemButton extends StatelessWidget {
+  final NavBarEntity item;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _NavBarItemButton({
+    required this.item,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: isSelected
+          ? SelectedNavBarItem(item: item)
+          : UnselectedNavBarItem(item: item),
     );
   }
 }

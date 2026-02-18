@@ -11,8 +11,9 @@ class FruitItem extends StatelessWidget {
   final ProductEntity? product;
 
   final bool enabled;
+  final void Function()? onTap;
 
-  const FruitItem({super.key, this.product, required this.enabled});
+  const FruitItem({super.key, this.product, required this.enabled, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +102,7 @@ class FruitItem extends StatelessWidget {
                               ),
                               children: [
                                 TextSpan(
-                                  text: '/ كيلو',
+                                  text: '/  ${product?.unitAmount ?? 'كيلو'} ',
                                   style: AppStyles.wight400Size13.copyWith(
                                     color: AppColors.lightSecondary,
                                   ),
@@ -111,17 +112,20 @@ class FruitItem extends StatelessWidget {
                           ),
 
                           /// ➕ Add Button
-                          Container(
-                            height: 32,
-                            width: 32,
-                            decoration: BoxDecoration(
-                              color: AppColors.primary,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: const Icon(
-                              Icons.add,
-                              size: 18,
-                              color: Colors.white,
+                          InkWell(
+                            onTap: onTap,
+                            child: Container(
+                              height: 32,
+                              width: 32,
+                              decoration: BoxDecoration(
+                                color: AppColors.primary,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: const Icon(
+                                Icons.add,
+                                size: 18,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ],

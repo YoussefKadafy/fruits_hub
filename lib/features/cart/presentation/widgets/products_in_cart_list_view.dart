@@ -10,7 +10,7 @@ class ProductsInCartListView extends StatelessWidget {
     return Expanded(
       child: ListView.builder(
         physics: const BouncingScrollPhysics(),
-        itemCount: 7,
+        itemCount: cartItems.length,
         itemBuilder: (context, index) {
           final item = cartItems[index];
           return CartItem(cartItem: item);

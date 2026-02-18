@@ -259,6 +259,9 @@ class _AddProductBodyState extends State<AddProductBody> {
                       context,
                     ).showSnackBar(SnackBar(content: Text(state.errorMessage)));
                   } else if (state is AddProductCubitSuccess) {
+                    setState(() {
+                      imageFieldKey = UniqueKey();
+                    });
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('تم اضافة المنتج بنجاح')),
                     );

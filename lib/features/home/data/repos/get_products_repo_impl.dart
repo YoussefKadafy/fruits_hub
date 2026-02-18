@@ -49,7 +49,9 @@ class GetProductsRepoImpl implements GetProductsRepo {
   }
 
   @override
-  Future<Either<Failure, List<ProductEntity>>> getProductsBestSelling() async {
+  Future<Either<Failure, List<ProductEntity>>> getProductsBestSelling({
+    bool isLimited = true,
+  }) async {
     try {
       final productsData = await dataBaseService.getData(
         path: BackendEndpoints.productsCollection,
@@ -57,7 +59,7 @@ class GetProductsRepoImpl implements GetProductsRepo {
           'where': ['sellingCount', '>', 0],
           'orderBy': 'sellingCount',
           'descending': true,
-          'limit': 4,
+          'limit': isLimited ? 1 : null,
         },
       );
 

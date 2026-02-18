@@ -19,9 +19,11 @@ class GetProductsCubit extends Cubit<GetProductsCubitState> {
     );
   }
 
-  Future<void> getBestSellingProducts() async {
+  Future<void> getBestSellingProducts({bool isLimited = true}) async {
     emit(GetProductsCubitLoading());
-    final result = await getProductsRepo.getProductsBestSelling();
+    final result = await getProductsRepo.getProductsBestSelling(
+      isLimited: isLimited,
+    );
     result.fold(
       (failure) => emit(GetProductsCubitFailure(errorMessage: failure.message)),
       (products) => emit(GetProductsCubitSuccess(products: products)),

@@ -4,5 +4,7 @@ import 'package:fruits_hub/features/add_product/domain/entities/add_product_enti
 
 abstract class GetProductsRepo {
   Future<Either<Failure, List<ProductEntity>>> getProducts();
-  Future<Either<Failure, List<ProductEntity>>> getProductsBestSelling();
+  Future<Either<Failure, List<ProductEntity>>> getProductsBestSelling({
+    bool isLimited = true,
+  });
 }
