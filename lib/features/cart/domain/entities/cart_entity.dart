@@ -9,6 +9,10 @@ class CartEntity {
     items.add(item);
   }
 
+  void removeItem(CartItemEntity item) {
+    items.remove(item);
+  }
+
   bool isItemInCart(ProductEntity product) {
     return items.any((item) => item.product.code == product.code);
   }

@@ -1,6 +1,7 @@
+import 'package:equatable/equatable.dart';
 import 'package:fruits_hub/features/add_product/domain/entities/add_product_entity.dart';
 
-class CartItemEntity {
+class CartItemEntity extends Equatable {
   final ProductEntity product;
   int count;
   CartItemEntity({required this.product, this.count = 1});
@@ -15,4 +16,7 @@ class CartItemEntity {
   void increaseCount() {
     count++;
   }
+
+  @override
+  List<Object?> get props => [product];
 }

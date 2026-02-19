@@ -86,7 +86,11 @@ class _CartItemState extends State<CartItem> {
                       borderRadius: BorderRadius.circular(8.r),
                       splashColor: AppColors.green50,
 
-                      onTap: () {},
+                      onTap: () {
+                        context.read<CartCubit>().removeFromCart(
+                          cartItem: widget.cartItem,
+                        );
+                      },
                       child: SvgPicture.asset(AppAssets.assetsIconsTrash),
                     ),
                     Text(

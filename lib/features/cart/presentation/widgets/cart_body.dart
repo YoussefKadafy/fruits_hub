@@ -23,7 +23,7 @@ class CartBody extends StatelessWidget {
         24.height,
 
         ProductsInCartListView(
-          cartItems: context.read<CartCubit>().cart.items,
+          cartItems: context.watch<CartCubit>().cart.items,
           totalPrice: totalPrce,
         ),
 
