@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fruits_hub/core/app_styles/app_assets.dart';
 import 'package:fruits_hub/core/app_styles/app_colors.dart';
 import 'package:fruits_hub/core/app_styles/app_styles.dart';
 import 'package:fruits_hub/core/extensions/sized_box_extension.dart';
 import 'package:fruits_hub/features/cart/domain/entities/cart_Item_entity.dart';
+import 'package:fruits_hub/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:fruits_hub/features/cart/presentation/widgets/increace_and_decreace_widget.dart';
 import 'package:svg_flutter/svg.dart';
 
-class CartItem extends StatelessWidget {
-  const CartItem({super.key, required this.cartItem});
+class CartItem extends StatefulWidget {
+  const CartItem({super.key, required this.cartItem, required this.totalPrice});
   final CartItemEntity cartItem;
+  final num totalPrice;
 
+  @override
+  State<CartItem> createState() => _CartItemState();
+}
+
+class _CartItemState extends State<CartItem> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -34,7 +42,7 @@ class CartItem extends StatelessWidget {
                         color: AppColors.lightGray,
                       ),
                       child: Image.network(
-                        cartItem.product.imageUrl!,
+                        widget.cartItem.product.imageUrl!,
                         fit: BoxFit.contain,
                       ),
                     ),
@@ -44,19 +52,27 @@ class CartItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          cartItem.product.name,
+                          widget.cartItem.product.name,
                           style: AppStyles.wight700Size13,
                         ),
                         Text(
-                          '${cartItem.product.amount} ${cartItem.product.unitAmount}',
+                          '${widget.cartItem.product.amount} ${widget.cartItem.product.unitAmount}',
                           style: AppStyles.wight400Size13.copyWith(
                             color: AppColors.lightSecondary,
                           ),
                         ),
                         IncreaceAndDecreaceWidget(
-                          count: cartItem.count,
-                          onIncrease: cartItem.increasedCount,
-                          onDecrease: cartItem.decreasedCount,
+                          count: widget.cartItem.count,
+                          onIncrease: () {
+                            context.read<CartCubit>().increaseItemCount(
+                              widget.cartItem,
+                            );
+                          },
+                          onDecrease: () {
+                            context.read<CartCubit>().decreaseItemCount(
+                              widget.cartItem,
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -74,7 +90,7 @@ class CartItem extends StatelessWidget {
                       child: SvgPicture.asset(AppAssets.assetsIconsTrash),
                     ),
                     Text(
-                      ' ${cartItem.totalPrice} جنيه',
+                      ' ${widget.cartItem.totalPrice} جنيه',
                       style: AppStyles.wight700Size16.copyWith(
                         color: AppColors.secondary,
                       ),

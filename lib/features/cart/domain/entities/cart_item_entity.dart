@@ -6,15 +6,13 @@ class CartItemEntity {
   CartItemEntity({required this.product, this.count = 1});
   num get totalPrice => product.price * count;
   num get totalAmount => product.amount * count;
-  int decreasedCount() {
+  void decreaseCount() {
     if (count > 1) {
-      return count - 1;
-    } else {
-      return count;
+      count--;
     }
   }
 
-  int increasedCount() {
-    return count + 1;
+  void increaseCount() {
+    count++;
   }
 }

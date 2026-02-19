@@ -36,7 +36,7 @@ class ProductsGridList extends StatelessWidget {
             enabled: false,
             onTap: () {
               context.read<CartCubit>().addToCart(
-                theCartItem: CartItemEntity(product: products[index]),
+                productEntity: products[index],
               );
             },
           );

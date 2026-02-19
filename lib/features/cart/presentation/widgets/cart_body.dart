@@ -12,6 +12,7 @@ class CartBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    num totalPrce = context.watch<CartCubit>().totalPrice;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -21,12 +22,15 @@ class CartBody extends StatelessWidget {
         ),
         24.height,
 
-        ProductsInCartListView(cartItems: context.read<CartCubit>().cart.items),
+        ProductsInCartListView(
+          cartItems: context.read<CartCubit>().cart.items,
+          totalPrice: totalPrce,
+        ),
 
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
           child: CustomButton(
-            text: 'الدفع ${context.read<CartCubit>().cart.totalPrice} جنيه',
+            text: 'الدفع $totalPrce جنيه',
             backgroundColor: AppColors.primary,
             textColor: AppColors.white,
             onPressed: () {},
