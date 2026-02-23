@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruits_hub/core/app_styles/app_colors.dart';
 import 'package:fruits_hub/core/extensions/sized_box_extension.dart';
+import 'package:fruits_hub/core/routing/app_routes.dart';
 import 'package:fruits_hub/core/utils/custom_button.dart';
 import 'package:fruits_hub/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:fruits_hub/features/cart/presentation/widgets/number_of_products_in_cart.dart';
 import 'package:fruits_hub/features/cart/presentation/widgets/products_in_cart_list_view.dart';
+import 'package:go_router/go_router.dart';
 
 class CartBody extends StatelessWidget {
   const CartBody({super.key});
@@ -33,7 +35,9 @@ class CartBody extends StatelessWidget {
             text: 'الدفع $totalPrce جنيه',
             backgroundColor: AppColors.primary,
             textColor: AppColors.white,
-            onPressed: () {},
+            onPressed: () {
+              context.pushNamed(AppRoutes.payment);
+            },
           ),
         ),
         40.height,

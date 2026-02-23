@@ -6,6 +6,7 @@ import 'package:fruits_hub/features/auth/presentation/cubit/login/login_cubit.da
 import 'package:fruits_hub/features/auth/presentation/cubit/signup/register_cubit.dart';
 import 'package:fruits_hub/features/auth/presentation/views/login_view.dart';
 import 'package:fruits_hub/features/auth/presentation/views/register_view.dart';
+import 'package:fruits_hub/features/checkout/presentation/views/checkout_view.dart';
 import 'package:fruits_hub/features/home/presentation/views/best_seller_view.dart';
 import 'package:fruits_hub/features/main/presentation/views/main_view.dart';
 import 'package:fruits_hub/features/onboaeding/presentation/views/onboarding_view.dart';
@@ -30,6 +31,13 @@ class RoutesConfig {
         name: AppRoutes.onboarding,
         builder: (context, state) {
           return const OnboardingView();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.payment,
+        name: AppRoutes.payment,
+        builder: (context, state) {
+          return const CheckoutView();
         },
       ),
       GoRoute(

@@ -10,6 +10,7 @@ class AppRoutes {
   static const String bestSeller = '/bestSeller';
   static const String productDetails = '/productDetails';
   static const String addProduct = '/addProduct';
-
+  static const String editProduct = '/editProduct';
+  static const String payment = '/payment';
   static const String search = '/search';
 }

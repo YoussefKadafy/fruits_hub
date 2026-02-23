@@ -3,7 +3,6 @@ import 'package:fruits_hub/features/add_product/domain/entities/add_product_enti
 import 'package:fruits_hub/features/cart/domain/entities/cart_Item_entity.dart';
 import 'package:fruits_hub/features/cart/domain/entities/cart_entity.dart';
 import 'package:fruits_hub/features/cart/presentation/cubit/cart_states.dart';
-import 'package:fruits_hub/features/cart/presentation/widgets/cart_item.dart';
 
 class CartCubit extends Cubit<CartState> {
   CartCubit() : super(CartInitial());
