@@ -14,6 +14,8 @@ class CheckoutBody extends StatefulWidget {
 
 class _CheckoutBodyState extends State<CheckoutBody> {
   late PageController _pageController;
+  int? _selectedShippingIndex;
+
   @override
   void initState() {
     _pageController = PageController();
@@ -29,8 +31,17 @@ class _CheckoutBodyState extends State<CheckoutBody> {
         children: [
           20.height,
           const CheckoutSteps(isChecked: true),
+          32.height,
           Expanded(
-            child: CheckoutStepsPageView(pageController: _pageController),
+            child: CheckoutStepsPageView(
+              pageController: _pageController,
+              selectedShippingIndex: _selectedShippingIndex,
+              onShippingSelected: (index) {
+                setState(() {
+                  _selectedShippingIndex = index;
+                });
+              },
+            ),
           ),
           20.height,
           CustomButton(

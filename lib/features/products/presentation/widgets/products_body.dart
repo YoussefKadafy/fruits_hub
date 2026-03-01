@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruits_hub/core/app_styles/app_assets.dart';
-import 'package:fruits_hub/core/app_styles/app_styles.dart';
 import 'package:fruits_hub/core/extensions/sized_box_extension.dart';
 import 'package:fruits_hub/core/utils/headline_and_action.dart';
 import 'package:fruits_hub/core/utils/search_text_field.dart';

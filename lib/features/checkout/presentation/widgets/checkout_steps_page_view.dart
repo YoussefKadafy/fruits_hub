@@ -5,14 +5,24 @@ class CheckoutStepsPageView extends StatelessWidget {
   const CheckoutStepsPageView({
     super.key,
     required PageController pageController,
+    this.selectedShippingIndex,
+    this.onShippingSelected,
   }) : _pageController = pageController;
 
   final PageController _pageController;
+  final int? selectedShippingIndex;
+  final ValueChanged<int>? onShippingSelected;
+
   List<Widget> get pages => [
-    ShippingSection(),
+    ShippingSection(
+      selectedIndex: selectedShippingIndex,
+      onItemSelected: onShippingSelected,
+    ),
     SizedBox(),
     SizedBox(),
     SizedBox(),
+               
+                
   ];
 
   @override

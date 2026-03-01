@@ -5,7 +5,7 @@ import 'package:fruits_hub/core/app_styles/app_assets.dart';
 import 'package:fruits_hub/core/app_styles/app_colors.dart';
 import 'package:fruits_hub/core/app_styles/app_styles.dart';
 import 'package:fruits_hub/core/extensions/sized_box_extension.dart';
-import 'package:fruits_hub/features/cart/domain/entities/cart_Item_entity.dart';
+import 'package:fruits_hub/features/cart/domain/entities/cart_item_entity.dart';
 import 'package:fruits_hub/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:fruits_hub/features/cart/presentation/widgets/increace_and_decreace_widget.dart';
 import 'package:svg_flutter/svg.dart';

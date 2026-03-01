@@ -130,7 +130,7 @@ class _AddProductBodyState extends State<AddProductBody> {
                   16.width,
                   Expanded(
                     child: DropdownButtonFormField<String>(
-                      value: productUnitAmount,
+                      initialValue: productUnitAmount,
                       decoration: InputDecoration(
                         labelText: 'الوحدة',
                         hintText: 'اختر الوحدة',

@@ -1,5 +1,5 @@
 import 'package:fruits_hub/features/add_product/domain/entities/add_product_entity.dart';
-import 'package:fruits_hub/features/cart/domain/entities/cart_Item_entity.dart';
+import 'package:fruits_hub/features/cart/domain/entities/cart_item_entity.dart';
 
 class CartEntity {
   final List<CartItemEntity> items;

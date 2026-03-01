@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fruits_hub/features/cart/domain/entities/cart_Item_entity.dart';
+import 'package:fruits_hub/features/cart/domain/entities/cart_item_entity.dart';
 import 'package:fruits_hub/features/cart/presentation/widgets/cart_item.dart';
 
 class ProductsInCartListView extends StatelessWidget {

@@ -63,6 +63,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '792436545567',
     projectId: 'key-surf-459412-g7',
     storageBucket: 'key-surf-459412-g7.firebasestorage.app',
+    androidClientId: '792436545567-ie64l5rm24melln1vf23037dfk55d1t2.apps.googleusercontent.com',
+    iosClientId: '792436545567-mbmjgctq0j3r0hrp0v71l3d50nhk4k34.apps.googleusercontent.com',
     iosBundleId: 'com.example.fruitsHub',
   );
+
 }
