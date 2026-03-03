@@ -20,72 +20,80 @@ class ShippingItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 81.h,
 
-decoration: BoxDecoration(      color: AppColors.grayScale50,
-border: Border.all(
-  color: isSelected ? AppColors.lightPrimary : Colors.transparent,
-),
-),      height: 81.h,
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              GestureDetector(
-                onTap: onTap,
-                child: Container(
-                  height: 18,
-                  width: 18,padding: const EdgeInsets.all(2),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: isSelected ? AppColors.white : AppColors.grayScale,
+        decoration: BoxDecoration(
+          color: AppColors.grayScale50,
+          border: Border.all(
+            color: isSelected ? AppColors.lightPrimary : Colors.transparent,
+          ),
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GestureDetector(
+                  onTap: onTap,
+                  child: Container(
+                    height: 18,
+                    width: 18,
+                    padding: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: isSelected
+                            ? AppColors.white
+                            : AppColors.grayScale,
+                      ),
+                      color: isSelected ? AppColors.white : Colors.transparent,
                     ),
-                    color: isSelected ? AppColors.white : Colors.transparent,
-                  ),
-                  child: isSelected
-                      ? Center(
-                          child: Container(
-                         
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppColors.lightPrimary,
+                    child: isSelected
+                        ? Center(
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColors.lightPrimary,
+                              ),
                             ),
-                          ),
-                        )
-                      : null,
+                          )
+                        : null,
+                  ),
+                ),
+                10.width,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(title, style: AppStyles.wight600Size13),
+                    Text(
+                      subtitle,
+                      style: AppStyles.wight400Size13.copyWith(
+                        color: AppColors.grayScale,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Align(
+              alignment: Alignment.center,
+              child: Text(
+                '$payingCount جنيه',
+                style: AppStyles.wight600Size13.copyWith(
+                  color: AppColors.lightPrimary,
                 ),
               ),
-              10.width,
-              Column( crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(title, style: AppStyles.wight600Size13),
-                  Text(
-              subtitle,
-                    style: AppStyles.wight400Size13.copyWith(
-                      color: AppColors.grayScale,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          Align(
-            alignment: Alignment.center,
-            child: Text(
-               '$payingCount جنيه',
-              style: AppStyles.wight600Size13.copyWith(
-                color: AppColors.lightPrimary,
-              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

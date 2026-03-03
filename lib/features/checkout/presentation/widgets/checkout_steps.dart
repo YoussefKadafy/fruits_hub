@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fruits_hub/features/checkout/presentation/widgets/checkout_step.dart';
 
-class CheckoutSteps extends StatelessWidget {
-  const CheckoutSteps({super.key, required this.isChecked});
-  final bool isChecked;
+class CheckoutStepsVerification extends StatelessWidget {
+  const CheckoutStepsVerification({super.key, this.currentStep = 0});
+  final int currentStep;
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class CheckoutSteps extends StatelessWidget {
         (index) => Expanded(
           child: CheckoutStep(
             title: stepsData()[index],
-            isChecked: isChecked,
+            isChecked: index < currentStep,
             stepNumber: index + 1,
           ),
         ),

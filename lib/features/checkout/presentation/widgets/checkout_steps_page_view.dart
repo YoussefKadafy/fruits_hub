@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fruits_hub/features/checkout/presentation/widgets/address_input_section.dart';
 import 'package:fruits_hub/features/checkout/presentation/widgets/shipping_section.dart';
 
 class CheckoutStepsPageView extends StatelessWidget {
@@ -18,11 +19,9 @@ class CheckoutStepsPageView extends StatelessWidget {
       selectedIndex: selectedShippingIndex,
       onItemSelected: onShippingSelected,
     ),
+    AddressInputSection(),
     SizedBox(),
     SizedBox(),
-    SizedBox(),
-               
-                
   ];
 
   @override

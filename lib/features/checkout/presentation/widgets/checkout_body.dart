@@ -6,22 +6,23 @@ import 'package:fruits_hub/features/checkout/presentation/widgets/checkout_steps
 import 'package:fruits_hub/features/checkout/presentation/widgets/checkout_steps_page_view.dart';
 
 class CheckoutBody extends StatefulWidget {
-  const CheckoutBody({super.key});
+  const CheckoutBody({
+    super.key,
+    required PageController pageController,
+    this.currentStep = 1,
+    this.onNextPressed,
+  }) : _pageController = pageController;
+
+  final PageController _pageController;
+  final int currentStep;
+  final VoidCallback? onNextPressed;
 
   @override
   State<CheckoutBody> createState() => _CheckoutBodyState();
 }
 
 class _CheckoutBodyState extends State<CheckoutBody> {
-  late PageController _pageController;
   int? _selectedShippingIndex;
-
-  @override
-  void initState() {
-    _pageController = PageController();
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +31,11 @@ class _CheckoutBodyState extends State<CheckoutBody> {
       child: Column(
         children: [
           20.height,
-          const CheckoutSteps(isChecked: true),
+          CheckoutStepsVerification(currentStep: widget.currentStep),
           32.height,
           Expanded(
             child: CheckoutStepsPageView(
-              pageController: _pageController,
+              pageController: widget._pageController,
               selectedShippingIndex: _selectedShippingIndex,
               onShippingSelected: (index) {
                 setState(() {
@@ -48,7 +49,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
             text: 'التالي',
             backgroundColor: AppColors.primary,
             textColor: AppColors.white,
-            onPressed: () {},
+            onPressed: widget.onNextPressed,
           ),
           20.height,
         ],
