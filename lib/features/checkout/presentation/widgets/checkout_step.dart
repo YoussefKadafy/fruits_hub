@@ -8,19 +8,24 @@ class CheckoutStep extends StatelessWidget {
     required this.title,
     required this.isChecked,
     required this.stepNumber,
+    this.onTap,
   });
   final String title;
   final int stepNumber;
   final bool isChecked;
+  final VoidCallback? onTap;
   @override
   Widget build(BuildContext context) {
-    return AnimatedCrossFade(
-      firstChild: CheckedStep(title: title),
-      secondChild: UncheckedStep(title: title, stepNumber: stepNumber),
-      crossFadeState: isChecked
-          ? CrossFadeState.showFirst
-          : CrossFadeState.showSecond,
-      duration: const Duration(milliseconds: 300),
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedCrossFade(
+        firstChild: CheckedStep(title: title),
+        secondChild: UncheckedStep(title: title, stepNumber: stepNumber),
+        crossFadeState: isChecked
+            ? CrossFadeState.showFirst
+            : CrossFadeState.showSecond,
+        duration: const Duration(milliseconds: 300),
+      ),
     );
   }
 }
