@@ -35,9 +35,16 @@ class CartBody extends StatelessWidget {
             text: 'الدفع $totalPrce جنيه',
             backgroundColor: AppColors.primary,
             textColor: AppColors.white,
-            onPressed: () {
-              context.pushNamed(AppRoutes.payment);
-            },
+            onPressed: () {if(context.read<CartCubit>().cart.items.isEmpty) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(        backgroundColor: Colors.red,
+
+                  content: Text('السلة فارغة'),
+                ),
+              );
+            }else{
+              context.pushNamed(AppRoutes.payment ,extra: context.read<CartCubit>().cart );
+            }},
           ),
         ),
         40.height,

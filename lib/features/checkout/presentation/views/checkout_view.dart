@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:fruits_hub/features/cart/domain/entities/cart_entity.dart';
+import 'package:fruits_hub/features/checkout/domain/entity/checkout_entity.dart';
 import 'package:fruits_hub/features/checkout/presentation/widgets/checkout_body.dart';
+import 'package:provider/provider.dart';
 
 class CheckoutView extends StatefulWidget {
-  const CheckoutView({super.key});
-
+  const CheckoutView({super.key, required this.cartItems});
+final CartEntity cartItems;
   @override
   State<CheckoutView> createState() => _CheckoutViewState();
 }
@@ -25,7 +28,7 @@ class _CheckoutViewState extends State<CheckoutView> {
   }
 
   List<String> stepsData() {
-    return ['الشحن', 'العنوان', 'الدفع', 'المراجعة'];
+    return ['الشحن', 'العنوان', 'المراجعة'];
   }
 
   void _handleBack() {
@@ -65,10 +68,13 @@ class _CheckoutViewState extends State<CheckoutView> {
       body: SafeArea(
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
-          child: CheckoutBody(
-            pageController: _pageController,
-            currentStep: _currentStep,
-            onNextPressed: _handleNext,
+          child: Provider.value(
+            value: CheckoutEntity(cartItems:  widget.cartItems),
+            child: CheckoutBody(cart: widget.cartItems,
+              pageController: _pageController,
+              currentStep: _currentStep,
+              onNextPressed: _handleNext,
+            ),
           ),
         ),
       ),

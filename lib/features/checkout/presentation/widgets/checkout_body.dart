@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruits_hub/core/app_styles/app_colors.dart';
 import 'package:fruits_hub/core/extensions/sized_box_extension.dart';
 import 'package:fruits_hub/core/utils/custom_button.dart';
-import 'package:fruits_hub/features/cart/domain/entities/cart_item_entity.dart';
-import 'package:fruits_hub/features/cart/presentation/cubit/cart_cubit.dart';
+import 'package:fruits_hub/features/cart/domain/entities/cart_entity.dart';
+import 'package:fruits_hub/features/checkout/domain/entity/address_entity.dart';
 import 'package:fruits_hub/features/checkout/presentation/widgets/checkout_steps_verification.dart';
 import 'package:fruits_hub/features/checkout/presentation/widgets/checkout_steps_page_view.dart';
 
@@ -14,14 +13,16 @@ class CheckoutBody extends StatefulWidget {
     required PageController pageController,
     this.currentStep = 1,
     this.onNextPressed,
-    this.onStepTapped,
+    this.onStepTapped, 
+    required this.cart,
   }) : _pageController = pageController;
 
   final PageController _pageController;
   final int currentStep;
   final VoidCallback? onNextPressed;
   final void Function(int)? onStepTapped;
-
+  final CartEntity cart;
+  
   @override
   State<CheckoutBody> createState() => _CheckoutBodyState();
 }
@@ -31,21 +32,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   final GlobalKey<dynamic> _pageViewKey = GlobalKey();
   
   // Address fields
-  String? _fullName;
-  String? _address;
-  String? _city;
-  String? _neighborhood;
-  String? _apartment;
-  String? _phone;
-
-  List<CartItemEntity> get _cartItems {
-    try {
-      final cartCubit = context.read<CartCubit>();
-      return cartCubit.cart.items;
-    } catch (e) {
-      return [];
-    }
-  }
+  AddressEntity? _address; 
 
   bool _validateCurrentStep() {
     final currentStep = widget.currentStep;
@@ -65,6 +52,12 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   }
 
   void _handleNextWithValidation() {
+    // Save address when moving from step 2 to step 3
+    if (widget.currentStep == 2) {
+      final pageView = _pageViewKey.currentWidget as CheckoutStepsPageView;
+      _address = pageView.getAddress();
+    }
+    
     if (_validateCurrentStep()) {
       widget.onNextPressed?.call();
     } else {
@@ -104,6 +97,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
           32.height,
           Expanded(
             child: CheckoutStepsPageView(
+              cart: widget.cart,
+              address: _address,
               key: _pageViewKey,
               pageController: widget._pageController,
               selectedShippingIndex: _selectedShippingIndex,
@@ -112,13 +107,6 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   _selectedShippingIndex = index;
                 });
               },
-              cartItems: _cartItems,
-              fullName: _fullName,
-              address: _address,
-              city: _city,
-              neighborhood: _neighborhood,
-              apartment: _apartment,
-              phone: _phone,
             ),
           ),
           20.height,

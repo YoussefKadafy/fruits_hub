@@ -27,7 +27,7 @@ class ShippingSection extends StatelessWidget {
         ShippingItem(
           title: 'الدفع اونلاين',
           subtitle: 'يرجى تحديد طريقة الدفع',
-          payingCount: '45',
+          payingCount: ' 45',
           isSelected: selectedIndex == 1,
           onTap: () => onItemSelected?.call(1),
         ),

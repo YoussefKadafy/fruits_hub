@@ -3,12 +3,23 @@ import 'package:fruits_hub/core/app_styles/app_colors.dart';
 import 'package:fruits_hub/core/app_styles/app_styles.dart';
 import 'package:fruits_hub/core/extensions/sized_box_extension.dart';
 import 'package:fruits_hub/core/utils/row_text_widget.dart';
+import 'package:fruits_hub/features/cart/domain/entities/cart_entity.dart';
+import 'package:fruits_hub/features/checkout/domain/entity/address_entity.dart';
 
 class ReviewSection extends StatelessWidget {
-  const ReviewSection({super.key});
-
+  const ReviewSection({
+    super.key,
+    required this.cart,
+    this.address,
+  });
+  
+  final CartEntity cart;
+  final AddressEntity? address;
+  
   @override
   Widget build(BuildContext context) {
+    final price = cart.totalPrice(cart: cart);
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -24,7 +35,7 @@ class ReviewSection extends StatelessWidget {
             children: [
               RowTextWidget(
                 actionText: 'المجموع الفرعي',
-                resultText: " 150 جنيه",
+                resultText: "${price.toString()} جنيه",
               ),
               8.height,
 
@@ -39,7 +50,7 @@ class ReviewSection extends StatelessWidget {
 
               RowTextWidget(
                 actionText: 'المجموع الكلي',
-                resultText: " 180 جنيه",
+                resultText:'${price+30} جنيه' ,
                 actionColor: AppColors.black,
               ),
             ],
@@ -66,7 +77,9 @@ class ReviewSection extends StatelessWidget {
                     8.width,
                     Expanded(
                       child: Text(
-                        ' الجيزة - ترسا - شارع 10- عمارة 14 - شقة 4',
+                        address != null 
+                          ? '${address!.address}, ${address!.city}, ${address!.neighborhood}'
+                          : 'لم يتم تحديد العنوان',
                         style: AppStyles.wight700Size13,
                       ),
                     ),
@@ -74,7 +87,7 @@ class ReviewSection extends StatelessWidget {
                 ),
               ),
               TextButton( style:  TextButton.styleFrom(
-overlayColor: AppColors.mintGreen   
+ overlayColor: AppColors.mintGreen   
               ),
                 onPressed: () {},
                 child: Row(

@@ -4,6 +4,7 @@ import 'package:fruits_hub/core/app_styles/app_colors.dart';
 import 'package:fruits_hub/core/app_styles/app_styles.dart';
 import 'package:fruits_hub/core/extensions/sized_box_extension.dart';
 import 'package:fruits_hub/core/utils/custom_text_field.dart';
+import 'package:fruits_hub/features/checkout/domain/entity/address_entity.dart';
 
 class AddressInputSection extends StatefulWidget {
   const AddressInputSection({super.key});
@@ -26,6 +27,35 @@ class AddressInputSectionState extends State<AddressInputSection> {
 
   bool validate() {
     return _formKey.currentState?.validate() ?? false;
+  }
+
+  AddressEntity? getAddress() {
+    final fullName = _controllers['fullName']?.text;
+    final address = _controllers['address']?.text;
+    final city = _controllers['city']?.text;
+    final neighborhood = _controllers['neighborhood']?.text;
+    final phone = _controllers['phone']?.text;
+    final floor = _controllers['floor']?.text;
+    final apartment = _controllers['apartment']?.text;
+
+    if (fullName == null || fullName.isEmpty ||
+        address == null || address.isEmpty ||
+        city == null || city.isEmpty ||
+        neighborhood == null || neighborhood.isEmpty ||
+        phone == null || phone.isEmpty) {
+      return null;
+    }
+
+    return AddressEntity(
+      name: fullName,
+      phone: phone,
+      address: address,
+      city: city,
+      neighborhood: neighborhood,
+      floor: floor ?? '',
+      apartment: apartment ?? '',
+      buildingNumber: '',
+    );
   }
 
   TextInputType _getKeyboardType(String hintText) {
@@ -123,6 +153,7 @@ class AddressInputSectionState extends State<AddressInputSection> {
                     keyboardType: TextInputType.number,
                     textInputAction: TextInputAction.next,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    controller: _controllers['floor'],
                   ),
                 ),
                 16.width,
@@ -133,6 +164,7 @@ class AddressInputSectionState extends State<AddressInputSection> {
                     keyboardType: TextInputType.number,
                     textInputAction: TextInputAction.done,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    controller: _controllers['apartment'],
                   ),
                 ),
               ],

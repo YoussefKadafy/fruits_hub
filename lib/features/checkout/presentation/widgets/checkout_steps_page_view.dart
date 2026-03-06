@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fruits_hub/features/cart/domain/entities/cart_item_entity.dart';
+import 'package:fruits_hub/features/cart/domain/entities/cart_entity.dart';
+import 'package:fruits_hub/features/checkout/domain/entity/address_entity.dart';
 import 'package:fruits_hub/features/checkout/presentation/widgets/address_input_section.dart';
 import 'package:fruits_hub/features/checkout/presentation/widgets/review_section.dart';
 import 'package:fruits_hub/features/checkout/presentation/widgets/shipping_section.dart';
@@ -10,26 +11,18 @@ class CheckoutStepsPageView extends StatelessWidget {
     required PageController pageController,
     this.selectedShippingIndex,
     this.onShippingSelected,
-    this.cartItems,
-    this.fullName,
+    required this.cart,
     this.address,
-    this.city,
-    this.neighborhood,
-    this.apartment,
-    this.phone,
+  
+     
   }) : _pageController = pageController;
 
   final PageController _pageController;
   final int? selectedShippingIndex;
   final ValueChanged<int>? onShippingSelected;
-  final List<CartItemEntity>? cartItems;
-  final String? fullName;
-  final String? address;
-  final String? city;
-  final String? neighborhood;
-  final String? apartment;
-  final String? phone;
-
+  final CartEntity cart;
+  final AddressEntity? address;
+  
   // Key to access AddressInputSection state
   final GlobalKey<AddressInputSectionState> _addressKey = GlobalKey<AddressInputSectionState>();
 
@@ -39,7 +32,7 @@ class CheckoutStepsPageView extends StatelessWidget {
           onItemSelected: onShippingSelected,
         ),
         AddressInputSection(key: _addressKey),
-        const ReviewSection(),
+        ReviewSection(cart: cart, address: address),
       ];
 
   bool validateAddressStep() {
@@ -48,6 +41,14 @@ class CheckoutStepsPageView extends StatelessWidget {
       return addressSection.validate();
     }
     return false;
+  }
+
+  AddressEntity? getAddress() {
+    final addressSection = _addressKey.currentState;
+    if (addressSection != null) {
+      return addressSection.getAddress();
+    }
+    return null;
   }
 
   @override
