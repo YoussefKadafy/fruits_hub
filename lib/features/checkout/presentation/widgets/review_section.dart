@@ -1,24 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruits_hub/core/app_styles/app_colors.dart';
 import 'package:fruits_hub/core/app_styles/app_styles.dart';
 import 'package:fruits_hub/core/extensions/sized_box_extension.dart';
 import 'package:fruits_hub/core/utils/row_text_widget.dart';
 import 'package:fruits_hub/features/cart/domain/entities/cart_entity.dart';
 import 'package:fruits_hub/features/checkout/domain/entity/address_entity.dart';
+import 'package:fruits_hub/features/checkout/domain/entity/checkout_entity.dart';
 
 class ReviewSection extends StatelessWidget {
   const ReviewSection({
     super.key,
     required this.cart,
     this.address,
+    this.isPayCash,
   });
   
   final CartEntity cart;
   final AddressEntity? address;
+  final bool? isPayCash;
   
   @override
   Widget build(BuildContext context) {
     final price = cart.totalPrice(cart: cart);
+    final deliveryFee = 30;
+    final tax = 15;
+    final total = price + deliveryFee + (isPayCash == true ? tax : 0);
     
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,16 +48,27 @@ class ReviewSection extends StatelessWidget {
 
               RowTextWidget(
                 actionText: 'التوصيل',
-                resultText: " 30 جنيه",
+                resultText: " $deliveryFee جنيه",
                 resultColor: AppColors.grayScale500,
               ),
               8.height,
+              
+              if (isPayCash == true)
+              RowTextWidget(
+                actionText: 'ضريبة',
+                resultText: ' $tax جنيه',
+                resultColor: AppColors.grayScale500,
+              ),
+              
+              if (isPayCash == true)
+              8.height,
+              
               Divider(color: AppColors.grayScale),
               8.height,
 
               RowTextWidget(
                 actionText: 'المجموع الكلي',
-                resultText:'${price+30} جنيه' ,
+                resultText:'$total جنيه' ,
                 actionColor: AppColors.black,
               ),
             ],

@@ -13,8 +13,7 @@ class CheckoutStepsPageView extends StatelessWidget {
     this.onShippingSelected,
     required this.cart,
     this.address,
-  
-     
+    this.isPayCash,
   }) : _pageController = pageController;
 
   final PageController _pageController;
@@ -22,6 +21,7 @@ class CheckoutStepsPageView extends StatelessWidget {
   final ValueChanged<int>? onShippingSelected;
   final CartEntity cart;
   final AddressEntity? address;
+  final bool? isPayCash;
   
   // Key to access AddressInputSection state
   final GlobalKey<AddressInputSectionState> _addressKey = GlobalKey<AddressInputSectionState>();
@@ -32,7 +32,7 @@ class CheckoutStepsPageView extends StatelessWidget {
           onItemSelected: onShippingSelected,
         ),
         AddressInputSection(key: _addressKey),
-        ReviewSection(cart: cart, address: address),
+        ReviewSection(cart: cart, address: address, isPayCash: isPayCash),
       ];
 
   bool validateAddressStep() {

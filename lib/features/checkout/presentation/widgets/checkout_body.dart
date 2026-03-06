@@ -33,6 +33,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   
   // Address fields
   AddressEntity? _address; 
+  bool? _isPayCash;
 
   bool _validateCurrentStep() {
     final currentStep = widget.currentStep;
@@ -52,9 +53,16 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   }
 
   void _handleNextWithValidation() {
-    // Save address when moving from step 2 to step 3
+    // Save data when moving from step to step
+    final pageView = _pageViewKey.currentWidget as CheckoutStepsPageView;
+    
+    // Step 1: Save shipping selection (isPayCash)
+    if (widget.currentStep == 1) {
+      _isPayCash = _selectedShippingIndex == 0; // 0 = cash on delivery
+    }
+    
+    // Step 2: Save address when moving from step 2 to step 3
     if (widget.currentStep == 2) {
-      final pageView = _pageViewKey.currentWidget as CheckoutStepsPageView;
       _address = pageView.getAddress();
     }
     
@@ -99,6 +107,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
             child: CheckoutStepsPageView(
               cart: widget.cart,
               address: _address,
+              isPayCash: _isPayCash,
               key: _pageViewKey,
               pageController: widget._pageController,
               selectedShippingIndex: _selectedShippingIndex,
