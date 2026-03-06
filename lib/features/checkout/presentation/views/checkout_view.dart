@@ -74,6 +74,17 @@ class _CheckoutViewState extends State<CheckoutView> {
               pageController: _pageController,
               currentStep: _currentStep,
               onNextPressed: _handleNext,
+              onStepTapped: (step) {
+                step<=_currentStep?
+                setState(() {
+                  _currentStep = step;
+                  _pageController.animateToPage(
+                    step - 1,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                }):null;
+              },
             ),
           ),
         ),
