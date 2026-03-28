@@ -15,8 +15,15 @@ class CheckoutBody extends StatefulWidget {
     this.onNextPressed,
     this.onStepTapped,
     required this.cart,
+    this.address,
+    required this.isPayCash,
+    required this.onAddressChange,
+    required this.onPayCashChange,
   }) : _pageController = pageController;
-
+  final AddressEntity? address;
+  final bool? isPayCash;
+  final ValueChanged<bool> onPayCashChange;
+  final ValueChanged<AddressEntity?> onAddressChange;
   final PageController _pageController;
   final int currentStep;
   final VoidCallback? onNextPressed;
@@ -30,10 +37,6 @@ class CheckoutBody extends StatefulWidget {
 class _CheckoutBodyState extends State<CheckoutBody> {
   int? _selectedShippingIndex;
   final GlobalKey<CheckoutStepsPageViewState> _pageViewKey = GlobalKey();
-
-  // Address fields
-  AddressEntity? _address;
-  bool _isPayCash = false;
 
   bool _validateCurrentStep() {
     final currentStep = widget.currentStep;
@@ -63,11 +66,11 @@ class _CheckoutBodyState extends State<CheckoutBody> {
 
     // Step 1: Save shipping selection (isPayCash)
     if (widget.currentStep == 1) {
-      _isPayCash = _selectedShippingIndex == 0; // 0 = cash on delivery
+      widget.onPayCashChange(_selectedShippingIndex == 0);
     }
 
     if (widget.currentStep == 2 && pageView != null) {
-      _address = pageView.getAddress();
+      widget.onAddressChange(pageView.getAddress());
     }
 
     if (_validateCurrentStep()) {
@@ -108,10 +111,11 @@ class _CheckoutBodyState extends State<CheckoutBody> {
           ),
           32.height,
           Expanded(
-            child: CheckoutStepsPageView(onStepTapped: widget.onStepTapped,
+            child: CheckoutStepsPageView(
+              onStepTapped: widget.onStepTapped,
               cart: widget.cart,
-              address: _address,
-              isPayCash: _isPayCash,
+              address:  widget.address,
+              isPayCash:  widget.isPayCash,
               key: _pageViewKey,
               pageController: widget._pageController,
               selectedShippingIndex: _selectedShippingIndex,
@@ -123,22 +127,26 @@ class _CheckoutBodyState extends State<CheckoutBody> {
             ),
           ),
           20.height,
-          widget.currentStep < 3
-              ? CustomButton(
-                  text: 'التالي',
-                  backgroundColor: AppColors.primary,
-                  textColor: AppColors.white,
-                  onPressed: _handleNextWithValidation,
-                )
-              : _isPayCash ?  CustomButton(text: 'تم التاكيد' ,    backgroundColor: AppColors.primary,
-                  textColor: AppColors.white,
-                  onPressed: _handleNextWithValidation,
-           ) : CustomButton(
-                  text: 'ادفع عبر PayPal',
-                  backgroundColor: AppColors.primary,
-                  textColor: AppColors.white,
-                  onPressed: _handleNextWithValidation,
-                ),
+widget.currentStep < 3
+    ? CustomButton(
+        text: 'التالي',
+        backgroundColor: AppColors.primary,
+        textColor: AppColors.white,
+        onPressed: _handleNextWithValidation,
+      )
+    : (widget.isPayCash == true)
+        ? CustomButton(
+            text: 'تم التاكيد',
+            backgroundColor: AppColors.primary,
+            textColor: AppColors.white,
+            onPressed: _handleNextWithValidation,
+          )
+        : CustomButton(
+            text: 'ادفع عبر PayPal',
+            backgroundColor: AppColors.primary,
+            textColor: AppColors.white,
+            onPressed: _handleNextWithValidation,
+          ),
           20.height,
         ],
       ),

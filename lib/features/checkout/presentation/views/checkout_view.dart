@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:fruits_hub/core/helpers/shared_prefs.dart';
 import 'package:fruits_hub/features/cart/domain/entities/cart_entity.dart';
+import 'package:fruits_hub/features/checkout/domain/entity/address_entity.dart';
 import 'package:fruits_hub/features/checkout/domain/entity/checkout_entity.dart';
 import 'package:fruits_hub/features/checkout/presentation/widgets/checkout_body.dart';
 import 'package:provider/provider.dart';
 
 class CheckoutView extends StatefulWidget {
   const CheckoutView({super.key, required this.cartItems});
-final CartEntity cartItems;
+  final CartEntity cartItems;
   @override
   State<CheckoutView> createState() => _CheckoutViewState();
 }
@@ -55,6 +57,8 @@ class _CheckoutViewState extends State<CheckoutView> {
     });
   }
 
+  AddressEntity? _address;
+  bool? _isPayCash;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,21 +73,39 @@ class _CheckoutViewState extends State<CheckoutView> {
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           child: Provider.value(
-            value: CheckoutEntity(cartItems:  widget.cartItems),
-            child: CheckoutBody(cart: widget.cartItems,
+            value: CheckoutEntity(
+              cartItems: widget.cartItems,
+              uId: SharedPrefs.getUserEntity()!.userId,
+              address: _address,
+              isPayCash: _isPayCash,
+            ),
+            child: CheckoutBody(
+              cart: widget.cartItems,
               pageController: _pageController,
               currentStep: _currentStep,
               onNextPressed: _handleNext,
               onStepTapped: (step) {
-                step<=_currentStep?
+                step <= _currentStep
+                    ? setState(() {
+                        _currentStep = step;
+                        _pageController.animateToPage(
+                          step - 1,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                      })
+                    : null;
+              },
+              isPayCash: _isPayCash,
+              onAddressChange: (AddressEntity? value) {
                 setState(() {
-                  _currentStep = step;
-                  _pageController.animateToPage(
-                    step - 1,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                  );
-                }):null;
+                  _address = value;
+                });
+              },
+              onPayCashChange: (value) {
+                setState(() {
+                  _isPayCash = value;
+                });
               },
             ),
           ),
