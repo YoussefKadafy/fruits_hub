@@ -3,6 +3,8 @@ import 'package:fruits_hub/core/helpers/shared_prefs.dart';
 import 'package:fruits_hub/features/cart/domain/entities/cart_entity.dart';
 import 'package:fruits_hub/features/checkout/domain/entity/address_entity.dart';
 import 'package:fruits_hub/features/checkout/domain/entity/checkout_entity.dart';
+import 'package:fruits_hub/features/checkout/presentation/cubits/orders_cubit/orders_cubit.dart';
+import 'package:fruits_hub/features/checkout/presentation/widgets/add_orders_bloc_builder.dart';
 import 'package:fruits_hub/features/checkout/presentation/widgets/checkout_body.dart';
 import 'package:provider/provider.dart';
 
@@ -48,10 +50,26 @@ class _CheckoutViewState extends State<CheckoutView> {
   }
 
   void _handleNext() {
+       if (_currentStep == 3) {
+      final entity = CheckoutEntity(
+        cartItems: widget.cartItems,
+        uId: SharedPrefs.getUserEntity()!.userId,
+        address: _address,
+        isPayCash: _isPayCash,
+      );
+
+      context.read<OrdersCubit>().addOrder(
+        checkoutEntity: entity,
+      );
+      return;
+    }
+
+    // ✅ OTHERWISE → GO NEXT
     _pageController.nextPage(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
+
     setState(() {
       _currentStep++;
     });
@@ -79,34 +97,36 @@ class _CheckoutViewState extends State<CheckoutView> {
               address: _address,
               isPayCash: _isPayCash,
             ),
-            child: CheckoutBody(
-              cart: widget.cartItems,
-              pageController: _pageController,
-              currentStep: _currentStep,
-              onNextPressed: _handleNext,
-              onStepTapped: (step) {
-                step <= _currentStep
-                    ? setState(() {
-                        _currentStep = step;
-                        _pageController.animateToPage(
-                          step - 1,
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                        );
-                      })
-                    : null;
-              },
-              isPayCash: _isPayCash,
-              onAddressChange: (AddressEntity? value) {
-                setState(() {
-                  _address = value;
-                });
-              },
-              onPayCashChange: (value) {
-                setState(() {
-                  _isPayCash = value;
-                });
-              },
+            child: AddOrdersBlocBuilder(
+              child: CheckoutBody(
+                cart: widget.cartItems,
+                pageController: _pageController,
+                currentStep: _currentStep,
+                onNextPressed: _handleNext,
+                onStepTapped: (step) {
+                  step <= _currentStep
+                      ? setState(() {
+                          _currentStep = step;
+                          _pageController.animateToPage(
+                            step - 1,
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                        })
+                      : null;
+                },
+                isPayCash: _isPayCash,
+                onAddressChange: (AddressEntity? value) {
+                  setState(() {
+                    _address = value;
+                  });
+                },
+                onPayCashChange: (value) {
+                  setState(() {
+                    _isPayCash = value;
+                  });
+                },
+              ),
             ),
           ),
         ),

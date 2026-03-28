@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruits_hub/core/helpers/service_locator.dart';
+import 'package:fruits_hub/core/repos/orders_repo/orders_repo.dart';
 import 'package:fruits_hub/core/routing/app_routes.dart';
 import 'package:fruits_hub/features/add_product/presentation/views/add_product_view.dart';
 import 'package:fruits_hub/features/auth/presentation/cubit/login/login_cubit.dart';
@@ -7,7 +8,7 @@ import 'package:fruits_hub/features/auth/presentation/cubit/signup/register_cubi
 import 'package:fruits_hub/features/auth/presentation/views/login_view.dart';
 import 'package:fruits_hub/features/auth/presentation/views/register_view.dart';
 import 'package:fruits_hub/features/cart/domain/entities/cart_entity.dart';
-import 'package:fruits_hub/features/cart/presentation/widgets/cart_item.dart';
+import 'package:fruits_hub/features/checkout/presentation/cubits/orders_cubit/orders_cubit.dart';
 import 'package:fruits_hub/features/checkout/presentation/views/checkout_view.dart';
 import 'package:fruits_hub/features/home/presentation/views/best_seller_view.dart';
 import 'package:fruits_hub/features/main/presentation/views/main_view.dart';
@@ -36,11 +37,14 @@ class RoutesConfig {
         },
       ),
       GoRoute(
-        path: AppRoutes.payment,
-        name: AppRoutes.payment,
+        path: AppRoutes.checkout,
+        name: AppRoutes.checkout,
         builder: (context, state) {
           final cartItems = state.extra as CartEntity;
-          return  CheckoutView(cartItems:  cartItems,);
+          return BlocProvider(
+            create: (context) => locator<OrdersCubit>(),
+            child: CheckoutView(cartItems: cartItems),
+          );
         },
       ),
       GoRoute(

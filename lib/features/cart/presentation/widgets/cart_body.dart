@@ -43,7 +43,7 @@ class CartBody extends StatelessWidget {
                 ),
               );
             }else{
-              context.pushNamed(AppRoutes.payment ,extra: context.read<CartCubit>().cart );
+              context.pushNamed(AppRoutes.checkout ,extra: context.read<CartCubit>().cart );
             }},
           ),
         ),

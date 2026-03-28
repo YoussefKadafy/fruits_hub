@@ -71,7 +71,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
 
     if (widget.currentStep == 2 && pageView != null) {
       widget.onAddressChange(pageView.getAddress());
-    }
+    } 
 
     if (_validateCurrentStep()) {
       widget.onNextPressed?.call();

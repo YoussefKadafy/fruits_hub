@@ -82,7 +82,7 @@ class AddressInputSectionState extends State<AddressInputSection> with Automatic
       neighborhood: neighborhood,
       floor: floor,
       apartment: apartment,
-      buildingNumber: '',
+      buildingNumber: floor,
     );
   }
 
@@ -105,6 +105,7 @@ class AddressInputSectionState extends State<AddressInputSection> with Automatic
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       child: Form(

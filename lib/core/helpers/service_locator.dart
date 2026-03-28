@@ -5,6 +5,8 @@ import 'package:fruits_hub/core/admin/repos/images_repos/images_repo_impl.dart';
 import 'package:fruits_hub/core/admin/services/storage_service.dart';
 import 'package:fruits_hub/core/admin/services/admin_fire_store_service.dart';
 import 'package:fruits_hub/core/admin/services/supabase_service.dart';
+import 'package:fruits_hub/core/repos/orders_repo/orders_repo.dart';
+import 'package:fruits_hub/core/repos/orders_repo/orders_repo_impl.dart';
 import 'package:fruits_hub/core/services/data_base_service.dart';
 import 'package:fruits_hub/core/services/fire_store_service.dart';
 import 'package:fruits_hub/features/auth/data/repos/auth_repo_impl.dart';
@@ -13,6 +15,7 @@ import 'package:fruits_hub/features/auth/presentation/cubit/login/login_cubit.da
 import 'package:fruits_hub/features/auth/presentation/cubit/signup/register_cubit.dart';
 import 'package:fruits_hub/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:fruits_hub/features/auth/domain/usecases/listen_to_user_usecase.dart';
+import 'package:fruits_hub/features/checkout/presentation/cubits/orders_cubit/orders_cubit.dart';
 import 'package:fruits_hub/features/profile/domain/usecases/sign_out_usecase.dart';
 import 'package:fruits_hub/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:fruits_hub/features/add_product/presentation/cubit/add_product_cubit_cubit.dart';
@@ -52,6 +55,9 @@ void setupServiceLocator() {
   locator.registerLazySingleton<GetProductsRepo>(
     () => GetProductsRepoImpl(dataBaseService: locator<DataBaseService>()),
   );
+  locator.registerLazySingleton<OrdersRepo>(
+    () => OrdersRepoImpl(dataBaseService: locator<DataBaseService>()),
+  );
   // Add your repositories here
 
   // Use Cases
@@ -82,6 +88,9 @@ void setupServiceLocator() {
   );
   locator.registerFactory<GetProductsCubit>(
     () => GetProductsCubit(getProductsRepo: locator<GetProductsRepo>()),
+  );
+  locator.registerFactory<OrdersCubit>(
+    () => OrdersCubit(ordersRepo: locator<OrdersRepo>()),
   );
 
   // Add your BLoCs here
