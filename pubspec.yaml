@@ -47,6 +47,7 @@ dependencies:
   flutter_localization: ^0.3.3
   flutter_localizations:
     sdk: flutter
+  flutter_paypal_payment: ^1.0.8
   flutter_screenutil: ^5.9.3
   flutter_svg_provider: ^1.0.7
   get_it: ^9.2.0

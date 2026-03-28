@@ -6,5 +6,8 @@ class CheckoutEntity {final String uId;  final AddressEntity? address;
    bool? isPayCash;
 
   CheckoutEntity({ this.address, required this.cartItems,  this.isPayCash, required this.uId});
-  
+  num subTotal() => cartItems.totalPrice(cart: cartItems);
+   num shipping() => 30;  num discount() => 0;
+
+  num total() => subTotal() + shipping() - discount();
 }
