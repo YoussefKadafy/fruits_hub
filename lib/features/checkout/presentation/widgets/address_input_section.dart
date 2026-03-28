@@ -13,36 +13,64 @@ class AddressInputSection extends StatefulWidget {
   AddressInputSectionState createState() => AddressInputSectionState();
 }
 
-class AddressInputSectionState extends State<AddressInputSection> {
+class AddressInputSectionState extends State<AddressInputSection> with AutomaticKeepAliveClientMixin  {
   final _formKey = GlobalKey<FormState>();
-  final Map<String, TextEditingController> _controllers = {};
+  
+  final _fullNameFocusNode = FocusNode();
+  final _addressFocusNode = FocusNode();
+  final _cityFocusNode = FocusNode();
+  final _neighborhoodFocusNode = FocusNode();
+  final _phoneFocusNode = FocusNode();
+  final _floorFocusNode = FocusNode();
+  final _apartmentFocusNode = FocusNode();
+  
+  final _fullNameController = TextEditingController();
+  final _addressController = TextEditingController();
+  final _cityController = TextEditingController();
+  final _neighborhoodController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _floorController = TextEditingController();
+  final _apartmentController = TextEditingController();
+  
+  bool _saveInfo = false;
+
   @override
   void dispose() {
-    for (var controller in _controllers.values) {
-      controller.dispose();
-    }
+    _fullNameFocusNode.dispose();
+    _addressFocusNode.dispose();
+    _cityFocusNode.dispose();
+    _neighborhoodFocusNode.dispose();
+    _phoneFocusNode.dispose();
+    _floorFocusNode.dispose();
+    _apartmentFocusNode.dispose();
+    _fullNameController.dispose();
+    _addressController.dispose();
+    _cityController.dispose();
+    _neighborhoodController.dispose();
+    _phoneController.dispose();
+    _floorController.dispose();
+    _apartmentController.dispose();
     super.dispose();
   }
-
 
   bool validate() {
     return _formKey.currentState?.validate() ?? false;
   }
 
   AddressEntity? getAddress() {
-    final fullName = _controllers['fullName']?.text;
-    final address = _controllers['address']?.text;
-    final city = _controllers['city']?.text;
-    final neighborhood = _controllers['neighborhood']?.text;
-    final phone = _controllers['phone']?.text;
-    final floor = _controllers['floor']?.text;
-    final apartment = _controllers['apartment']?.text;
+    final fullName = _fullNameController.text.trim();
+    final address = _addressController.text.trim();
+    final city = _cityController.text.trim();
+    final neighborhood = _neighborhoodController.text.trim();
+    final phone = _phoneController.text.trim();
+    final floor = _floorController.text.trim();
+    final apartment = _apartmentController.text.trim();
 
-    if (fullName == null || fullName.isEmpty ||
-        address == null || address.isEmpty ||
-        city == null || city.isEmpty ||
-        neighborhood == null || neighborhood.isEmpty ||
-        phone == null || phone.isEmpty) {
+    if (fullName.isEmpty ||
+        address.isEmpty ||
+        city.isEmpty ||
+        neighborhood.isEmpty ||
+        phone.isEmpty) {
       return null;
     }
 
@@ -52,44 +80,17 @@ class AddressInputSectionState extends State<AddressInputSection> {
       address: address,
       city: city,
       neighborhood: neighborhood,
-      floor: floor ?? '',
-      apartment: apartment ?? '',
+      floor: floor,
+      apartment: apartment,
       buildingNumber: '',
     );
   }
 
-  TextInputType _getKeyboardType(String hintText) {
-    switch (hintText) {
-      case 'رقم الهاتف':
-        return TextInputType.phone;
-      case 'العنوان':
-        return TextInputType.streetAddress;
-      case 'الاسم الكامل':
-        return TextInputType.name;
-      case 'المدينة':
-      case 'الحي':
-      default:
-        return TextInputType.text;
-    }
-  }
-
-  TextInputAction _getTextInputAction(String hintText, int index, int totalFields) {
-    if (index == totalFields - 1) {
-      return TextInputAction.done;
-    }
-    return TextInputAction.next;
-  }
-
-  String? _validateRequired(String? value, {String fieldName = 'هذا الحقل'}) {
+  String? _validateRequired(String? value, String fieldName) {
     if (value == null || value.trim().isEmpty) {
       return 'يرجى إدخال $fieldName';
     }
     return null;
-  }
-
-  // Helper to create validator with field name
-  String? Function(String?) _getValidator(String fieldName) {
-    return (value) => _validateRequired(value, fieldName: fieldName);
   }
 
   String? _validatePhone(String? value) {
@@ -104,93 +105,144 @@ class AddressInputSectionState extends State<AddressInputSection> {
 
   @override
   Widget build(BuildContext context) {
-    ValueNotifier<bool> isChecked = ValueNotifier<bool>(false);
-    
-    final fields = [
-      {'hintText': 'الاسم الكامل', 'labelText': 'الاسم الكامل', 'key': 'fullName', 'validator': _getValidator('الاسم الكامل')},
-      {'hintText': 'العنوان', 'labelText': 'العنوان', 'key': 'address', 'validator': _getValidator('العنوان')},
-      {'hintText': 'المدينة', 'labelText': 'المدينة', 'key': 'city', 'validator': _getValidator('المدينة')},
-      {'hintText': 'الحي', 'labelText': 'الحي', 'key': 'neighborhood', 'validator': _getValidator('الحي')},
-      {'hintText': 'رقم الهاتف', 'labelText': 'رقم الهاتف', 'key': 'phone', 'validator': _validatePhone},
-    ];
-    
     return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       child: Form(
         key: _formKey,
-        child: Column(
-          children: [
-            ...fields.asMap().entries.map((entry) {
-              final index = entry.key;
-              final field = entry.value;
-              final hintText = field['hintText'] as String;
-              final labelText = field['labelText'] as String;
-              final key = field['key'] as String;
-              final validator = field['validator'] as String? Function(String?);
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'معلومات العنوان',
+                style: AppStyles.wight600Size18.copyWith(
+                  color: AppColors.onboardingDescriptionTextColor,
+                ),
+              ),
+              16.height,
               
-              _controllers[key] ??= TextEditingController();
+              CustomTextField(
+                focusNode: _fullNameFocusNode,
+                hintText: 'الاسم الكامل',
+                labelText: 'الاسم الكامل',
+                controller: _fullNameController,
+                textInputAction: TextInputAction.next,
+                onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_addressFocusNode),
+                validator: (v) => _validateRequired(v, 'الاسم الكامل'),
+              ),
+              16.height,
               
-              return Column(
+              CustomTextField(
+                focusNode: _addressFocusNode,
+                hintText: 'العنوان',
+                labelText: 'العنوان',
+                controller: _addressController,
+                textInputAction: TextInputAction.next,
+                onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_cityFocusNode),
+                validator: (v) => _validateRequired(v, 'العنوان'),
+              ),
+              16.height,
+              
+              CustomTextField(
+                focusNode: _cityFocusNode,
+                hintText: 'المدينة',
+                labelText: 'المدينة',
+                controller: _cityController,
+                textInputAction: TextInputAction.next,
+                onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_neighborhoodFocusNode),
+                validator: (v) => _validateRequired(v, 'المدينة'),
+              ),
+              16.height,
+              
+              CustomTextField(
+                focusNode: _neighborhoodFocusNode,
+                hintText: 'الحي',
+                labelText: 'الحي',
+                controller: _neighborhoodController,
+                textInputAction: TextInputAction.next,
+                onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_phoneFocusNode),
+                validator: (v) => _validateRequired(v, 'الحي'),
+              ),
+              16.height,
+              
+              CustomTextField(
+                focusNode: _phoneFocusNode,
+                hintText: 'رقم الهاتف',
+                labelText: 'رقم الهاتف',
+                controller: _phoneController,
+                textInputAction: TextInputAction.next,
+                onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_floorFocusNode),
+                keyboardType: TextInputType.phone,
+                validator: _validatePhone,
+              ),
+              24.height,
+              
+              Row(
                 children: [
-                  CustomTextField(
-                    hintText: hintText,
-                    labelText: labelText,
-                    keyboardType: _getKeyboardType(hintText),
-                    textInputAction: _getTextInputAction(hintText, index, fields.length + 1),
-                    controller: _controllers[key],
-                    validator: validator,
+                  Expanded(
+                    child: CustomTextField(
+                      focusNode: _floorFocusNode,
+                      hintText: '٠١',
+                      labelText: 'الطابق',
+                      controller: _floorController,
+                      textInputAction: TextInputAction.next,
+                      onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_apartmentFocusNode),
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    ),
                   ),
-                  16.height,
+                  16.width,
+                  Expanded(
+                    child: CustomTextField(
+                      focusNode: _apartmentFocusNode,
+                      hintText: '٠١',
+                      labelText: 'رقم الشقة',
+                      controller: _apartmentController,
+                      textInputAction: TextInputAction.done,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    ),
+                  ),
                 ],
-              );
-            }),
-            Row(
-              children: [
-                Expanded(
-                  child: CustomTextField(
-                    hintText: '٠١',
-                    labelText: 'الطابق',
-                    keyboardType: TextInputType.number,
-                    textInputAction: TextInputAction.next,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    controller: _controllers['floor'],
-                  ),
+              ),
+              24.height,
+              
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppColors.grayScale.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                16.width,
-                Expanded(
-                  child: CustomTextField(
-                    hintText: '٠١',
-                    labelText: 'رقم الشقة',
-                    keyboardType: TextInputType.number,
-                    textInputAction: TextInputAction.done,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    controller: _controllers['apartment'],
-                  ),
+                child: Row(
+                  children: [
+                    Switch(
+                      value: _saveInfo,
+                      onChanged: (value) => setState(() => _saveInfo = value),
+                      activeThumbColor: AppColors.primary,
+                      thumbColor: WidgetStateProperty.all(Colors.white),
+                      activeTrackColor: AppColors.primary,
+                      inactiveTrackColor: AppColors.grayScale,
+                    ),
+                    8.width,
+                    Expanded(
+                      child: Text(
+                        'حفظ المعلومات لاستخدامها لاحقاً',
+                        style: AppStyles.wight600Size13.copyWith(
+                          color: AppColors.onboardingDescriptionTextColor,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            16.height,
-            Row(
-              children: [
-                ValueListenableBuilder<bool>(
-                  valueListenable: isChecked,
-                  builder: (context, value, child) => Switch(
-                    value: value,
-                    onChanged: (value) {
-                      isChecked.value = value;
-                    },
-                    activeThumbColor: AppColors.primary,
-                    thumbColor: WidgetStateProperty.all(Colors.white),
-                    activeTrackColor: AppColors.primary,
-                    inactiveTrackColor: AppColors.grayScale,
-                  ),
-                ),8.width,
-                Text('حفظ المعلومات',style: AppStyles.wight600Size13.copyWith(color: AppColors.onboardingDescriptionTextColor),),
-              ],
-            ),
-          ],
+              ),
+              24.height,
+            ],
+          ),
         ),
       ),
     );
   }
-}
+  
+  @override
+bool get wantKeepAlive => true;}

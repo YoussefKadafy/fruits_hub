@@ -10,9 +10,11 @@ class CustomTextField extends StatefulWidget {
   final String? labelText;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
+  final FocusNode? focusNode;
   final bool obscureText;
   final String? Function(String?)? validator;
   final void Function(String)? onChanged;
+  final void Function(String)? onFieldSubmitted;
   final int? maxLines;
   final bool enabled;
   final List<TextInputFormatter>? inputFormatters;
@@ -26,6 +28,7 @@ class CustomTextField extends StatefulWidget {
     this.labelText,
     this.keyboardType,
     this.textInputAction,
+    this.focusNode,
     this.obscureText = false,
     this.validator,
     this.onChanged,
@@ -35,6 +38,7 @@ class CustomTextField extends StatefulWidget {
     this.prefixIcon,
     this.suffixIcon,
     this.onSaved,
+    this.onFieldSubmitted,
   });
 
   @override
@@ -64,14 +68,15 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
+    return TextFormField(autovalidateMode: AutovalidateMode.onUserInteraction,
       controller: widget.controller,
       onSaved: widget.onSaved,
-      focusNode: _focusNode,
+      focusNode: widget.focusNode ?? _focusNode,
       keyboardType: widget.keyboardType,
       textInputAction: widget.textInputAction,
       validator: widget.validator,
       onChanged: widget.onChanged,
+      onFieldSubmitted: widget.onFieldSubmitted,
       enabled: widget.enabled,
       obscureText: widget.obscureText,
       maxLines: widget.maxLines,

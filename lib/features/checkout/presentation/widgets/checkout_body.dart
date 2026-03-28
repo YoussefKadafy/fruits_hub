@@ -13,7 +13,7 @@ class CheckoutBody extends StatefulWidget {
     required PageController pageController,
     this.currentStep = 1,
     this.onNextPressed,
-    this.onStepTapped, 
+    this.onStepTapped,
     required this.cart,
   }) : _pageController = pageController;
 
@@ -22,23 +22,23 @@ class CheckoutBody extends StatefulWidget {
   final VoidCallback? onNextPressed;
   final void Function(int)? onStepTapped;
   final CartEntity cart;
-  
+
   @override
   State<CheckoutBody> createState() => _CheckoutBodyState();
 }
 
 class _CheckoutBodyState extends State<CheckoutBody> {
   int? _selectedShippingIndex;
-  final GlobalKey<dynamic> _pageViewKey = GlobalKey();
-  
+  final GlobalKey<CheckoutStepsPageViewState> _pageViewKey = GlobalKey();
+
   // Address fields
-  AddressEntity? _address; 
-  bool? _isPayCash;
+  AddressEntity? _address;
+  bool _isPayCash = false;
 
   bool _validateCurrentStep() {
     final currentStep = widget.currentStep;
-    final pageView = _pageViewKey.currentWidget as CheckoutStepsPageView;
-    
+    final pageView = _pageViewKey.currentState;
+
     // Step 1: Shipping
     if (currentStep == 1) {
       if (_selectedShippingIndex == null) {
@@ -47,25 +47,29 @@ class _CheckoutBodyState extends State<CheckoutBody> {
     }
     // Step 2: Address
     if (currentStep == 2) {
+      if (pageView == null) return false;
       return pageView.validateAddressStep();
+    }
+    // Step 3: Review (always valid as it's the final step)
+    if (currentStep == 3) {
+      return true;
     }
     return true;
   }
 
   void _handleNextWithValidation() {
     // Save data when moving from step to step
-    final pageView = _pageViewKey.currentWidget as CheckoutStepsPageView;
-    
+    final pageView = _pageViewKey.currentState;
+
     // Step 1: Save shipping selection (isPayCash)
     if (widget.currentStep == 1) {
       _isPayCash = _selectedShippingIndex == 0; // 0 = cash on delivery
     }
-    
-    // Step 2: Save address when moving from step 2 to step 3
-    if (widget.currentStep == 2) {
+
+    if (widget.currentStep == 2 && pageView != null) {
       _address = pageView.getAddress();
     }
-    
+
     if (_validateCurrentStep()) {
       widget.onNextPressed?.call();
     } else {
@@ -104,7 +108,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
           ),
           32.height,
           Expanded(
-            child: CheckoutStepsPageView(
+            child: CheckoutStepsPageView(onStepTapped: widget.onStepTapped,
               cart: widget.cart,
               address: _address,
               isPayCash: _isPayCash,
@@ -119,19 +123,22 @@ class _CheckoutBodyState extends State<CheckoutBody> {
             ),
           ),
           20.height,
- widget.currentStep < 3 ?
-          CustomButton(
-            text: 'التالي',
-            backgroundColor: AppColors.primary,
-            textColor: AppColors.white,
-            onPressed: _handleNextWithValidation,
-          )
-          : CustomButton(
-            text: 'ادفع عبر PayPal',
-            backgroundColor: AppColors.primary,
-            textColor: AppColors.white,
-            onPressed: _handleNextWithValidation,
-          ),
+          widget.currentStep < 3
+              ? CustomButton(
+                  text: 'التالي',
+                  backgroundColor: AppColors.primary,
+                  textColor: AppColors.white,
+                  onPressed: _handleNextWithValidation,
+                )
+              : _isPayCash ?  CustomButton(text: 'تم التاكيد' ,    backgroundColor: AppColors.primary,
+                  textColor: AppColors.white,
+                  onPressed: _handleNextWithValidation,
+           ) : CustomButton(
+                  text: 'ادفع عبر PayPal',
+                  backgroundColor: AppColors.primary,
+                  textColor: AppColors.white,
+                  onPressed: _handleNextWithValidation,
+                ),
           20.height,
         ],
       ),
