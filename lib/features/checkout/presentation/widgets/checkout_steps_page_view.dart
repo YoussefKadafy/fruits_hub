@@ -13,9 +13,10 @@ class CheckoutStepsPageView extends StatefulWidget {
     this.onShippingSelected,
     required this.cart,
     this.address,
-    this.isPayCash,  this.onStepTapped,
+    this.isPayCash,  this.onStepTapped, this.onAddressChanged,
   }) : _pageController = pageController;
 final void Function(int)? onStepTapped;
+ final ValueChanged<AddressEntity?>? onAddressChanged;
   final PageController _pageController;
   final int? selectedShippingIndex;
   final ValueChanged<int>? onShippingSelected;
@@ -60,7 +61,9 @@ class CheckoutStepsPageViewState extends State<CheckoutStepsPageView> {
               onItemSelected: widget.onShippingSelected,
             );
           case 1:
-            return AddressInputSection(key: _addressKey);
+            return AddressInputSection(key: _addressKey,onAddressChanged: widget.onAddressChanged,
+          
+            );
           case 2:
             return ReviewSection( onEditStep:  widget.onStepTapped,
               pageController: widget._pageController,

@@ -1,9 +1,17 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_paypal_payment/flutter_paypal_payment.dart';
 import 'package:fruits_hub/core/app_styles/app_colors.dart';
 import 'package:fruits_hub/core/extensions/sized_box_extension.dart';
+import 'package:fruits_hub/core/helpers/app_keys.dart';
 import 'package:fruits_hub/core/utils/custom_button.dart';
 import 'package:fruits_hub/features/cart/domain/entities/cart_entity.dart';
 import 'package:fruits_hub/features/checkout/domain/entity/address_entity.dart';
+import 'package:fruits_hub/features/checkout/domain/entity/checkout_entity.dart';
+import 'package:fruits_hub/features/checkout/domain/entity/paypal_payment_entity/paypal_payment_entity.dart';
+import 'package:fruits_hub/features/checkout/presentation/cubits/orders_cubit/orders_cubit.dart';
 import 'package:fruits_hub/features/checkout/presentation/widgets/checkout_steps_verification.dart';
 import 'package:fruits_hub/features/checkout/presentation/widgets/checkout_steps_page_view.dart';
 
@@ -111,7 +119,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
           ),
           32.height,
           Expanded(
-            child: CheckoutStepsPageView(
+            child: CheckoutStepsPageView(onAddressChanged: widget.onAddressChange,
               onStepTapped: widget.onStepTapped,
               cart: widget.cart,
               address:  widget.address,
@@ -145,11 +153,55 @@ widget.currentStep < 3
             text: 'ادفع عبر PayPal',
             backgroundColor: AppColors.primary,
             textColor: AppColors.white,
-            onPressed: _handleNextWithValidation,
+            onPressed: () => _processPayPalPayment(context),
           ),
           20.height,
         ],
       ),
     );
   }
+  void _processPayPalPayment(BuildContext context ) {
+
+  final orderEntity= context.read<CheckoutEntity>();
+  final paypal= PayPalPaymentEntity.fromEntity( orderEntity);
+ final orderCubit= context.read<OrdersCubit>();
+  
+
+    Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => PaypalCheckoutView(
+                    sandboxMode: true,
+                    clientId: AppKeys.kPayPalClientId,
+                    secretKey: AppKeys.kPayPalSecretKey,
+                    transactions:  [
+                   paypal.toJson()
+                    ],
+                    note: "Contact us for any questions on your order.",
+                 onSuccess: (Map params) async {
+  Navigator.pop(context); // اقفل PayPal أولاً
+  if (!context.mounted) return;
+   orderCubit.addOrder(checkoutEntity: orderEntity);
+   ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(content: Text('تم الدفع بنجاح')),
+  );
+  // هنا تكمّل منطق حفظ الـ order في Supabase
+  // context.read<YourCubit>().placeOrder(params);
+  
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(content: Text('تم الدفع بنجاح')),
+  );
+},
+                    onError: (error) {
+                      log("onError: $error");
+                        ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text('حدث خطأ أثناء الدفع: $error' )));
+                     log( "onError: $error");
+                     log( "onError: ${error is Exception ? (error).toString() : error.toString()}");
+                      Navigator.pop(context);
+                    },
+                    onCancel: () {
+                      log('cancelled:');
+                    },
+                  ),
+                ));
+  }
+  
 }

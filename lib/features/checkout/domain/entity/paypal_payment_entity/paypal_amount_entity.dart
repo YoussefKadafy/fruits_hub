@@ -1,3 +1,4 @@
+import 'package:fruits_hub/core/helpers/get_currency.dart';
 import 'package:fruits_hub/features/checkout/domain/entity/checkout_entity.dart';
 import 'package:fruits_hub/features/checkout/domain/entity/paypal_payment_entity/paypal_amount_details_entity.dart';
 
@@ -15,8 +16,8 @@ class PayPalAmountEntity {
   factory PayPalAmountEntity.fromEntity( CheckoutEntity checkoutEntity){
 
     return PayPalAmountEntity(
-      total: checkoutEntity.total().toString(),
-      currency: 'USD',
+      total: checkoutEntity.total().toStringAsFixed(2),
+      currency: getCurrency() ,
       details: PayPalAmountDetailsEntity.fromEntity(checkoutEntity)
     );
   }

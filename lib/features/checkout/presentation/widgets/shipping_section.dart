@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruits_hub/core/extensions/sized_box_extension.dart';
+import 'package:fruits_hub/features/checkout/domain/entity/address_entity.dart';
 import 'package:fruits_hub/features/checkout/domain/entity/checkout_entity.dart';
 import 'package:fruits_hub/features/checkout/presentation/widgets/shipping_item.dart';
 
@@ -8,11 +9,12 @@ class ShippingSection extends StatelessWidget {
   const ShippingSection({
     super.key,
     this.selectedIndex,
-    this.onItemSelected,
+    this.onItemSelected, this.onAddressChanged,
   });
 
   final int? selectedIndex;
   final ValueChanged<int>? onItemSelected;
+  final ValueChanged<AddressEntity?>? onAddressChanged;
 
   @override
   Widget build(BuildContext context) {

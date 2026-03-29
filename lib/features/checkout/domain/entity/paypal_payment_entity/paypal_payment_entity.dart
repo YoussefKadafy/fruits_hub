@@ -21,6 +21,6 @@ class PayPalPaymentEntity {
   Map<String, Object> toJson() => {
     'amount': amount.toJson(),
     'description': description,
-    'itemList': itemList.toJson(),
+'item_list': itemList.toJson(),
   };
 }

@@ -7,8 +7,8 @@ import 'package:fruits_hub/core/utils/custom_text_field.dart';
 import 'package:fruits_hub/features/checkout/domain/entity/address_entity.dart';
 
 class AddressInputSection extends StatefulWidget {
-  const AddressInputSection({super.key});
-
+  const AddressInputSection({super.key, this.onAddressChanged});
+final ValueChanged<AddressEntity?>? onAddressChanged;
   @override
   AddressInputSectionState createState() => AddressInputSectionState();
 }
@@ -33,7 +33,18 @@ class AddressInputSectionState extends State<AddressInputSection> with Automatic
   final _apartmentController = TextEditingController();
   
   bool _saveInfo = false;
+@override
+void initState() {
+  super.initState();
 
+  _fullNameController.addListener(_notifyParent);
+  _addressController.addListener(_notifyParent);
+  _cityController.addListener(_notifyParent);
+  _neighborhoodController.addListener(_notifyParent);
+  _phoneController.addListener(_notifyParent);
+  _floorController.addListener(_notifyParent);
+  _apartmentController.addListener(_notifyParent);
+}
   @override
   void dispose() {
     _fullNameFocusNode.dispose();
@@ -52,39 +63,44 @@ class AddressInputSectionState extends State<AddressInputSection> with Automatic
     _apartmentController.dispose();
     super.dispose();
   }
-
+void _notifyParent() {
+  if (widget.onAddressChanged != null) {
+    widget.onAddressChanged!(getAddress());
+  }
+}
   bool validate() {
     return _formKey.currentState?.validate() ?? false;
   }
 
   AddressEntity? getAddress() {
-    final fullName = _fullNameController.text.trim();
-    final address = _addressController.text.trim();
-    final city = _cityController.text.trim();
-    final neighborhood = _neighborhoodController.text.trim();
-    final phone = _phoneController.text.trim();
-    final floor = _floorController.text.trim();
-    final apartment = _apartmentController.text.trim();
+  final fullName = _fullNameController.text.trim();
+  final address = _addressController.text.trim();
+  final city = _cityController.text.trim();
+  final neighborhood = _neighborhoodController.text.trim();
+  final phone = _phoneController.text.trim();
+  final floor = _floorController.text.trim();
+  final apartment = _apartmentController.text.trim();
 
-    if (fullName.isEmpty ||
-        address.isEmpty ||
-        city.isEmpty ||
-        neighborhood.isEmpty ||
-        phone.isEmpty) {
-      return null;
-    }
-
-    return AddressEntity(
-      name: fullName,
-      phone: phone,
-      address: address,
-      city: city,
-      neighborhood: neighborhood,
-      floor: floor,
-      apartment: apartment,
-      buildingNumber: floor,
-    );
+  // ❗ Only return null if ALL fields empty (not partially)
+  if (fullName.isEmpty &&
+      address.isEmpty &&
+      city.isEmpty &&
+      neighborhood.isEmpty &&
+      phone.isEmpty) {
+    return null;
   }
+
+  return AddressEntity(
+    name: fullName,
+    phone: phone,
+    address: address,
+    city: city,
+    neighborhood: neighborhood,
+    floor: floor,
+    apartment: apartment,
+    buildingNumber: floor,
+  );
+}
 
   String? _validateRequired(String? value, String fieldName) {
     if (value == null || value.trim().isEmpty) {

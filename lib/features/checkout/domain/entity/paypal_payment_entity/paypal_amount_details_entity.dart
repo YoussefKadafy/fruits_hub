@@ -3,7 +3,7 @@ import 'package:fruits_hub/features/checkout/domain/entity/checkout_entity.dart'
 class PayPalAmountDetailsEntity {
   final String subtotal;
   final String shipping;
-  final int shippingDiscount;
+final String shippingDiscount;
 
   PayPalAmountDetailsEntity({
     required this.subtotal,
@@ -12,10 +12,9 @@ class PayPalAmountDetailsEntity {
   });
    factory PayPalAmountDetailsEntity.fromEntity( CheckoutEntity checkoutEntity) {
      return PayPalAmountDetailsEntity(
-       subtotal: checkoutEntity.subTotal().toString(),
-       shipping: checkoutEntity.shipping().toString(),
-       shippingDiscount: checkoutEntity.discount().toInt(),
-
+subtotal: checkoutEntity.subTotal().toStringAsFixed(2),
+shipping: checkoutEntity.shipping().toStringAsFixed(2),
+shippingDiscount: checkoutEntity.discount().toStringAsFixed(2),
      );
    }
    Map<String, Object> toJson() => {

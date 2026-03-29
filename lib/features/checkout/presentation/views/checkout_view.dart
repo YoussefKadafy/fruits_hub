@@ -115,6 +115,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                         })
                       : null;
                 },
+                address: _address,
                 isPayCash: _isPayCash,
                 onAddressChange: (AddressEntity? value) {
                   setState(() {
